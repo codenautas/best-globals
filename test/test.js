@@ -3,7 +3,7 @@
 var expect = require('expect.js');
 var sinon = require('sinon');
 
-require('..');
+require('..').setGlobals(global);
 
 describe('best-globals', function(){
     describe('coalesce', function(){
@@ -35,5 +35,85 @@ describe('best-globals', function(){
                 expect(result).to.be(valid.element);
             });
         });
+    });
+});
+
+describe('mini-tools config functions', function(){
+    it("deep 'changing' function", function(){
+        var obtained = changing({
+            soloOriginal:2,
+            enAmbos:3,
+            hijo:{
+                nieto:{
+                    soloOriginal:12,
+                    enAmbos:13,
+                },
+                logicoPorFalse:true,
+                logicoPorNull:true,
+                logicoPorTrue:null,
+                logicoUndefinedNoPisa:true,
+            }
+        },{
+            enAmbos:4,
+            hijo:{
+                nieto:{
+                    enAmbos:14,
+                    soloCambio:15,
+                },
+                nietoFaltante:{
+                    uno:16,
+                    dos:17
+                },
+                logicoPorFalse:false,
+                logicoPorNull:null,
+                logicoPorTrue:true,
+                logicoUndefinedNoPisa:undefined,
+            },
+            soloCambio:5,
+        });
+        expect(obtained).to.eql({
+            soloOriginal:2,
+            enAmbos:4,
+            soloCambio:5,
+            hijo:{
+                nieto:{
+                    soloOriginal:12,
+                    enAmbos:14,
+                    soloCambio:15,
+                },
+                nietoFaltante:{
+                    uno:16,
+                    dos:17
+                },
+                logicoPorFalse:false,
+                logicoPorNull:null,
+                logicoPorTrue:true,
+                logicoUndefinedNoPisa:true, 
+            },
+        })
+    });
+    it("deep 'changing' function must delete", function(){
+        var obtained = changing({
+            normal:1,
+            forDelete:2,
+        },{
+            normal:3,
+            forDelete:'data-to-delete'
+        },true,'data-to-delete');
+        expect(obtained).to.eql({
+            normal:3
+        })
+    });
+    it("deep 'changing' function must delete undefineds", function(){
+        var obtained = changing({
+            normal:1,
+            forDelete:2,
+        },{
+            normal:3,
+            forDelete:undefined
+        },true);
+        expect(obtained).to.eql({
+            normal:3
+        })
     });
 });
