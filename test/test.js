@@ -99,7 +99,7 @@ describe('mini-tools config functions', function(){
         },{
             normal:3,
             forDelete:'data-to-delete'
-        },true,'data-to-delete');
+        },changing.options({deletingValue:'data-to-delete'}));
         expect(obtained).to.eql({
             normal:3
         })
@@ -111,7 +111,7 @@ describe('mini-tools config functions', function(){
         },{
             normal:3,
             forDelete:undefined
-        },true);
+        },changing.options({deletingValue:undefined}));
         expect(obtained).to.eql({
             normal:3
         })

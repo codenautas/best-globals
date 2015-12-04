@@ -8,7 +8,12 @@ bestGlobals.coalesce=function coalesce(){
     return arguments[i];
 }
 
-bestGlobals.changing = function changing(original, changes, deleting, whatToDelete){
+bestGlobals.changing = function changing(original, changes, opts){
+    if(opts && !(opts instanceof bestGlobals.changing.options)){
+        console.log('*********',opts);
+        throw new Error("changin options must be constructed with changing.options function");
+    }
+    opts = opts || {};
     if(typeof original!=="object" || original===null){
         if(changes!==undefined){
             return changes;
@@ -28,7 +33,7 @@ bestGlobals.changing = function changing(original, changes, deleting, whatToDele
             for(var name in original){
                 if(!(name in changes)){
                     result[name] = original[name];
-                }else if(deleting && changes[name]===whatToDelete){
+                }else if('deletingValue' in opts && changes[name]===opts.deletingValue){
                 }else{
                     result[name] = changing(original[name], changes[name]);
                 }
@@ -42,6 +47,14 @@ bestGlobals.changing = function changing(original, changes, deleting, whatToDele
         }
     }
 }
+
+bestGlobals.changing.options = function options(opts){
+    var result = Object.create(bestGlobals.changing.options.prototype);
+    for(var attr in opts){
+        result[attr] = opts[attr];
+    }
+    return result;
+};
     
 bestGlobals.setGlobals = function setGlobals(theGlobalObj){
     for(var name in bestGlobals){
