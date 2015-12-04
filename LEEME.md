@@ -1,23 +1,18 @@
-<!-- multilang from README.md
-
-
-
-
-NO MODIFIQUE ESTE ARCHIVO. FUE GENERADO AUTOMÁTICAMENTE POR multilang.js
-
-
-
-
--->
+<!--multilang v0 es:LEEME.md en:README.md -->
 # best-globals
-common global function and constants - i.e. coalesce
-
+<!--lang:es-->
 
 algunas funciones comunes que queremos que sean globales
 
+<!--lang:en--]
 
-![designing](https://img.shields.io/badge/stability-desgining-red.svg)
-[![version](https://img.shields.io/npm/v/best-globals.svg)](https://npmjs.org/package/best-globals)
+common global function and constants - i.e. coalesce
+
+[!--lang:*-->
+
+<!-- cucardas -->
+![extending](https://img.shields.io/badge/stability-extending-orange.svg)
+[![npm-version](https://img.shields.io/npm/v/best-globals.svg)](https://npmjs.org/package/best-globals)
 [![downloads](https://img.shields.io/npm/dm/best-globals.svg)](https://npmjs.org/package/best-globals)
 [![build](https://img.shields.io/travis/codenautas/best-globals/master.svg)](https://travis-ci.org/codenautas/best-globals)
 [![coverage](https://img.shields.io/coveralls/codenautas/best-globals/master.svg)](https://coveralls.io/r/codenautas/best-globals)
@@ -30,26 +25,47 @@ idioma: ![castellano](https://raw.githubusercontent.com/codenautas/multilang/mas
 también disponible en:
 [![inglés](https://raw.githubusercontent.com/codenautas/multilang/master/img/lang-en.png)](README.md)
 
+<!--lang:es-->
+
 ## Instalación
 
+<!--lang:en--]
+
+## Install
+
+[!--lang:*-->
 
 ```sh
 $ npm install best-globals
 ```
 
+<!--lang:es-->
 
 ## Objetivo principal
 
 Tener a mano algunas funciones que estén como globales
 
+<!--lang:en--]
+
+## Main goal
+
+Have some common global functions
+
+[!--lang:*-->
 
 ## API
 
 ### coalesce(a [...,b])
 
+<!--lang:es-->
 
 Retorna el primer argumento que no es nulo o indefinido
 
+<!--lang:en--]
+
+Returns the first not null nor undefined parameter
+
+[!--lang:*-->
 
 ```js
 console.log(coalesce(1,2)); // = 1
@@ -57,10 +73,66 @@ console.log(coalesce(null,3)); // = 3
 console.log(coalesce(null,undefined,false,4)); // = false
 ```
 
+<!--lang:*-->
+
+### changing(originalConfig, changes, options)
+
+<!--lang:es-->
+
+Retorna un nuevo objeto con los datos que tiene orginalConfig cambiados por los que diga changes. 
+
+<!--lang:en--]
+
+Returns a new object like originalConfig with the changes reflected
+
+[!--lang:*-->
+
+```js
+
+var newConfig = changing(
+    {
+        database:'default_db',
+        port:3306,
+        user:'default_user',
+        throwExceptions:true
+    },
+    {
+        database:'develop_db',
+        user:'devel_user',
+        password:'d3v31_u53r',
+        throwExceptions:undefined
+    },
+    changing.options({deletingValue:undefined})
+);
+
+console.log(newConfig);
+/*
+    {
+        database:'develop_db',
+        port:3306,
+        user:'devel_user',
+        password:'d3v31_u53r',
+    },
+*/
+
+```
+
+<!--lang:es-->
+
+Retorna un nuevo objeto con los datos que tiene orginalConfig cambiados por los que diga changes. 
+
+<!--lang:en--]
+
+Returns a new object like originalConfig with the changes reflected
+
+<!--lang:es-->
 
 ## Licencia
 
+<!--lang:en--]
+
+## License
+
+[!--lang:*-->
 
 [MIT](LICENSE)
-
-.............................

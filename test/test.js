@@ -52,6 +52,9 @@ describe('mini-tools config functions', function(){
                 logicoPorNull:true,
                 logicoPorTrue:null,
                 logicoUndefinedNoPisa:true,
+            },
+            soloObjetoOriginal:{
+                original:7
             }
         },{
             enAmbos:4,
@@ -90,6 +93,9 @@ describe('mini-tools config functions', function(){
                 logicoPorTrue:true,
                 logicoUndefinedNoPisa:true, 
             },
+            soloObjetoOriginal:{
+                original:7
+            },
         })
     });
     it("deep 'changing' function must delete", function(){
@@ -115,5 +121,28 @@ describe('mini-tools config functions', function(){
         expect(obtained).to.eql({
             normal:3
         })
+    });
+    it("must reject plain options", function(){
+        expect(function(){
+            var obtained = changing({
+                normal:1,
+                forDelete:2,
+            },{
+                normal:3,
+                forDelete:undefined
+            },{deletingValue:undefined});
+        }).to.throwError(/options must be constructed with changing.options function/);
+    });
+    it("must reject non-object changer", function(){
+        expect(function(){
+            var obtained = changing({
+                normal:{
+                    one:1,
+                    two:2
+                }
+            },{
+                normal:3,
+            });
+        }).to.throwError(/changing object with non-object/);
     });
 });

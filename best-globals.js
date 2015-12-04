@@ -1,19 +1,70 @@
 "use strict";
+/*jshint eqnull:true */
+/*jshint globalstrict:true */
+/*jshint node:true */
 
+(function webpackUniversalModuleDefinition(root, factory) {
+    /* global define */
+    /* istanbul ignore next */
+    if(typeof root.globalModuleName !== 'string'){
+        root.globalModuleName = factory.name;
+    }
+    /* istanbul ignore next */
+    if(typeof exports === 'object' && typeof module === 'object'){
+        module.exports = factory();
+    }else if(typeof define === 'function' && define.amd){
+        define(factory);
+    }else if(typeof exports === 'object'){
+        exports[root.globalModuleName] = factory();
+    }else{
+        root[root.globalModuleName] = factory();
+    }
+    root.globalModuleName = null;
+})(/*jshint -W040 */this, function bestGlobals() {
+/*jshint +W040 */
+
+/*jshint -W004 */
 var bestGlobals = {};
+/*jshint +W004 */
 
 bestGlobals.coalesce=function coalesce(){
     var i=0;
-    while(i<arguments.length-1 && arguments[i]==null) i++;
+    while(i<arguments.length-1 && arguments[i]==null){
+        i++;
+    }
     return arguments[i];
+};
+
+function retreiveOptions(functionCallee, functionAruguments, mandatoryPositionCountingFromOne){
+    if(functionAruguments.length<mandatoryPositionCountingFromOne){
+        return {};
+    }
+    var opts = functionAruguments[mandatoryPositionCountingFromOne-1];
+    if(opts instanceof functionCallee.options){
+        return opts;
+    }else{
+        throw new Error("options must be constructed with "+functionCallee.name+".options function");
+    }
 }
 
-bestGlobals.changing = function changing(original, changes, opts){
-    if(opts && !(opts instanceof bestGlobals.changing.options)){
-        console.log('*********',opts);
-        throw new Error("changin options must be constructed with changing.options function");
-    }
-    opts = opts || {};
+bestGlobals.createOptionsToFunction = function createOptionsToFunction(fun, mandatoryPositionCountingFromOne){
+    mandatoryPositionCountingFromOne = mandatoryPositionCountingFromOne || fun.length+1;
+    fun.retreiveOptions = function retrieOptions(functionAruguments){
+        return retreiveOptions(fun, functionAruguments, mandatoryPositionCountingFromOne);
+    };
+    fun.options = function options(opts){
+        var result = Object.create(fun.options.prototype);
+        /*jshint forin:false */
+        for(var attr in opts){
+            result[attr] = opts[attr];
+        }
+        /*jshint forin:true */
+        return result;
+    };
+};
+
+bestGlobals.changing = function changing(original, changes){
+    var opts = bestGlobals.changing.retreiveOptions(arguments);
     if(typeof original!=="object" || original===null){
         if(changes!==undefined){
             return changes;
@@ -22,14 +73,10 @@ bestGlobals.changing = function changing(original, changes, opts){
         }
     }else{
         if(typeof changes!=="object"){
-            console.log("ERROR changing object with non-object");
-            console.dir(original);
-            console.dir(changes);
             throw new Error("ERROR changing object with non-object");
-        }else if(!changes){
-            return changes;
         }else{
             var result={};
+            /*jshint forin:false */
             for(var name in original){
                 if(!(name in changes)){
                     result[name] = original[name];
@@ -38,28 +85,27 @@ bestGlobals.changing = function changing(original, changes, opts){
                     result[name] = changing(original[name], changes[name]);
                 }
             }
-            for(var name in changes){
+            for(name in changes){
                 if(!(name in original)){
                     result[name] = changes[name];
                 }
             }
+            /*jshint forin:true */
             return result;
         }
     }
-}
-
-bestGlobals.changing.options = function options(opts){
-    var result = Object.create(bestGlobals.changing.options.prototype);
-    for(var attr in opts){
-        result[attr] = opts[attr];
-    }
-    return result;
 };
-    
+
+bestGlobals.createOptionsToFunction(bestGlobals.changing);
+
 bestGlobals.setGlobals = function setGlobals(theGlobalObj){
+    /*jshint forin:false */
     for(var name in bestGlobals){
         theGlobalObj[name] = bestGlobals[name];
     }
-}
+    /*jshint forin:true */
+};
 
-module.exports = bestGlobals;
+return bestGlobals;
+
+});
