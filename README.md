@@ -39,6 +39,8 @@ Returns the first not null nor undefined parameter
 
 
 ```js
+var coalesce = require('best-globals').coalesce;
+
 console.log(coalesce(1,2)); // = 1
 console.log(coalesce(null,3)); // = 3
 console.log(coalesce(null,undefined,false,4)); // = false
@@ -52,6 +54,7 @@ Returns a new object like originalConfig with the changes reflected
 
 
 ```js
+var chaging = require('best-globals').chaging;
 
 var newConfig = changing(
     {
