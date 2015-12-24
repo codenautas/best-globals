@@ -1,7 +1,7 @@
 {
   "name": "best-globals",
   "description": "common global function and constants - i.e. coalesce",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "author": "Codenautas <codenautas@googlegroups.com>",
   "license": "MIT",
   "repository": "codenautas/best-globals",
@@ -43,8 +43,9 @@
       "no-console": 1,
       "no-unused-vars": 1
     }
-  },   "qa-control": {
-    "package-version": "0.1.3",
+  },   
+  "qa-control": {
+    "package-version": "0.1.4",
     "run-in": "both",
     "type": "lib",
     "stage": "designing",

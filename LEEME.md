@@ -18,6 +18,7 @@ common global function and constants - i.e. coalesce
 [![coverage](https://img.shields.io/coveralls/codenautas/best-globals/master.svg)](https://coveralls.io/r/codenautas/best-globals)
 [![climate](https://img.shields.io/codeclimate/github/codenautas/best-globals.svg)](https://codeclimate.com/github/codenautas/best-globals)
 [![dependencies](https://img.shields.io/david/codenautas/best-globals.svg)](https://david-dm.org/codenautas/best-globals)
+[![qa-control](http://codenautas.com/github/codenautas/best-globals.svg)](http://codenautas.com/github/codenautas/best-globals)
 
 <!--multilang buttons-->
 
