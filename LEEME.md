@@ -50,7 +50,7 @@ Tener a mano algunas funciones que estén como globales
 
 ## Main goal
 
-Have some common global functions
+Have handy some common global functions
 
 [!--lang:*-->
 
