@@ -69,7 +69,7 @@ bestGlobals.isPlainObject = function isPlainObject(x){
 
 bestGlobals.changing = function changing(original, changes){
     var opts = bestGlobals.changing.retreiveOptions(arguments);
-    if(!isPlainObject(original) || original===null){
+    if(!bestGlobals.isPlainObject(original) || original===null){
         if(changes!==undefined){
             return changes;
         }else{

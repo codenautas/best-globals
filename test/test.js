@@ -3,18 +3,18 @@
 var expect = require('expect.js');
 var sinon = require('sinon');
 
-require('..').setGlobals(global);
+var bestGlobals = require('..');
 
 describe('best-globals', function(){
     describe('coalesce', function(){
         it('return the first value if is not null',function(){
-            expect(coalesce(7,8)).to.be(7);
+            expect(bestGlobals.coalesce(7,8)).to.be(7);
         });
         it('return the first not null value',function(){
-            expect(coalesce(null,null,null,null,null,null,null,null,null,null,null,null,null,17,8)).to.be(17);
+            expect(bestGlobals.coalesce(null,null,null,null,null,null,null,null,null,null,null,null,null,17,8)).to.be(17);
         });
         it('return the last value if all are nulls',function(){
-            expect(typeof coalesce(null,{}.inex)).to.be("undefined");
+            expect(typeof bestGlobals.coalesce(null,{}.inex)).to.be("undefined");
         });
         var valids=[
             { element:[]         },
@@ -31,7 +31,7 @@ describe('best-globals', function(){
         ];
         valids.forEach(function(valid){
             it('return the valid element '||valid, function(){
-                var result=coalesce(null, {}.inexis, valid.element, 'last');
+                var result=bestGlobals.coalesce(null, {}.inexis, valid.element, 'last');
                 expect(result).to.be(valid.element);
             });
         });
@@ -40,19 +40,19 @@ describe('best-globals', function(){
 
 describe('is Plain Object', function(){
     it("recognizes {}",function(){
-        expect(isPlainObject({})).to.ok();
+        expect(bestGlobals.isPlainObject({})).to.ok();
     });
     it("! recognizes Array",function(){
-        expect(isPlainObject([])).to.not.ok();
+        expect(bestGlobals.isPlainObject([])).to.not.ok();
     });
     it("! recognizes null",function(){
-        expect(isPlainObject(null)).to.not.ok();
+        expect(bestGlobals.isPlainObject(null)).to.not.ok();
     });
 });
 
 describe('mini-tools config functions', function(){
     it("deep 'changing' function", function(){
-        var obtained = changing({
+        var obtained = bestGlobals.changing({
             soloOriginal:2,
             enAmbos:3,
             hijo:{
@@ -110,33 +110,33 @@ describe('mini-tools config functions', function(){
             },
         })
     });
-    it("deep 'changing' function must delete", function(){
-        var obtained = changing({
+    it("deep 'bestGlobals.changing' function must delete", function(){
+        var obtained = bestGlobals.changing({
             normal:1,
             forDelete:2,
         },{
             normal:3,
             forDelete:'data-to-delete'
-        },changing.options({deletingValue:'data-to-delete'}));
+        },bestGlobals.changing.options({deletingValue:'data-to-delete'}));
         expect(obtained).to.eql({
             normal:3
         })
     });
-    it("deep 'changing' function must delete undefineds", function(){
-        var obtained = changing({
+    it("deep 'bestGlobals.changing' function must delete undefineds", function(){
+        var obtained = bestGlobals.changing({
             normal:1,
             forDelete:2,
         },{
             normal:3,
             forDelete:undefined
-        },changing.options({deletingValue:undefined}));
+        },bestGlobals.changing.options({deletingValue:undefined}));
         expect(obtained).to.eql({
             normal:3
         })
     });
     it("must reject plain options", function(){
         expect(function(){
-            var obtained = changing({
+            var obtained = bestGlobals.changing({
                 normal:1,
                 forDelete:2,
             },{
@@ -147,7 +147,7 @@ describe('mini-tools config functions', function(){
     });
     it("must reject non-object changer", function(){
         expect(function(){
-            var obtained = changing({
+            var obtained = bestGlobals.changing({
                 normal:{
                     one:1,
                     two:2
@@ -158,7 +158,7 @@ describe('mini-tools config functions', function(){
         }).to.throwError(/changing object with non-object/);
     });
     it("non plain objects must be interpreted as values", function(){
-        var obtained = changing({
+        var obtained = bestGlobals.changing({
             a: new Date('1/2/3'),
             b: ['a', 'b', 'c']
         },{
@@ -169,5 +169,13 @@ describe('mini-tools config functions', function(){
             a: new Date('3/2/3'),
             b: ['a', 'd']
         });
+    });
+});
+
+describe("setGlobals",function(){
+    it("populate globals", function(){
+        var fakeGlobal={};
+        bestGlobals.setGlobals(fakeGlobal);
+        expect(fakeGlobal.coalesce instanceof Function).to.ok();
     });
 });
