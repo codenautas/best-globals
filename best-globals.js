@@ -63,9 +63,13 @@ bestGlobals.createOptionsToFunction = function createOptionsToFunction(fun, mand
     };
 };
 
+bestGlobals.isPlainObject = function isPlainObject(x){
+    return typeof x==="object" && x && x.constructor === Object;
+};
+
 bestGlobals.changing = function changing(original, changes){
     var opts = bestGlobals.changing.retreiveOptions(arguments);
-    if(typeof original!=="object" || original===null){
+    if(!isPlainObject(original) || original===null){
         if(changes!==undefined){
             return changes;
         }else{

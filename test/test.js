@@ -38,6 +38,18 @@ describe('best-globals', function(){
     });
 });
 
+describe('is Plain Object', function(){
+    it("recognizes {}",function(){
+        expect(isPlainObject({})).to.ok();
+    });
+    it("! recognizes Array",function(){
+        expect(isPlainObject([])).to.not.ok();
+    });
+    it("! recognizes null",function(){
+        expect(isPlainObject(null)).to.not.ok();
+    });
+});
+
 describe('mini-tools config functions', function(){
     it("deep 'changing' function", function(){
         var obtained = changing({
@@ -144,5 +156,18 @@ describe('mini-tools config functions', function(){
                 normal:3,
             });
         }).to.throwError(/changing object with non-object/);
+    });
+    it("non plain objects must be interpreted as values", function(){
+        var obtained = changing({
+            a: new Date('1/2/3'),
+            b: ['a', 'b', 'c']
+        },{
+            a: new Date('3/2/3'),
+            b: ['a', 'd']
+        });
+        expect(obtained).to.eql({
+            a: new Date('3/2/3'),
+            b: ['a', 'd']
+        });
     });
 });
