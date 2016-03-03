@@ -9,12 +9,19 @@ describe('best-globals', function(){
     describe('coalesce', function(){
         it('return the first value if is not null',function(){
             expect(bestGlobals.coalesce(7,8)).to.be(7);
+            expect(bestGlobals.coalesce(7,8,bestGlobals.coalesce.throwError)).to.be(7);
         });
         it('return the first not null value',function(){
             expect(bestGlobals.coalesce(null,null,null,null,null,null,null,null,null,null,null,null,null,17,8)).to.be(17);
+            expect(bestGlobals.coalesce(null,null,null,null,null,null,null,null,null,null,null,null,null,17,8,bestGlobals.coalesce.throwError)).to.be(17);
         });
         it('return the last value if all are nulls',function(){
             expect(typeof bestGlobals.coalesce(null,{}.inex)).to.be("undefined");
+        });
+        it('throw error if all are nulls',function(){
+            expect(function(){
+                typeof bestGlobals.coalesce(null,{}.inex,bestGlobals.coalesce.throwError("this message"));
+            }).to.throwError(/this message/);
         });
         var valids=[
             { element:[]         },

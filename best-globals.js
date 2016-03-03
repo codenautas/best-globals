@@ -32,7 +32,18 @@ bestGlobals.coalesce=function coalesce(){
     while(i<arguments.length-1 && arguments[i]==null){
         i++;
     }
+    if(arguments[i] instanceof bestGlobals.coalesce.throwError){
+        throw new Error(arguments[i].message);
+    }
     return arguments[i];
+};
+
+bestGlobals.coalesce.throwError=function throwError(message){
+    if(this === bestGlobals.coalesce){
+        return new bestGlobals.coalesce.throwError(message);
+    }else{
+        this.message=message;
+    }
 };
 
 function retreiveOptions(functionCallee, functionAruguments, mandatoryPositionCountingFromOne){

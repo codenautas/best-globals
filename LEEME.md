@@ -56,11 +56,15 @@ Have handy some common global functions
 
 ## API
 
-### coalesce(a [...,b])
+### coalesce(a [...,b] [,coalesce.throwError(message)])
 
 <!--lang:es-->
 
 Retorna el primer argumento que no es nulo o indefinido
+
+En caso de recibir como parámetro `coalesce.throwError(message)` 
+y que los parámetros anteriores no están definidos o son distintos de null
+lanza una excepción con ese mensaje. 
 
 <!--lang:en--]
 

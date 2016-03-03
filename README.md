@@ -28,12 +28,12 @@ $ npm install best-globals
 
 ## Main goal
 
-Have some common global functions
+Have handy some common global functions
 
 
 ## API
 
-### coalesce(a [...,b])
+### coalesce(a [...,b] [,coalesce.throwError(message)])
 
 
 Returns the first not null nor undefined parameter
@@ -86,7 +86,21 @@ console.log(newConfig);
 ```
 
 
-Returns a new object like originalConfig with the changes reflected
+### setGlobals(globalObject)
+
+
+Receives the global object and populates all the module functions
+
+
+```js
+require('best-globals').setGlobals(global);
+/*
+  coalesce and the other functions are now global
+*/
+
+console.log(coalesce(null, 'yes));
+
+```
 
 
 ## License
