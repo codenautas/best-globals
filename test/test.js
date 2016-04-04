@@ -179,6 +179,64 @@ describe('mini-tools config functions', function(){
     });
 });
 
+describe("date", function(){
+    var indep = new Date(1916,7-1,9);
+    var first = new Date(1910,5-1,25);
+    var date = bestGlobals.date;
+    function control(fechaConstruida, fechaControl){
+        expect(fechaConstruida.isRealDate).to.eql(true);
+        expect(fechaConstruida.toISOString()).to.eql(fechaControl.toISOString());
+        expect(fechaConstruida.toUTCString()).to.eql(fechaControl.toUTCString());
+        expect(fechaConstruida.getTime()).to.eql(fechaControl.getTime());
+        expect(fechaConstruida - fechaControl).to.eql(0);
+    }
+    it.skip("create date from string", function(){
+        var d1 = date.iso("1916-07-09");
+        control(d1, indep);
+    });
+    it.skip("create date from array", function(){
+        var d1 = date.array([1916,7,09]);
+        control(d1, indep);
+    });
+    it.skip("create date from integers", function(){
+        var d1 = date.ymd(1916,7,09);
+        control(d1, indep);
+    });
+    it.skip("create date from string and ignore timezone in input", function(){
+        var d1 = date.iso("1916-07-09 00:00:00-11:00");
+        control(d1, indep);
+        var d1 = date.iso("1916-07-09T00:00:00Z");
+        control(d1, indep);
+    });
+    [ ["1997-12"], [1997,12], [1997,0,1], [[1997,0,1]], [(new Date(1916,7-1,9)).getTime()]].forEach(function(invalidParams){
+        it.skip("rejects invalid date: "+JSON.stringify(invalidParams), function(){
+            expect(function(){
+                date.iso.apply(date,invalidParams);
+            }).to.throwError(/invalid date/);
+        });
+    });
+    it.skip("add setDateValue function", function(){
+        var d1 = date.iso("1916-07-09");
+        var d2 = date.iso("1910-05-25");
+        var d3 = date.iso("1913-01-31");
+        d3.setDateValue(d2);
+        control(d3, first);
+    });
+    if(typeof Promise == 'function'){
+        it.skip("add setDateValue function Promise version", function(done){
+            var d1 = date.iso("1916-07-09");
+            var d2 = date.iso("1910-05-25");
+            var d3 = date.iso("1913-01-31");
+            Promise.resolve(d2)
+            .then(d3.setDateValue)
+            .then(function(){
+                control(d3, first);
+            })
+            .then(done, done);
+        });
+    };
+});
+
 describe("setGlobals",function(){
     it("populate globals", function(){
         var fakeGlobal={};

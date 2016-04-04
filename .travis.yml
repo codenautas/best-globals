@@ -1,13 +1,13 @@
 language: node_js
 node_js:
-  - "0.12"
-  - "4.2"
-  - "5.1"
+  - "0.12.7"
+  - "4.4.2"
+  - "5.10.0"
 matrix:
   fast_finish: true
 script: "npm run-script test-ci"
 after_script: 
-  - "npm install coveralls@2.10.0 && cat ./coverage/lcov.info | coveralls"
+  - "npm install coveralls@2.11.9 && cat ./coverage/lcov.info | coveralls"
   - "cat ./coverage/lcov.info | codeclimate"
 addons:
   code_climate:

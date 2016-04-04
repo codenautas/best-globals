@@ -111,6 +111,19 @@ bestGlobals.changing = function changing(original, changes){
     }
 };
 
+function nothing(){ 
+    var d=new Date();
+    d.isRealDate=true;
+    d.setDateValue=nothing;
+    return d; 
+};
+
+bestGlobals.date = {
+    iso:nothing,
+    array:nothing,
+    ymd:nothing,
+};
+
 bestGlobals.createOptionsToFunction(bestGlobals.changing);
 
 bestGlobals.setGlobals = function setGlobals(theGlobalObj){
