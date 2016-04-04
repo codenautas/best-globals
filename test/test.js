@@ -240,13 +240,13 @@ describe("date", function(){
         control(d1, indep);
     });
     [ ["1997-12"], [1997,12], [1997,0,1], [[1997,0,1]], [(new Date(1916,7-1,9)).getTime()]].forEach(function(invalidParams){
-        it.skip("rejects invalid date: "+JSON.stringify(invalidParams), function(){
+        it("rejects invalid date: "+JSON.stringify(invalidParams), function(){
             expect(function(){
                 date.iso.apply(date,invalidParams);
             }).to.throwError(/invalid date/);
         });
     });
-    it.skip("add setDateValue function", function(){
+    it("add setDateValue function", function(){
         var d1 = date.iso("1916-07-09");
         var d2 = date.iso("1910-05-25");
         var d3 = date.iso("1913-01-31");
