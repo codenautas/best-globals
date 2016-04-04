@@ -1,6 +1,5 @@
 "use strict";
 /*jshint eqnull:true */
-/*jshint globalstrict:true */
 /*jshint node:true */
 
 (function codenautasModuleDefinition(root, name, factory) {
@@ -116,7 +115,7 @@ function nothing(){
     d.isRealDate=true;
     d.setDateValue=nothing;
     return d; 
-};
+}
 
 bestGlobals.date = {
     iso:nothing,
