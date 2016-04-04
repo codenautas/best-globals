@@ -162,9 +162,8 @@ bestGlobals.date = {
         if(! this.isValid(y, m, d)) { throw new Error('invalid date'); }
         var d = new Date(y, m-1, d);
         d.isRealDate=true;
-        var me = d;
         d.setDateValue = function setDateValue(dateVal) {
-            me.setTime(dateVal.valueOf())
+            this.setTime(dateVal.valueOf())
         }
         return d;
     },
