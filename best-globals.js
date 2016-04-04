@@ -110,26 +110,15 @@ bestGlobals.changing = function changing(original, changes){
     }
 };
 
+/*
 function nothing(){ 
     var d=new Date();
     d.isRealDate=true;
     d.setDateValue=nothing;
     return d; 
 }
-
-function dateIsValid(dateObject) {
-    if(Object.prototype.toString.call(dateObject) === "[object Date]") {
-        return ! isNaN(dateObject.getTime());
-    }
-    return false;
-}
-
-function setupDate(d) {
-    d.setTime( d.getTime() + d.getTimezoneOffset()*60*1000 );
-    d.isRealDate=dateIsValid(d);
-    return d;
-}
-
+*/
+/*
 function prn(id, d) {
     console.log(id, ".toISOString", d.toISOString());
     console.log(id, ".toUTCString", d.toUTCString());
@@ -140,16 +129,27 @@ function prn(id, d) {
     console.log(id, ".getUTCDay()", d.getUTCDay());
     console.log(id, ".getTime()", d.getTime());
 }
-
+*/
 bestGlobals.date = {
+    validDate: function validDate(dateObject) {
+        if(Object.prototype.toString.call(dateObject) === "[object Date]") {
+            return ! isNaN(dateObject.getTime());
+        }
+        return false;
+    },
+    setup: function setup(d) {
+        d.setTime( d.getTime() + d.getTimezoneOffset()*60*1000 );
+        d.isRealDate=this.validDate(d);
+        return d;
+    },
     iso: function iso(dateStr) {
-        return setupDate(new Date(Date.parse(dateStr)));
+        return this.setup(new Date(Date.parse(dateStr)));
     },
     array: function array(arr) {
-        return setupDate(new Date(Date.UTC(arr[0], arr[1]-1, arr[2], 0,0,0)));
+        return this.setup(new Date(Date.UTC(arr[0], arr[1]-1, arr[2], 0,0,0)));
     },
     ymd: function ymd(y, m, d) {
-        return setupDate(new Date(Date.UTC(y, m-1, d, 0,0,0)));
+        return this.setup(new Date(Date.UTC(y, m-1, d, 0,0,0)));
     },
 };
 
