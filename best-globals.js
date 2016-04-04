@@ -121,7 +121,11 @@ function nothing(){
 
 bestGlobals.date = {
     parseFormat: function parseFormat(dateStr) {
-        var reDate = /^(([12][0-9]{3})([-/])(([1][0-2])|(0?[1-9]))\3(([0123][0-9])))$/;
+        var tz1 = ' [0-9]{2}:[0-9]{2}:[0-9]{2}-[0-9]{2}:[0-9]{2}';
+        var tz2 = 'T[0-9]{2}:[0-9]{2}:[0-9]{2}Z';
+        var re = '([12][0-9]{3})([-/])(([1][0-2])|(0?[1-9]))\\3(([0123][0-9]))';
+        var reDate = new RegExp('^('+re+'('+tz1+'|'+tz2+')?)$');
+        //var reDate = /^(([12][0-9]{3})([-/])(([1][0-2])|(0?[1-9]))\3(([0123][0-9])))$/;
         var match = reDate.exec(dateStr);
         var err = {y:-1, m:-1, d:-1};
         if(! match) { return err; }
