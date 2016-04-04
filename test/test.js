@@ -198,7 +198,7 @@ describe("date", function(){
         var d1 = date.array([1916,7,09]);
         control(d1, indep);
     });
-    it.skip("create date from integers", function(){
+    it("create date from integers", function(){
         var d1 = date.ymd(1916,7,09);
         control(d1, indep);
     });

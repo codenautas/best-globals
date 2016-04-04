@@ -148,7 +148,9 @@ bestGlobals.date = {
     array: function array(arr) {
         return setupDate(new Date(Date.UTC(arr[0], arr[1]-1, arr[2], 0,0,0)));
     },
-    ymd:nothing,
+    ymd: function ymd(y, m, d) {
+        return setupDate(new Date(Date.UTC(y, m-1, d, 0,0,0)));
+    },
 };
 
 bestGlobals.createOptionsToFunction(bestGlobals.changing);
