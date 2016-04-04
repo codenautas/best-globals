@@ -117,8 +117,31 @@ function nothing(){
     return d; 
 }
 
+function dateIsValid(dateObject) {
+    if(Object.prototype.toString.call(dateObject) === "[object Date]") {
+        return ! isNaN(dateObject.getTime());
+    }
+    return false;
+}
+
+function prn(id, d) {
+    console.log(id, ".toISOString", d.toISOString());
+    console.log(id, ".toUTCString", d.toUTCString());
+    console.log(id, ".getTimezoneOffset()", d.getTimezoneOffset());
+    console.log(id, ".getDate()", d.getDate());
+    console.log(id, ".getUTCDate()", d.getUTCDate());
+    console.log(id, ".getDay()", d.getDay());
+    console.log(id, ".getUTCDay()", d.getUTCDay());
+    console.log(id, ".getTime()", d.getTime());
+}
+
 bestGlobals.date = {
-    iso:nothing,
+    iso: function iso(dateStr) {
+        var d = new Date(Date.parse(dateStr));
+        d.setTime( d.getTime() + d.getTimezoneOffset()*60*1000 );
+        d.isRealDate=dateIsValid(d);
+        return d;
+    },
     array:nothing,
     ymd:nothing,
 };

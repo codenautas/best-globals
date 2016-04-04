@@ -190,7 +190,7 @@ describe("date", function(){
         expect(fechaConstruida.getTime()).to.eql(fechaControl.getTime());
         expect(fechaConstruida - fechaControl).to.eql(0);
     }
-    it.skip("create date from string", function(){
+    it("create date from string", function(){
         var d1 = date.iso("1916-07-09");
         control(d1, indep);
     });
