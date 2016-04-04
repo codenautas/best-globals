@@ -22,6 +22,8 @@
 })(/*jshint -W040 */this, 'bestGlobals', function() {
 /*jshint +W040 */
 
+var Promises = require('best-promise');
+
 /*jshint -W004 */
 var bestGlobals = {};
 /*jshint +W004 */
@@ -164,7 +166,13 @@ bestGlobals.date = {
         d.isRealDate=true;
         d.setDateValue = function setDateValue(dateVal) {
             this.setTime(dateVal.valueOf())
-        }
+        };
+        d.setDateValue = function setDateValue(dateVal) {
+            return Promises.make(function(resolve, reject) {
+                d.setTime(dateVal);
+                return resolve();
+            });
+        };
         return d;
     },
     iso: function iso(dateStr) {
@@ -173,7 +181,7 @@ bestGlobals.date = {
     },
     array: function array(arr) {
         return this.ymd(arr[0], arr[1], arr[2]);
-    },
+    }
 };
 
 bestGlobals.createOptionsToFunction(bestGlobals.changing);

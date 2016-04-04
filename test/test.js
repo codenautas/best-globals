@@ -254,7 +254,7 @@ describe("date", function(){
         control(d3, first);
     });
     if(typeof Promise == 'function'){
-        it.skip("add setDateValue function Promise version", function(done){
+        it("add setDateValue function Promise version", function(done){
             var d1 = date.iso("1916-07-09");
             var d2 = date.iso("1910-05-25");
             var d3 = date.iso("1913-01-31");
