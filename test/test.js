@@ -180,6 +180,17 @@ describe('mini-tools config functions', function(){
 });
 
 describe("date", function(){
+    it("should parse the format of a string", function() {
+       var parse = bestGlobals.date.parseFormat;
+       var error = {y:-1, m:-1, d:-1};
+       expect(parse("2016-12-02")).to.eql({y:2016, m:12, d:2});
+       expect(parse("2016-1-02")).to.eql({y:2016, m:1, d:2});
+       expect(parse("2016/1/02")).to.eql({y:2016, m:1, d:2});
+       expect(parse("2016-12/02")).to.eql(error);
+       expect(parse("2016/12-02")).to.eql(error);
+       expect(parse("2016_12_02")).to.eql(error);
+       expect(parse("2016-2-30")).to.eql({y:2016, m:2, d:30}); // right format, wrong date
+    });
     it("should validate a date object", function() {
        var isReal = bestGlobals.date.dateIsReal;
        expect(isReal(new Date())).to.be.ok();

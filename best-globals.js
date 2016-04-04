@@ -131,6 +131,14 @@ function prn(id, d) {
 }
 */
 bestGlobals.date = {
+    parseFormat: function parseFormat(dateStr) {
+        var reDate = /^(([12][0-9]{3})([-/])(([1][0-2])|(0?[1-9]))\3(([0123][0-9])))$/;
+        var match = reDate.exec(dateStr);
+        var err = {y:-1, m:-1, d:-1};
+        if(! match) { return err; }
+        //for(var m=0; m<match.length; ++m) { console.log("m", m, "'"+match[m]+"'");  }
+        return { y:parseInt(match[2]), m:parseInt(match[4]), d:parseInt(match[7]) };
+    },
     dateIsReal: function dateIsReal(dateObject) {
         //console.log("toString", dateObject.toString());
         if(Object.prototype.toString.call(dateObject) === "[object Date]") {
