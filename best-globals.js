@@ -131,15 +131,19 @@ function prn(id, d) {
 }
 */
 bestGlobals.date = {
-    validDate: function validDate(dateObject) {
+    dateIsReal: function dateIsReal(dateObject) {
+        //console.log("toString", dateObject.toString());
         if(Object.prototype.toString.call(dateObject) === "[object Date]") {
-            return ! isNaN(dateObject.getTime());
+            if(isNaN(dateObject.getTime())) { return false; }
+            if(dateObject.toString()==='Invalid Date') { return false; }
+            
+            return true;
         }
         return false;
     },
     setup: function setup(d) {
         d.setTime( d.getTime() + d.getTimezoneOffset()*60*1000 );
-        d.isRealDate=this.validDate(d);
+        d.isRealDate=this.dateIsReal(d);
         return d;
     },
     iso: function iso(dateStr) {

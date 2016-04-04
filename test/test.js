@@ -180,6 +180,14 @@ describe('mini-tools config functions', function(){
 });
 
 describe("date", function(){
+    it("should validate a date object", function() {
+       var isReal = bestGlobals.date.dateIsReal;
+       expect(isReal(new Date())).to.be.ok();
+       expect(isReal(new Date("wrong"))).to.not.be.ok();
+       // esto deberia devolver false!!
+       //expect(isReal(new Date(Date.parse("2016-02-31")))).to.not.be.ok();
+    });
+    
     var indep = new Date(1916,7-1,9);
     var first = new Date(1910,5-1,25);
     var date = bestGlobals.date;
