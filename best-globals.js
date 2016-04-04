@@ -118,18 +118,7 @@ function nothing(){
     return d; 
 }
 */
-/*
-function prn(id, d) {
-    console.log(id, ".toISOString", d.toISOString());
-    console.log(id, ".toUTCString", d.toUTCString());
-    console.log(id, ".getTimezoneOffset()", d.getTimezoneOffset());
-    console.log(id, ".getDate()", d.getDate());
-    console.log(id, ".getUTCDate()", d.getUTCDate());
-    console.log(id, ".getDay()", d.getDay());
-    console.log(id, ".getUTCDay()", d.getUTCDay());
-    console.log(id, ".getTime()", d.getTime());
-}
-*/
+
 bestGlobals.date = {
     parseFormat: function parseFormat(dateStr) {
         var reDate = /^(([12][0-9]{3})([-/])(([1][0-2])|(0?[1-9]))\3(([0123][0-9])))$/;
@@ -140,6 +129,7 @@ bestGlobals.date = {
         return { y:parseInt(match[2]), m:parseInt(match[4]), d:parseInt(match[7]) };
     },
     isValid: function isValid(y, m, d) {
+        //console.log("isValid(", y, m, d, ")")
         if(y<0 || m<0 || d<0) { return false; }
         if(y<1900) { return false; }
         switch(m) {
@@ -156,29 +146,28 @@ bestGlobals.date = {
         }
         return true;
     },
-    dateIsReal: function dateIsReal(dateObject) {
-        //console.log("toString", dateObject.toString());
+    isReal: function isReal(dateObject) {
         if(Object.prototype.toString.call(dateObject) === "[object Date]") {
             if(isNaN(dateObject.getTime())) { return false; }
             if(dateObject.toString()==='Invalid Date') { return false; }
-            
-            return true;
+            return bestGlobals.date.isValid(dateObject.getFullYear(), dateObject.getMonth()+1, dateObject.getDay()+1);
         }
         return false;
     },
-    setup: function setup(d) {
-        d.setTime( d.getTime() + d.getTimezoneOffset()*60*1000 );
-        d.isRealDate=this.dateIsReal(d);
+    ymd: function ymd(y, m, d) {
+        if(! this.isValid(y, m, d)) {
+            throw new Error('invalid date');
+        }
+        var d = new Date(y, m-1, d);
+        d.isRealDate=true;
         return d;
     },
     iso: function iso(dateStr) {
-        return this.setup(new Date(Date.parse(dateStr)));
+        var parsed=this.parseFormat(dateStr);
+        return this.ymd(parsed.y, parsed.m, parsed.d);
     },
     array: function array(arr) {
-        return this.setup(new Date(Date.UTC(arr[0], arr[1]-1, arr[2], 0,0,0)));
-    },
-    ymd: function ymd(y, m, d) {
-        return this.setup(new Date(Date.UTC(y, m-1, d, 0,0,0)));
+        return this.ymd(arr[0], arr[1], arr[2]);
     },
 };
 
