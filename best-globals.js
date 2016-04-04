@@ -124,6 +124,12 @@ function dateIsValid(dateObject) {
     return false;
 }
 
+function setupDate(d) {
+    d.setTime( d.getTime() + d.getTimezoneOffset()*60*1000 );
+    d.isRealDate=dateIsValid(d);
+    return d;
+}
+
 function prn(id, d) {
     console.log(id, ".toISOString", d.toISOString());
     console.log(id, ".toUTCString", d.toUTCString());
@@ -137,12 +143,11 @@ function prn(id, d) {
 
 bestGlobals.date = {
     iso: function iso(dateStr) {
-        var d = new Date(Date.parse(dateStr));
-        d.setTime( d.getTime() + d.getTimezoneOffset()*60*1000 );
-        d.isRealDate=dateIsValid(d);
-        return d;
+        return setupDate(new Date(Date.parse(dateStr)));
     },
-    array:nothing,
+    array: function array(arr) {
+        return setupDate(new Date(Date.UTC(arr[0], arr[1]-1, arr[2], 0,0,0)));
+    },
     ymd:nothing,
 };
 
