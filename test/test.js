@@ -266,6 +266,14 @@ describe("date", function(){
             .then(done, done);
         });
     };
+    [ [7], ["1992-12-12"], /*[new Date(1999,12,31,23,0,0)],*/ [null] ].forEach(function(invalidParams){
+        it("setDateValue rejects invalid date: "+JSON.stringify(invalidParams), function(){
+            expect(function(){
+                var d1 = date.iso("2016-04-03");
+                d1.setDateValue.apply(d1, invalidParams);
+            }).to.throwError(/invalid date/);
+        });
+    });
 });
 
 describe("setGlobals",function(){

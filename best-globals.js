@@ -161,17 +161,28 @@ bestGlobals.date = {
     },
     ymd: function ymd(y, m, d) {
         if(! this.isValid(y, m, d)) { throw new Error('invalid date'); }
-        var d = new Date(y, m-1, d);
+        var d = new Date(y, m-1, d, 0, 0, 0, 0);
         d.isRealDate=true;
-        d.setDateValue = function setDateValue(dateVal) {
-            this.setTime(dateVal.valueOf())
+        function isValidDate(dv) {
+            if(Object.prototype.toString.call(dv) === "[object Date]") {
+                if(isNaN(dv.getTime())) { return false; }
+                if(dv.toString()==='Invalid Date') { return false; }
+                return true;
+            }
+            return false;
         };
         d.setDateValue = function setDateValue(dateVal) {
             return Promises.make(function(resolve, reject) {
+                if(! isValidDate(dateVal)) { return reject('invalid date'); }
                 d.setTime(dateVal);
                 return resolve();
             });
         };
+        d.setDateValue = function setDateValue(dateVal) {
+            if(! isValidDate(dateVal)) { throw new Error('invalid date'); }
+            d.setTime(dateVal.valueOf()); 
+        };
+
         return d;
     },
     iso: function iso(dateStr) {
