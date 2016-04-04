@@ -202,7 +202,7 @@ describe("date", function(){
         expect(isValid(1940,13,29)).to.not.be.ok();
         expect(isValid(1940,11,31)).to.not.be.ok();
         expect(isValid(1940,4,31)).to.not.be.ok();
-        expect(isValid(194,5,31)).to.not.be.ok();
+        expect(isValid(194,5,31)).to.be.ok();
     });
     it("should validate a date object", function() {
        var isReal = bestGlobals.date.isReal;

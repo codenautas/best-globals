@@ -137,7 +137,6 @@ bestGlobals.date = {
     isValid: function isValid(y, m, d) {
         //console.log("isValid(", y, m, d, ")")
         if(y<0 || m<0 || d<0) { return false; }
-        if(y<1900) { return false; }
         switch(m) {
             case 1: case 3: case 5: case 7: case 8: case 10: case 12:
                 if(d>31) { return false; }
