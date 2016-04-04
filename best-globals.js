@@ -139,6 +139,23 @@ bestGlobals.date = {
         //for(var m=0; m<match.length; ++m) { console.log("m", m, "'"+match[m]+"'");  }
         return { y:parseInt(match[2]), m:parseInt(match[4]), d:parseInt(match[7]) };
     },
+    isValid: function isValid(y, m, d) {
+        if(y<0 || m<0 || d<0) { return false; }
+        if(y<1900) { return false; }
+        switch(m) {
+            case 1: case 3: case 5: case 7: case 8: case 10: case 12:
+                if(d>31) { return false; }
+                break;
+            case 4: case 6: case 9: case 11:
+                if(d>30) { return false; }
+                break;
+            case 2:
+                if(d > ((new Date(y, 1, 29).getMonth() == 1) ? 29 : 28) ) { return false; }
+                break;
+            default: return false;
+        }
+        return true;
+    },
     dateIsReal: function dateIsReal(dateObject) {
         //console.log("toString", dateObject.toString());
         if(Object.prototype.toString.call(dateObject) === "[object Date]") {

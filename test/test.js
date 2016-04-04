@@ -191,6 +191,19 @@ describe("date", function(){
        expect(parse("2016_12_02")).to.eql(error);
        expect(parse("2016-2-30")).to.eql({y:2016, m:2, d:30}); // right format, wrong date
     });
+    it("should validate y/d/m", function() {
+        var isValid = bestGlobals.date.isValid;
+        expect(isValid(1900,1,1)).to.be.ok();
+        expect(isValid(2016,2,28)).to.be.ok();
+        expect(isValid(1969,12,31)).to.be.ok();
+        expect(isValid(2016,2,29)).to.be.ok();
+        expect(isValid(2015,2,29)).to.not.be.ok();
+        expect(isValid(15,2,29)).to.not.be.ok();
+        expect(isValid(1940,13,29)).to.not.be.ok();
+        expect(isValid(1940,11,31)).to.not.be.ok();
+        expect(isValid(1940,4,31)).to.not.be.ok();
+        expect(isValid(194,5,31)).to.not.be.ok();
+    });
     it("should validate a date object", function() {
        var isReal = bestGlobals.date.dateIsReal;
        expect(isReal(new Date())).to.be.ok();
