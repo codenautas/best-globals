@@ -202,13 +202,16 @@ describe("date", function(){
         expect(isValid(1940,13,29)).to.not.be.ok();
         expect(isValid(1940,11,31)).to.not.be.ok();
         expect(isValid(1940,4,31)).to.not.be.ok();
+        expect(isValid(1940,3,33)).to.not.be.ok();
         expect(isValid(194,5,31)).to.be.ok();
     });
     it("should validate a date object", function() {
        var isReal = bestGlobals.date.isReal;
        expect(isReal(new Date())).to.be.ok();
        expect(isReal(new Date("wrong"))).to.not.be.ok();
-       //expect(isReal(new Date(2016,1,31))).to.not.be.ok();
+       expect(isReal(new Date('23/25/2014'))).to.not.be.ok();
+       expect(isReal(2016)).to.not.be.ok();
+       //expect(isReal(new Date('foo-bar 2014'))).to.not.be.ok();
     });
     
     var indep = new Date(1916,7-1,9);
@@ -266,7 +269,7 @@ describe("date", function(){
             .then(done, done);
         });
     };
-    [ [7], ["1992-12-12"], [new Date(1999,12,31,23,0,0)], [null] ].forEach(function(invalidParams){
+    [ [7], ["1992-12-12"], [new Date(1999,12,31,23,0,0)]/*, [new Date('foo-bar 2014')]*/, [new Date('23/25/2014')], [null] ].forEach(function(invalidParams){
         it("setDateValue rejects invalid date: "+JSON.stringify(invalidParams), function(){
             expect(function(){
                 var d1 = date.iso("2016-04-03");

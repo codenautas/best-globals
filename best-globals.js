@@ -154,7 +154,6 @@ bestGlobals.date = {
     isReal: function isReal(dateObject) {
         if(Object.prototype.toString.call(dateObject) === "[object Date]") {
             if(isNaN(dateObject.getTime())) { return false; }
-            if(dateObject.toString()==='Invalid Date') { return false; }
             return bestGlobals.date.isValid(dateObject.getFullYear(), dateObject.getMonth()+1, dateObject.getDay()+1);
         }
         return false;
@@ -166,7 +165,6 @@ bestGlobals.date = {
         function isValidDate(dv) {
             if(Object.prototype.toString.call(dv) === "[object Date]") {
                 if(isNaN(dv.getTime())) { return false; }
-                if(dv.toString()==='Invalid Date') { return false; }
                 if(dv.getHours()!==0 || dv.getMinutes() !==0 || dv.getSeconds() !==0 || dv.getMilliseconds() !==0) {
                     return false;
                 }
