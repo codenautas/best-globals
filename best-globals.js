@@ -167,6 +167,9 @@ bestGlobals.date = {
             if(Object.prototype.toString.call(dv) === "[object Date]") {
                 if(isNaN(dv.getTime())) { return false; }
                 if(dv.toString()==='Invalid Date') { return false; }
+                if(dv.getHours()!==0 || dv.getMinutes() !==0 || dv.getSeconds() !==0 || dv.getMilliseconds() !==0) {
+                    return false;
+                }
                 return true;
             }
             return false;
