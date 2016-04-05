@@ -175,13 +175,6 @@ bestGlobals.date = {
             return false;
         };
         d.setDateValue = function setDateValue(dateVal) {
-            return Promises.make(function(resolve, reject) {
-                if(! isValidDate(dateVal)) { return reject('invalid date'); }
-                d.setTime(dateVal);
-                return resolve();
-            });
-        };
-        d.setDateValue = function setDateValue(dateVal) {
             if(! isValidDate(dateVal)) { throw new Error('invalid date'); }
             d.setTime(dateVal.valueOf()); 
         };
