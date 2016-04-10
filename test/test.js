@@ -180,42 +180,9 @@ describe('mini-tools config functions', function(){
 });
 
 describe("date", function(){
-    it("should parse the format of a string", function() {
-       var parse = bestGlobals.date.parseFormat;
-       var error = {y:-1, m:-1, d:-1};
-       expect(parse("2016-12-02")).to.eql({y:2016, m:12, d:2});
-       expect(parse("2016-1-02")).to.eql({y:2016, m:1, d:2});
-       expect(parse("2016/1/02")).to.eql({y:2016, m:1, d:2});
-       expect(parse("2016-12/02")).to.eql(error);
-       expect(parse("2016/12-02")).to.eql(error);
-       expect(parse("2016_12_02")).to.eql(error);
-       expect(parse("2016-2-30")).to.eql({y:2016, m:2, d:30}); // right format, wrong date
-    });
-    it("should validate y/d/m", function() {
-        var isValid = bestGlobals.date.isValid;
-        expect(isValid(1900,1,1)).to.be.ok();
-        expect(isValid(2016,2,28)).to.be.ok();
-        expect(isValid(1969,12,31)).to.be.ok();
-        expect(isValid(2016,2,29)).to.be.ok();
-        expect(isValid(2015,2,29)).to.not.be.ok();
-        expect(isValid(15,2,29)).to.not.be.ok();
-        expect(isValid(1940,13,29)).to.not.be.ok();
-        expect(isValid(1940,11,31)).to.not.be.ok();
-        expect(isValid(1940,4,31)).to.not.be.ok();
-        expect(isValid(1940,3,33)).to.not.be.ok();
-        expect(isValid(194,5,31)).to.be.ok();
-    });
-    it("should validate a date object", function() {
-       var isReal = bestGlobals.date.isReal;
-       expect(isReal(new Date())).to.be.ok();
-       expect(isReal(new Date("wrong"))).to.not.be.ok();
-       expect(isReal(new Date('23/25/2014'))).to.not.be.ok();
-       expect(isReal(2016)).to.not.be.ok();
-       //expect(isReal(new Date('foo-bar 2014'))).to.not.be.ok();
-    });
-    
     var indep = new Date(1916,7-1,9);
     var first = new Date(1910,5-1,25);
+    var nateConstantino = new Date(272,2-1,27);
     var date = bestGlobals.date;
     function control(fechaConstruida, fechaControl){
         expect(fechaConstruida.isRealDate).to.eql(true);
@@ -227,6 +194,10 @@ describe("date", function(){
     it("create date from string", function(){
         var d1 = date.iso("1916-07-09");
         control(d1, indep);
+    });
+    it.skip("create date from string without trainling zeros", function(){
+        var d1 = date.iso("272-2-27");
+        control(d1, nateConstantino);
     });
     it("create date from array", function(){
         var d1 = date.array([1916,7,09]);
@@ -269,13 +240,46 @@ describe("date", function(){
             .then(done, done);
         });
     };
-    [ [7], ["1992-12-12"], [new Date(1999,12,31,23,0,0)]/*, [new Date('foo-bar 2014')]*/, [new Date('23/25/2014')], [null] ].forEach(function(invalidParams){
+    [ [7], ["1992-12-12"], [new Date(1999,12,31,23,0,0)], [new Date("abcd")], [new Date('23/25/2014')], [null] ].forEach(function(invalidParams){
         it("setDateValue rejects invalid date: "+JSON.stringify(invalidParams), function(){
             expect(function(){
                 var d1 = date.iso("2016-04-03");
                 d1.setDateValue.apply(d1, invalidParams);
             }).to.throwError(/invalid date/);
         });
+    });
+    it("should parse the format of a string", function() {
+       var parse = bestGlobals.date.parseFormat;
+       var error = {y:-1, m:-1, d:-1};
+       expect(parse("2016-12-02")).to.eql({y:2016, m:12, d:2});
+       expect(parse("2016-1-02")).to.eql({y:2016, m:1, d:2});
+       expect(parse("2016/1/02")).to.eql({y:2016, m:1, d:2});
+       expect(parse("2016-12/02")).to.eql(error);
+       expect(parse("2016/12-02")).to.eql(error);
+       expect(parse("2016_12_02")).to.eql(error);
+       expect(parse("2016-2-30")).to.eql({y:2016, m:2, d:30}); // right format, wrong date
+    });
+    it("should validate y/d/m", function() {
+        var isValid = bestGlobals.date.isValid;
+        expect(isValid(1900,1,1)).to.be.ok();
+        expect(isValid(2016,2,28)).to.be.ok();
+        expect(isValid(1969,12,31)).to.be.ok();
+        expect(isValid(2016,2,29)).to.be.ok();
+        expect(isValid(2015,2,29)).to.not.be.ok();
+        expect(isValid(15,2,29)).to.not.be.ok();
+        expect(isValid(1940,13,29)).to.not.be.ok();
+        expect(isValid(1940,11,31)).to.not.be.ok();
+        expect(isValid(1940,4,31)).to.not.be.ok();
+        expect(isValid(1940,3,33)).to.not.be.ok();
+        expect(isValid(194,5,31)).to.be.ok();
+    });
+    it("should validate a date object", function() {
+       var isReal = bestGlobals.date.isReal;
+       expect(isReal(new Date())).to.be.ok();
+       expect(isReal(new Date("wrong"))).to.not.be.ok();
+       expect(isReal(new Date('23/25/2014'))).to.not.be.ok();
+       expect(isReal(2016)).to.not.be.ok();
+       //expect(isReal(new Date('foo-bar 2014'))).to.not.be.ok();
     });
 });
 
