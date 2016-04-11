@@ -182,6 +182,7 @@ bestGlobals.date = {
         return this.ymd(parsed.y, parsed.m, parsed.d);
     },
     array: function array(arr) {
+        if(arr.length !== 3) { throw new Error('invalid date array'); }
         return this.ymd(arr[0], arr[1], arr[2]);
     }
 };

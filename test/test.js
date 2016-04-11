@@ -249,7 +249,7 @@ describe("date", function(){
         });
     });
     it("should parse the format of a string", function() {
-       var parse = bestGlobals.date.parseFormat;
+       var parse = date.parseFormat;
        var invalidDate = /invalid date/;
        expect(parse("2016-12-02")).to.eql({y:2016, m:12, d:2});
        expect(parse("2016-1-02")).to.eql({y:2016, m:1, d:2});
@@ -280,6 +280,13 @@ describe("date", function(){
        expect(isReal(new Date('23/25/2014'))).to.not.be.ok();
        expect(isReal(2016)).to.not.be.ok();
        //expect(isReal(new Date('foo-bar 2014'))).to.not.be.ok();
+    });
+    [ [7], [3,4], [3,4,2010,4], [1992,4,4,1], ["1992-12-12"], [null] ].forEach(function(invalidParams){
+        it("date.array rejects invalid input: "+JSON.stringify(invalidParams), function(){
+            expect(function(){
+                date.array(invalidParams);
+            }).to.throwError(/invalid date array/);
+        });
     });
 });
 
