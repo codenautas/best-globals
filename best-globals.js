@@ -22,8 +22,6 @@
 })(/*jshint -W040 */this, 'bestGlobals', function() {
 /*jshint +W040 */
 
-var Promises = require('best-promise');
-
 /*jshint -W004 */
 var bestGlobals = {};
 /*jshint +W004 */
@@ -158,8 +156,8 @@ bestGlobals.date = {
     },
     ymd: function ymd(y, m, d) {
         if(! this.isValid(y, m, d)) { throw new Error('invalid date'); }
-        var d = new Date(y, m-1, d, 0, 0, 0, 0);
-        d.isRealDate=true;
+        var date = new Date(y, m-1, d, 0, 0, 0, 0);
+        date.isRealDate=true;
         function isValidDate(dv) {
             if(Object.prototype.toString.call(dv) === "[object Date]") {
                 if(isNaN(dv.getTime())) { return false; }
@@ -169,13 +167,12 @@ bestGlobals.date = {
                 return true;
             }
             return false;
-        };
-        d.setDateValue = function setDateValue(dateVal) {
+        }
+        date.setDateValue = function setDateValue(dateVal) {
             if(! isValidDate(dateVal)) { throw new Error('invalid date'); }
-            d.setTime(dateVal.valueOf()); 
+            date.setTime(dateVal.valueOf()); 
         };
-
-        return d;
+        return date;
     },
     iso: function iso(dateStr) {
         var parsed=this.parseFormat(dateStr);
