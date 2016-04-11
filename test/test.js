@@ -195,7 +195,7 @@ describe("date", function(){
         var d1 = date.iso("1916-07-09");
         control(d1, indep);
     });
-    it.skip("create date from string without trainling zeros", function(){
+    it("create date from string without trainling zeros", function(){
         var d1 = date.iso("272-2-27");
         control(d1, nateConstantino);
     });
