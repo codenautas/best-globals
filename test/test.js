@@ -271,6 +271,7 @@ describe("date", function(){
         expect(isValid(1940,11,31)).to.not.be.ok();
         expect(isValid(1940,4,31)).to.not.be.ok();
         expect(isValid(1940,3,33)).to.not.be.ok();
+        expect(isValid(-1940,3,33)).to.not.be.ok();
         expect(isValid(194,5,31)).to.be.ok();
     });
     it("should validate a date object", function() {
@@ -286,6 +287,13 @@ describe("date", function(){
             expect(function(){
                 date.array(invalidParams);
             }).to.throwError(/invalid date array/);
+        });
+    });
+    [ {y:-1, m:7, d:4} , {y:1000, m:13, d:4}, {y:2000, m:7, d:34}  ].forEach(function(invalidParams){
+        it("date.ymd rejects invalid input: "+JSON.stringify(invalidParams), function(){
+            expect(function(){
+                date.ymd(invalidParams.y, invalidParams.m, invalidParams.d);
+            }).to.throwError(/invalid date/);
         });
     });
 });

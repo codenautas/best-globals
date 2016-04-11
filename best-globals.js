@@ -157,7 +157,7 @@ bestGlobals.date = {
     ymd: function ymd(y, m, d) {
         if(! this.isValid(y, m, d)) { throw new Error('invalid date'); }
         var date = new Date(y, m-1, d, 0, 0, 0, 0);
-        date.isRealDate=true;
+        date.isRealDate=this.isReal(date);
         function isValidDate(dv) {
             if(Object.prototype.toString.call(dv) === "[object Date]") {
                 if(isNaN(dv.getTime())) { return false; }
