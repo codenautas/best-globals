@@ -129,9 +129,7 @@ bestGlobals.date = {
         var re = '([0-9]+)([-/])(([1][0-2])|(0?[1-9]))\\3(([0123][0-9]))';
         var reDate = new RegExp('^('+re+'('+tz1+'|'+tz2+')?)$');
         var match = reDate.exec(dateStr);
-        var err = {y:-1, m:-1, d:-1};
-        if(! match) { return err; }
-        //for(var m=0; m<match.length; ++m) { console.log("m", m, "'"+match[m]+"'");  }
+        if(! match) { throw new Error('invalid date'); }
         return { y:parseInt(match[2]), m:parseInt(match[4]), d:parseInt(match[7]) };
     },
     isValid: function isValid(y, m, d) {

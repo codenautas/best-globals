@@ -250,13 +250,13 @@ describe("date", function(){
     });
     it("should parse the format of a string", function() {
        var parse = bestGlobals.date.parseFormat;
-       var error = {y:-1, m:-1, d:-1};
+       var invalidDate = /invalid date/;
        expect(parse("2016-12-02")).to.eql({y:2016, m:12, d:2});
        expect(parse("2016-1-02")).to.eql({y:2016, m:1, d:2});
        expect(parse("2016/1/02")).to.eql({y:2016, m:1, d:2});
-       expect(parse("2016-12/02")).to.eql(error);
-       expect(parse("2016/12-02")).to.eql(error);
-       expect(parse("2016_12_02")).to.eql(error);
+       expect(parse).withArgs("2016-12/02").to.throwError(invalidDate);
+       expect(parse).withArgs("2016/12-02").to.throwError(invalidDate);
+       expect(parse).withArgs("2016_12_02").to.throwError(invalidDate);
        expect(parse("2016-2-30")).to.eql({y:2016, m:2, d:30}); // right format, wrong date
     });
     it("should validate y/d/m", function() {
