@@ -30,6 +30,7 @@
     "test-cov": "istanbul cover node_modules/mocha/bin/_mocha -- --reporter dot --check-leaks test/",
     "start": "node examples/server/server.js"
   },
+  "files": [ "best-globals.js" ],
   "jshintConfig": {
     "asi": false,
     "curly": true,

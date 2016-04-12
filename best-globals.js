@@ -128,7 +128,7 @@ bestGlobals.date = {
         var reDate = new RegExp('^('+re+'('+tz1+'|'+tz2+')?)$');
         var match = reDate.exec(dateStr);
         if(! match) { throw new Error('invalid date'); }
-        return { y:parseInt(match[2]), m:parseInt(match[4]), d:parseInt(match[7]) };
+        return { y:parseInt(match[2],10), m:parseInt(match[4],10), d:parseInt(match[7],10) };
     },
     isValid: function isValid(y, m, d) {
         //console.log("isValid(", y, m, d, ")")
@@ -141,7 +141,7 @@ bestGlobals.date = {
                 if(d>30) { return false; }
                 break;
             case 2:
-                if(d > ((new Date(y, 1, 29).getMonth() == 1) ? 29 : 28) ) { return false; }
+                if(d > ((new Date(y, 1, 29).getMonth() === 1) ? 29 : 28) ) { return false; }
                 break;
             default: return false;
         }
