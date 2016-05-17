@@ -119,6 +119,11 @@ function nothing(){
 }
 */
 
+function npad(num, width) {
+    var n=num+''; // to string
+    return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
+}
+
 bestGlobals.date = {
     parseFormat: function parseFormat(dateStr) {
         var tz1 = ' [0-9]{2}:[0-9]{2}:[0-9]{2}-[0-9]{2}:[0-9]{2}';
@@ -184,6 +189,11 @@ bestGlobals.date = {
     },
     ymdString: function ymdString(dt) {
         if(! (dt instanceof Date)) { throw new Error('invalid date'); }
+        var r = [];
+        r.push(dt.getFullYear());
+        r.push(npad(dt.getMonth()+1,2));
+        r.push(npad(dt.getDate(),2));
+        return r.join('-');
     },
     hmsString: function ymdString(dt) {
         if(! (dt instanceof Date)) { throw new Error('invalid date'); }

@@ -304,6 +304,16 @@ describe("date", function(){
                 });
             });
         });
+        [
+            {i:new Date(2015, 1, 10), o:'2015-02-10'},
+            {i:new Date(1935, 11, 1), o:'1935-12-01'},
+            {i:new Date(1935, 11, 31), o:'1935-12-31'},
+            {i:new Date(2035, 0, 1), o:'2035-01-01'},
+        ].forEach(function(param){
+            it("ymdString("+JSON.stringify(param.i)+") should return "+param.o, function(){
+                expect(date.ymdString(param.i)).to.eql(param.o);
+            });
+        });
     });
 });
 
