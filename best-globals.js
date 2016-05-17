@@ -197,6 +197,11 @@ bestGlobals.date = {
     },
     hmsString: function ymdString(dt) {
         if(! (dt instanceof Date)) { throw new Error('invalid date'); }
+        var r = [];
+        r.push(npad(dt.getHours(),2));
+        r.push(npad(dt.getMinutes(),2));
+        r.push(npad(dt.getSeconds(),2));
+        return r.join(':');
     },
     ymdHmsString: function ymdString(dt) {
         if(! (dt instanceof Date)) { throw new Error('invalid date'); }
