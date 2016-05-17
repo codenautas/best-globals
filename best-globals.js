@@ -181,6 +181,15 @@ bestGlobals.date = {
     array: function array(arr) {
         if(arr.length !== 3) { throw new Error('invalid date array'); }
         return this.ymd(arr[0], arr[1], arr[2]);
+    },
+    ymdString: function ymdString(dt) {
+        if(! (dt instanceof Date)) { throw new Error('invalid date'); }
+    },
+    hmsString: function ymdString(dt) {
+        if(! (dt instanceof Date)) { throw new Error('invalid date'); }
+    },
+    ymdHmsString: function ymdString(dt) {
+        if(! (dt instanceof Date)) { throw new Error('invalid date'); }
     }
 };
 
