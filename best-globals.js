@@ -206,6 +206,10 @@ bestGlobals.date = {
     ymdHmsString: function ymdHmsString(dt) {
         if(! (dt instanceof Date)) { throw new Error('invalid date'); }
         return bestGlobals.date.ymdString(dt)+' '+bestGlobals.date.hmsString(dt);
+    },
+    ymdHmsMString: function ymdHmsMString(dt) {
+        if(! (dt instanceof Date)) { throw new Error('invalid date'); }
+        return bestGlobals.date.ymdHmsString(dt)+'.'+npad(dt.getMilliseconds(),3);
     }
 };
 
