@@ -195,7 +195,7 @@ bestGlobals.date = {
         r.push(npad(dt.getDate(),2));
         return r.join('-');
     },
-    hmsString: function ymdString(dt) {
+    hmsString: function hmsString(dt) {
         if(! (dt instanceof Date)) { throw new Error('invalid date'); }
         var r = [];
         r.push(npad(dt.getHours(),2));
@@ -203,8 +203,9 @@ bestGlobals.date = {
         r.push(npad(dt.getSeconds(),2));
         return r.join(':');
     },
-    ymdHmsString: function ymdString(dt) {
+    ymdHmsString: function ymdHmsString(dt) {
         if(! (dt instanceof Date)) { throw new Error('invalid date'); }
+        return bestGlobals.date.ymdString(dt)+' '+bestGlobals.date.hmsString(dt);
     }
 };
 

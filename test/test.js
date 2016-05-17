@@ -311,7 +311,7 @@ describe("date", function(){
             {i:new Date(2035, 0, 1), o:'2035-01-01'},
             {i:new Date(2035, 0, 1, 3, 3), o:'2035-01-01'},
         ].forEach(function(param){
-            it("ymdString("+JSON.stringify(param.i)+") returns "+param.o, function(){
+            it("ymdString("+param.i.toLocaleString()+") => ["+param.o+"]", function(){
                 expect(date.ymdString(param.i)).to.eql(param.o);
             });
         });
@@ -321,8 +321,18 @@ describe("date", function(){
             {i:new Date(1935, 11, 1, 10, 11, 12), o:'10:11:12'},
             {i:new Date(1935, 11, 1, 0, 1, 2), o:'00:01:02'},
         ].forEach(function(param){
-            it("hmsString("+JSON.stringify(param.i)+") returns "+param.o, function(){
+            it("hmsString("+param.i.toLocaleString()+") => ["+param.o+"]", function(){
                 expect(date.hmsString(param.i)).to.eql(param.o);
+            });
+        });
+        [
+            {i:new Date(2015, 1, 10), o:'2015-02-10 00:00:00'},
+            {i:new Date(2015, 11, 1), o:'2015-12-01 00:00:00'},
+            {i:new Date(1969, 1, 2, 14, 2, 30), o:'1969-02-02 14:02:30'},
+            {i:new Date(1969, 1, 2, 14, 2), o:'1969-02-02 14:02:00'},
+        ].forEach(function(param){
+            it("ymdHmsString("+param.i.toLocaleString()+") => ["+param.o+"]", function(){
+                expect(date.ymdHmsString(param.i)).to.eql(param.o);
             });
         });
     });
