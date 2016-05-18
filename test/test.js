@@ -190,6 +190,7 @@ describe("date", function(){
         expect(fechaConstruida.toUTCString()).to.eql(fechaControl.toUTCString());
         expect(fechaConstruida.getTime()).to.eql(fechaControl.getTime());
         expect(fechaConstruida - fechaControl).to.eql(0);
+        expect(fechaConstruida).to.eql(date(fechaControl));
     }
     it("create date from string", function(){
         var d1 = date.iso("1916-07-09");
@@ -212,6 +213,19 @@ describe("date", function(){
         control(d1, indep);
         var d1 = date.iso("1916-07-09T00:00:00Z");
         control(d1, indep);
+    });
+    it("create datetime from string", function(){
+        var d1 = datetime.iso("1916-07-09 10:32");
+        expect(d1.isRealDateTime).to.be.ok();
+        expect(d1.toISOString()).to.eql(new Date(1916,7-1,9,10,32));
+    });
+    it("create datetime from integer", function(){
+        var d1 = datetime.ymdHms(1916,07,09,10,32,0);
+        expect(d1.toISOString()).to.eql(new Date(1916,7-1,9,10,32));
+    });
+    it("create timeInterval from integer and format it", function(){
+        expect(timeInterval(new Date(1916,07,09,10,32,0)-new Date(1916,07,09,10,32,11)).toHms).eql('-00:00:11');
+        expect(timeInterval(new Date(1916,07,07,11,00,0)-new Date(1916,07,09,10,32,11)).toHms).eql('48:27:49');
     });
     [ ["1997-12"], [1997,12], [1997,0,1], [[1997,0,1]], [(new Date(1916,7-1,9)).getTime()]].forEach(function(invalidParams){
         it("rejects invalid date: "+JSON.stringify(invalidParams), function(){
