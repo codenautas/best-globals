@@ -115,10 +115,7 @@ function npad(num, width) {
     return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
 }
 
-////////// date
-bestGlobals.date = function date(dt) {
-    if(! bestGlobals.date.isReal(dt)) { throw new Error('invalid date'); }
-    dt.isRealDate = true;
+function dateFix(dt) {
     dt.toYmd = function toYmd() {
         var r = [];
         r.push(this.getFullYear());
@@ -144,6 +141,17 @@ bestGlobals.date = function date(dt) {
         dt.setTime(dateVal.valueOf()); 
     };
     return dt;
+};
+
+////////// date
+bestGlobals.date = function date(dt) {
+    if(! bestGlobals.date.isReal(dt)) { throw new Error('invalid date'); }
+    var d = dateFix(dt);
+    if(d.getHours() || d.getMinutes() || d.getSeconds() || d.getMilliseconds()) {
+        throw new Error('invalid date "'+d.toDateString()+'"because it has time');
+    }
+    d.isRealDate = true;
+    return d;
 };
 bestGlobals.date.isValidDate = function isValidDate(y, m, d) {
     if(y<0 || m<0 || d<0) { return false; }
@@ -199,16 +207,14 @@ bestGlobals.date.array = function array(arr) {
 
 /////// datetime
 bestGlobals.datetime=function datetime(dt) {
-    bestGlobals.date.call(this, dt);
-    dt.isRealDateTime = true;
+    if(! bestGlobals.date.isReal(dt)) { throw new Error('invalid date'); }
+    var d = dateFix(dt);
+    d.isRealDateTime = true;
+    return d;
 };
 
-bestGlobals.datetime.prototype = Object.create(bestGlobals.date.prototype);
-
 bestGlobals.datetime.isValidTime = function isValidTime(h, m, s, ms) {
-    if(h<0 || m<0 || s<0 || ms<0
-       || h>23 || m>59 || s>59 || ms>999
-    ) { return false; }
+    if(h<0 || m<0 || s<0 || ms<0 || h>23 || m>59 || s>59 || ms>999) { return false; }
     return true;
 };
 
@@ -219,7 +225,7 @@ bestGlobals.datetime.ymdHms = function ymdHmsM(y, m, d, hh, mm, ss) {
 bestGlobals.datetime.ymdHmsM = function ymdHmsM(y, m, d, hh, mm, ss, ms) {
     if(! bestGlobals.date.isValidDate(y, m, d)) { throw new Error('invalid date'); }
     if(! bestGlobals.datetime.isValidTime(hh, mm, ss, ms)) { throw new Error('invalid datetime'); }
-    var dt = bestGlobals.date(new Date(y, m-1, d, hh, mm, ss, ms));
+    var dt = bestGlobals.datetime(new Date(y, m-1, d, hh, mm, ss, ms));
     dt.isRealDateTime = true;
     return dt;
 };
@@ -230,16 +236,14 @@ bestGlobals.datetime.parseFormat = function parseFormat(dateStr) {
     var match = re.exec(dateStr);
     if(! match) { throw new Error('invalid datetime'); }
     // for(var p=0; p<match.length; ++p) { console.log(p, match[p]); }
-    return { y:parseInt(match[2],10), m:parseInt(match[4],10), d:parseInt(match[7],10),
+    return {  y:parseInt(match[2],10), m:parseInt(match[4],10), d:parseInt(match[7],10),
              hh:parseInt(match[10]?match[10]:0,10), mm:parseInt(match[11]?match[11]:0,10),
              ss:parseInt(match[13]?match[13]:0,10), xx:parseInt(match[15]?match[15]:0,10) };
 }
 
 bestGlobals.datetime.iso = function iso(dateStr) {
     var parsed=bestGlobals.datetime.parseFormat(dateStr);
-    var dt = bestGlobals.datetime.ymdHmsM(parsed.y, parsed.m, parsed.d, parsed.hh, parsed.mm, parsed.ss, parsed.xx);
-    dt.isRealDateTime = true;
-    return dt;
+    return bestGlobals.datetime.ymdHmsM(parsed.y, parsed.m, parsed.d, parsed.hh, parsed.mm, parsed.ss, parsed.xx);
 }
 
 bestGlobals.createOptionsToFunction(bestGlobals.changing);

@@ -323,13 +323,13 @@ describe("date", function(){
         });
     });
     describe("to string", function(){
-        [ {} , 1000, 'un string', 232.3, []  ].forEach(function(invalidParams){
+        [ {} , 'un string', 232.3, [], 1000  ].forEach(function(invalidParams){
             it("date() rejects "+JSON.stringify(invalidParams), function(){
                 expect(function(){ date(invalidParams); }).to.throwError(/invalid date/);
                 expect(function(){ datetime(invalidParams); }).to.throwError(/invalid date/);
             });
         });
-        it.skip("rejects time in date", function(){
+        it("rejects time in date", function(){
             expect(function(){ date(new Date(1999,11,12,10,20)); }).to.throwError(/invalid date.*because it has time/);
         });
         [
@@ -349,10 +349,10 @@ describe("date", function(){
             "toYmd,toHms,toYmdHms,toYmdHmsM".split(',').forEach(function(functionName){
                 if(param[functionName]) {
                     it(functionName+"("+param.i.toLocaleString()+") => ["+param[functionName]+"]", function(){
-                        if(!param.hasHour){
+                        if(! param.hasHour){
                             expect(date(param.i)[functionName]()).to.eql(param[functionName]);
                         }
-                        //expect(datetime(param.i)[functionName]()).to.eql(param[functionName]);
+                        expect(datetime(param.i)[functionName]()).to.eql(param[functionName]);
                     });
                 }
             });
