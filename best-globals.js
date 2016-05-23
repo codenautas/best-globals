@@ -132,16 +132,6 @@ function dateIsValid(y, m, d) {
     return true;
 };
 
-function parseFormat(dateStr) {
-    var tz1 = ' [0-9]{2}:[0-9]{2}:[0-9]{2}-[0-9]{2}:[0-9]{2}';
-    var tz2 = 'T[0-9]{2}:[0-9]{2}:[0-9]{2}Z';
-    // var re = '([12][0-9]{3})([-/])(([1][0-2])|(0?[1-9]))\\3(([0123][0-9]))';
-    var re = '([0-9]+)([-/])(([1][0-2])|(0?[1-9]))\\3(([0123][0-9]))';
-    var reDate = new RegExp('^('+re+'('+tz1+'|'+tz2+')?)$');
-    var match = reDate.exec(dateStr);
-    if(! match) { throw new Error('invalid date'); }
-    return { y:parseInt(match[2],10), m:parseInt(match[4],10), d:parseInt(match[7],10) };
-};
 
 function dateIsReal(dt) {
     if(! (dt instanceof Date)
@@ -185,8 +175,19 @@ bestGlobals.date.ymd = function ymd(y, m, d) {
     return bestGlobals.date(new Date(y, m-1, d, 0, 0, 0, 0));
 };
 
+bestGlobals.date.parseFormat = function parseFormat(dateStr) {
+    var tz1 = ' [0-9]{2}:[0-9]{2}:[0-9]{2}-[0-9]{2}:[0-9]{2}';
+    var tz2 = 'T[0-9]{2}:[0-9]{2}:[0-9]{2}Z';
+    // var re = '([12][0-9]{3})([-/])(([1][0-2])|(0?[1-9]))\\3(([0123][0-9]))';
+    var re = '([0-9]+)([-/])(([1][0-2])|(0?[1-9]))\\3(([0123][0-9]))';
+    var reDate = new RegExp('^('+re+'('+tz1+'|'+tz2+')?)$');
+    var match = reDate.exec(dateStr);
+    if(! match) { throw new Error('invalid date'); }
+    return { y:parseInt(match[2],10), m:parseInt(match[4],10), d:parseInt(match[7],10) };
+};
+
 bestGlobals.date.iso =  function iso(dateStr) {
-    var parsed=parseFormat(dateStr);
+    var parsed=bestGlobals.date.parseFormat(dateStr);
     return bestGlobals.date.ymd(parsed.y, parsed.m, parsed.d);
 };
 

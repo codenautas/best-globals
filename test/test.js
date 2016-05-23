@@ -262,7 +262,7 @@ describe("date", function(){
             }).to.throwError(/invalid date/);
         });
     });
-    it.skip("should parse the format of a string", function() {
+    it("should parse the format of a string", function() {
        var parse = date.parseFormat;
        var invalidDate = /invalid date/;
        expect(parse("2016-12-02")).to.eql({y:2016, m:12, d:2});
