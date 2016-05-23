@@ -290,6 +290,16 @@ describe("date", function(){
         expect(isValidDate(-1940,3,33)).to.not.be.ok();
         expect(isValidDate(194,5,31)).to.be.ok();
     });
+    it("should validate h/m/s/ms", function() {
+        var isValidTime = bestGlobals.datetime.isValidTime;
+        expect(isValidTime(0,0,0,0)).to.be.ok();
+        expect(isValidTime(23,59,59,999)).to.be.ok();
+        expect(isValidTime(-1,59,59,999)).to.not.be.ok();
+        expect(isValidTime(0,59,59,1999)).to.not.be.ok();
+        expect(isValidTime(0,-59,59,1999)).to.not.be.ok();
+        expect(isValidTime(0,59,-59,1999)).to.not.be.ok();
+        expect(isValidTime(0,59,59,-1)).to.not.be.ok();
+    });
     it("should validate a date object", function() {
        var isReal = bestGlobals.date.isReal;
        expect(isReal(new Date())).to.be.ok();
