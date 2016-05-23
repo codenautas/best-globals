@@ -329,6 +329,17 @@ describe("date", function(){
             }).to.throwError(/invalid date/);
         });
     });
+    [
+      {y:-2000, m:1, d:2, hh:0,  mm:0, ss:0, ms:0},
+      {y:2000,  m:1, d:2, hh:-1, mm:0, ss:0, ms:0}
+    ].forEach(function(invalidParams){
+        it("datetime.ymdHmsM rejects invalid input: "+JSON.stringify(invalidParams), function(){
+            expect(function(){
+                datetime.ymdHmsM(invalidParams.y, invalidParams.m, invalidParams.d,
+                                 invalidParams.y, invalidParams.m, invalidParams.d, invalidParams.x);
+            }).to.throwError(/invalid date/);
+        });
+    });
     describe("to string", function(){
         [ {} , 'un string', 232.3, [], 1000  ].forEach(function(invalidParams){
             it("date() rejects "+JSON.stringify(invalidParams), function(){

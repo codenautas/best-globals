@@ -122,26 +122,26 @@ function dateFix(dt) {
         r.push(npad(this.getMonth()+1,2));
         r.push(npad(this.getDate(),2));
         return r.join('-');        
-    }
+    };
     dt.toHms = function toHms() {
         var r = [];
         r.push(npad(this.getHours(),2));
         r.push(npad(this.getMinutes(),2));
         r.push(npad(this.getSeconds(),2));
         return r.join(':');
-    },
+    };
     dt.toYmdHms = function toYmdHms() {
         return this.toYmd()+' '+this.toHms();
-    },
+    };
     dt.toYmdHmsM = function toYmdHmsM() {
         return this.toYmdHms()+'.'+npad(this.getMilliseconds(),3);
-    }
+    };
     dt.setDateValue = function setDateValue(dateVal) {
         if(! bestGlobals.date.isReal(dateVal)) { throw new Error('invalid date'); }
         dt.setTime(dateVal.valueOf()); 
     };
     return dt;
-};
+}
 
 ////////// date
 bestGlobals.date = function date(dt) {
@@ -171,12 +171,9 @@ bestGlobals.date.isValidDate = function isValidDate(y, m, d) {
 };
 
 bestGlobals.date.isReal = function isReal(dt) {
-    if(! (dt instanceof Date)
-       || isNaN(dt.getTime())
-       || ! bestGlobals.date.isValidDate(dt.getFullYear(), dt.getMonth()+1, dt.getDay()+1)
-    ) { return false }
+    if(! (dt instanceof Date) || isNaN(dt.getTime()) || ! bestGlobals.date.isValidDate(dt.getFullYear(), dt.getMonth()+1, dt.getDay()+1)) { return false; }
     return true;
-}
+};
 
 bestGlobals.date.ymd = function ymd(y, m, d) {
     if(! bestGlobals.date.isValidDate(y, m, d)) { throw new Error('invalid date'); }
@@ -239,12 +236,12 @@ bestGlobals.datetime.parseFormat = function parseFormat(dateStr) {
     return {  y:parseInt(match[2],10), m:parseInt(match[4],10), d:parseInt(match[7],10),
              hh:parseInt(match[10]?match[10]:0,10), mm:parseInt(match[11]?match[11]:0,10),
              ss:parseInt(match[13]?match[13]:0,10), ms:parseInt(match[15]?match[15]:0,10) };
-}
+};
 
 bestGlobals.datetime.iso = function iso(dateStr) {
     var parsed=bestGlobals.datetime.parseFormat(dateStr);
     return bestGlobals.datetime.ymdHmsM(parsed.y, parsed.m, parsed.d, parsed.hh, parsed.mm, parsed.ss, parsed.ms);
-}
+};
 
 bestGlobals.createOptionsToFunction(bestGlobals.changing);
 
