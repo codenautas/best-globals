@@ -115,6 +115,7 @@ function npad(num, width) {
     return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
 }
 
+////////// date
 bestGlobals.date = function date(dt) {
     if(! bestGlobals.date.isReal(dt)) { throw new Error('invalid date'); }
     dt.isRealDate = true;
@@ -144,7 +145,7 @@ bestGlobals.date = function date(dt) {
     };
     return dt;
 };
-bestGlobals.date.isValid = function isValid(y, m, d) {
+bestGlobals.date.isValidDate = function isValidDate(y, m, d) {
     if(y<0 || m<0 || d<0) { return false; }
     switch(m) {
         case 1: case 3: case 5: case 7: case 8: case 10: case 12:
@@ -164,23 +165,24 @@ bestGlobals.date.isValid = function isValid(y, m, d) {
 bestGlobals.date.isReal = function isReal(dt) {
     if(! (dt instanceof Date)
        || isNaN(dt.getTime())
-       || ! bestGlobals.date.isValid(dt.getFullYear(), dt.getMonth()+1, dt.getDay()+1)
+       || ! bestGlobals.date.isValidDate(dt.getFullYear(), dt.getMonth()+1, dt.getDay()+1)
     ) { return false }
     return true;
 }
 
 bestGlobals.date.ymd = function ymd(y, m, d) {
-    if(! bestGlobals.date.isValid(y, m, d)) { throw new Error('invalid date'); }
+    if(! bestGlobals.date.isValidDate(y, m, d)) { throw new Error('invalid date'); }
     return bestGlobals.date(new Date(y, m-1, d, 0, 0, 0, 0));
 };
 
+// var reDate = '([12][0-9]{3})([-/])(([1][0-2])|(0?[1-9]))\\3(([0123][0-9]))';
+var reDate = '([0-9]+)([-/])(([1][0-2])|(0?[1-9]))\\3(([0123][0-9]))';
+
 bestGlobals.date.parseFormat = function parseFormat(dateStr) {
-    var tz1 = ' [0-9]{2}:[0-9]{2}:[0-9]{2}-[0-9]{2}:[0-9]{2}';
-    var tz2 = 'T[0-9]{2}:[0-9]{2}:[0-9]{2}Z';
-    // var re = '([12][0-9]{3})([-/])(([1][0-2])|(0?[1-9]))\\3(([0123][0-9]))';
-    var re = '([0-9]+)([-/])(([1][0-2])|(0?[1-9]))\\3(([0123][0-9]))';
-    var reDate = new RegExp('^('+re+'('+tz1+'|'+tz2+')?)$');
-    var match = reDate.exec(dateStr);
+    var reTz1 = ' [0-9]{2}:[0-9]{2}:[0-9]{2}-[0-9]{2}:[0-9]{2}';
+    var reTz2 = 'T([0-9]{2}):[0-9]{2}:[0-9]{2}Z';
+    var re = new RegExp('^('+reDate+'('+reTz1+'|'+reTz2+')?)$');
+    var match = re.exec(dateStr);
     if(! match) { throw new Error('invalid date'); }
     return { y:parseInt(match[2],10), m:parseInt(match[4],10), d:parseInt(match[7],10) };
 };
@@ -194,6 +196,51 @@ bestGlobals.date.array = function array(arr) {
     if(arr.length !== 3) { throw new Error('invalid date array'); }
     return bestGlobals.date.ymd(arr[0], arr[1], arr[2]);
 };
+
+/////// datetime
+bestGlobals.datetime=function datetime(dt) {
+    bestGlobals.date.call(this, dt);
+    dt.isRealDateTime = true;
+};
+
+bestGlobals.datetime.prototype = Object.create(bestGlobals.date.prototype);
+
+bestGlobals.datetime.isValidTime = function isValidTime(h, m, s, ms) {
+    if(h<0 || m<0 || s<0 || ms<0
+       || h>23 || m>59 || s>59 || ms>999
+    ) { return false; }
+    return true;
+};
+
+bestGlobals.datetime.ymdHms = function ymdHmsM(y, m, d, hh, mm, ss) {
+    return bestGlobals.datetime.ymdHmsM(y, m, d, hh, mm, ss, 0);
+};
+
+bestGlobals.datetime.ymdHmsM = function ymdHmsM(y, m, d, hh, mm, ss, ms) {
+    if(! bestGlobals.date.isValidDate(y, m, d)) { throw new Error('invalid date'); }
+    if(! bestGlobals.datetime.isValidTime(hh, mm, ss, ms)) { throw new Error('invalid datetime'); }
+    var dt = bestGlobals.date(new Date(y, m-1, d, hh, mm, ss, ms));
+    dt.isRealDateTime = true;
+    return dt;
+};
+
+bestGlobals.datetime.parseFormat = function parseFormat(dateStr) {
+    var reTz3 = ' ([0-9]{2}):([0-9]{2})(:([0-9]{2}))?(.([0-9]{3}))?';
+    var re = new RegExp('^('+reDate+'('+reTz3+')?)$');
+    var match = re.exec(dateStr);
+    if(! match) { throw new Error('invalid datetime'); }
+    // for(var p=0; p<match.length; ++p) { console.log(p, match[p]); }
+    return { y:parseInt(match[2],10), m:parseInt(match[4],10), d:parseInt(match[7],10),
+             hh:parseInt(match[10]?match[10]:0,10), mm:parseInt(match[11]?match[11]:0,10),
+             ss:parseInt(match[13]?match[13]:0,10), xx:parseInt(match[15]?match[15]:0,10) };
+}
+
+bestGlobals.datetime.iso = function iso(dateStr) {
+    var parsed=bestGlobals.datetime.parseFormat(dateStr);
+    var dt = bestGlobals.datetime.ymdHmsM(parsed.y, parsed.m, parsed.d, parsed.hh, parsed.mm, parsed.ss, parsed.xx);
+    dt.isRealDateTime = true;
+    return dt;
+}
 
 bestGlobals.createOptionsToFunction(bestGlobals.changing);
 
