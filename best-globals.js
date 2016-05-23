@@ -110,107 +110,89 @@ bestGlobals.changing = function changing(original, changes){
     }
 };
 
-/*
-function nothing(){ 
-    var d=new Date();
-    d.isRealDate=true;
-    d.setDateValue=nothing;
-    return d; 
-}
-*/
-
 function npad(num, width) {
     var n=num+''; // to string
     return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
 }
 
-bestGlobals.date = {
-    parseFormat: function parseFormat(dateStr) {
-        var tz1 = ' [0-9]{2}:[0-9]{2}:[0-9]{2}-[0-9]{2}:[0-9]{2}';
-        var tz2 = 'T[0-9]{2}:[0-9]{2}:[0-9]{2}Z';
-        // var re = '([12][0-9]{3})([-/])(([1][0-2])|(0?[1-9]))\\3(([0123][0-9]))';
-        var re = '([0-9]+)([-/])(([1][0-2])|(0?[1-9]))\\3(([0123][0-9]))';
-        var reDate = new RegExp('^('+re+'('+tz1+'|'+tz2+')?)$');
-        var match = reDate.exec(dateStr);
-        if(! match) { throw new Error('invalid date'); }
-        return { y:parseInt(match[2],10), m:parseInt(match[4],10), d:parseInt(match[7],10) };
-    },
-    isValid: function isValid(y, m, d) {
-        //console.log("isValid(", y, m, d, ")")
-        if(y<0 || m<0 || d<0) { return false; }
-        switch(m) {
-            case 1: case 3: case 5: case 7: case 8: case 10: case 12:
-                if(d>31) { return false; }
-                break;
-            case 4: case 6: case 9: case 11:
-                if(d>30) { return false; }
-                break;
-            case 2:
-                if(d > ((new Date(y, 1, 29).getMonth() === 1) ? 29 : 28) ) { return false; }
-                break;
-            default: return false;
-        }
-        return true;
-    },
-    isReal: function isReal(dateObject) {
-        if(Object.prototype.toString.call(dateObject) === "[object Date]") {
-            if(isNaN(dateObject.getTime())) { return false; }
-            return bestGlobals.date.isValid(dateObject.getFullYear(), dateObject.getMonth()+1, dateObject.getDay()+1);
-        }
-        return false;
-    },
-    ymd: function ymd(y, m, d) {
-        if(! this.isValid(y, m, d)) { throw new Error('invalid date'); }
-        var date = new Date(y, m-1, d, 0, 0, 0, 0);
-        date.isRealDate=this.isReal(date);
-        function isValidDate(dv) {
-            if(Object.prototype.toString.call(dv) === "[object Date]") {
-                if(isNaN(dv.getTime())) { return false; }
-                if(dv.getHours()!==0 || dv.getMinutes() !==0 || dv.getSeconds() !==0 || dv.getMilliseconds() !==0) {
-                    return false;
-                }
-                return true;
-            }
-            return false;
-        }
-        date.setDateValue = function setDateValue(dateVal) {
-            if(! isValidDate(dateVal)) { throw new Error('invalid date'); }
-            date.setTime(dateVal.valueOf()); 
-        };
-        return date;
-    },
-    iso: function iso(dateStr) {
-        var parsed=this.parseFormat(dateStr);
-        return this.ymd(parsed.y, parsed.m, parsed.d);
-    },
-    array: function array(arr) {
-        if(arr.length !== 3) { throw new Error('invalid date array'); }
-        return this.ymd(arr[0], arr[1], arr[2]);
-    },
-    ymdString: function ymdString(dt) {
-        if(! (dt instanceof Date)) { throw new Error('invalid date'); }
+function dateIsValid(y, m, d) {
+    if(y<0 || m<0 || d<0) { return false; }
+    switch(m) {
+        case 1: case 3: case 5: case 7: case 8: case 10: case 12:
+            if(d>31) { return false; }
+            break;
+        case 4: case 6: case 9: case 11:
+            if(d>30) { return false; }
+            break;
+        case 2:
+            if(d > ((new Date(y, 1, 29).getMonth() === 1) ? 29 : 28) ) { return false; }
+            break;
+        default: return false;
+    }
+    return true;
+};
+
+function parseFormat(dateStr) {
+    var tz1 = ' [0-9]{2}:[0-9]{2}:[0-9]{2}-[0-9]{2}:[0-9]{2}';
+    var tz2 = 'T[0-9]{2}:[0-9]{2}:[0-9]{2}Z';
+    // var re = '([12][0-9]{3})([-/])(([1][0-2])|(0?[1-9]))\\3(([0123][0-9]))';
+    var re = '([0-9]+)([-/])(([1][0-2])|(0?[1-9]))\\3(([0123][0-9]))';
+    var reDate = new RegExp('^('+re+'('+tz1+'|'+tz2+')?)$');
+    var match = reDate.exec(dateStr);
+    if(! match) { throw new Error('invalid date'); }
+    return { y:parseInt(match[2],10), m:parseInt(match[4],10), d:parseInt(match[7],10) };
+};
+
+function dateIsReal(dt) {
+    if(! (dt instanceof Date)
+       || isNaN(dt.getTime())
+       || ! dateIsValid(dt.getFullYear(), dt.getMonth()+1, dt.getDay()+1)
+    ) { return false }
+    return true;
+}
+   
+bestGlobals.date = function date(dt) {
+    if(! dateIsReal(dt)) { throw new Error('invalid date'); }
+    dt.isRealDate = true;
+    dt.toYmd = function toYmd() {
         var r = [];
-        r.push(dt.getFullYear());
-        r.push(npad(dt.getMonth()+1,2));
-        r.push(npad(dt.getDate(),2));
-        return r.join('-');
-    },
-    hmsString: function hmsString(dt) {
-        if(! (dt instanceof Date)) { throw new Error('invalid date'); }
+        r.push(this.getFullYear());
+        r.push(npad(this.getMonth()+1,2));
+        r.push(npad(this.getDate(),2));
+        return r.join('-');        
+    }
+    dt.toHms = function toHms() {
         var r = [];
-        r.push(npad(dt.getHours(),2));
-        r.push(npad(dt.getMinutes(),2));
-        r.push(npad(dt.getSeconds(),2));
+        r.push(npad(this.getHours(),2));
+        r.push(npad(this.getMinutes(),2));
+        r.push(npad(this.getSeconds(),2));
         return r.join(':');
     },
-    ymdHmsString: function ymdHmsString(dt) {
-        if(! (dt instanceof Date)) { throw new Error('invalid date'); }
-        return bestGlobals.date.ymdString(dt)+' '+bestGlobals.date.hmsString(dt);
+    dt.toYmdHms = function toYmdHms() {
+        return this.toYmd()+' '+this.toHms();
     },
-    ymdHmsMString: function ymdHmsMString(dt) {
-        if(! (dt instanceof Date)) { throw new Error('invalid date'); }
-        return bestGlobals.date.ymdHmsString(dt)+'.'+npad(dt.getMilliseconds(),3);
+    dt.toYmdHmsM = function toYmdHmsM() {
+        return this.toYmdHms()+'.'+npad(this.getMilliseconds(),3);
     }
+    dt.setDateValue = function setDateValue(dateVal) {
+        if(! dateIsReal(dateVal)) { throw new Error('invalid date'); }
+        dt.setTime(dateVal.valueOf()); 
+    };
+    return dt;
+};
+bestGlobals.date.ymd = function ymd(y, m, d) {
+    if(! dateIsValid(y, m, d)) { throw new Error('invalid date'); }
+    return bestGlobals.date(new Date(y, m-1, d, 0, 0, 0, 0));
+};
+
+bestGlobals.date.iso =  function iso(dateStr) {
+    var parsed=parseFormat(dateStr);
+    return bestGlobals.date.ymd(parsed.y, parsed.m, parsed.d);
+};
+
+bestGlobals.date.array = function array(arr) {
+    if(arr.length !== 3) { throw new Error('invalid date array'); }
+    return bestGlobals.date.ymd(arr[0], arr[1], arr[2]);
 };
 
 bestGlobals.createOptionsToFunction(bestGlobals.changing);
