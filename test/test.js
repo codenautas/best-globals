@@ -300,7 +300,7 @@ describe("date", function(){
         ['ymdString', 'hmsString', 'ymdHmsString','ymdHmsMString'].forEach(function(func) {
             [ {} , 1000, 'un string', 232.3, []  ].forEach(function(invalidParams){
                 it(func+"() rejects "+JSON.stringify(invalidParams), function(){
-                    expect(function(){ eval('date.'+func)(invalidParams); }).to.throwError(/invalid date/);
+                    expect(function(){ date[func](invalidParams); }).to.throwError(/invalid date/);
                 });
             });
         });
