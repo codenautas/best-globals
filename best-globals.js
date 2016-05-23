@@ -115,34 +115,8 @@ function npad(num, width) {
     return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
 }
 
-function dateIsValid(y, m, d) {
-    if(y<0 || m<0 || d<0) { return false; }
-    switch(m) {
-        case 1: case 3: case 5: case 7: case 8: case 10: case 12:
-            if(d>31) { return false; }
-            break;
-        case 4: case 6: case 9: case 11:
-            if(d>30) { return false; }
-            break;
-        case 2:
-            if(d > ((new Date(y, 1, 29).getMonth() === 1) ? 29 : 28) ) { return false; }
-            break;
-        default: return false;
-    }
-    return true;
-};
-
-
-function dateIsReal(dt) {
-    if(! (dt instanceof Date)
-       || isNaN(dt.getTime())
-       || ! dateIsValid(dt.getFullYear(), dt.getMonth()+1, dt.getDay()+1)
-    ) { return false }
-    return true;
-}
-   
 bestGlobals.date = function date(dt) {
-    if(! dateIsReal(dt)) { throw new Error('invalid date'); }
+    if(! bestGlobals.date.isReal(dt)) { throw new Error('invalid date'); }
     dt.isRealDate = true;
     dt.toYmd = function toYmd() {
         var r = [];
@@ -165,13 +139,38 @@ bestGlobals.date = function date(dt) {
         return this.toYmdHms()+'.'+npad(this.getMilliseconds(),3);
     }
     dt.setDateValue = function setDateValue(dateVal) {
-        if(! dateIsReal(dateVal)) { throw new Error('invalid date'); }
+        if(! bestGlobals.date.isReal(dateVal)) { throw new Error('invalid date'); }
         dt.setTime(dateVal.valueOf()); 
     };
     return dt;
 };
+bestGlobals.date.isValid = function isValid(y, m, d) {
+    if(y<0 || m<0 || d<0) { return false; }
+    switch(m) {
+        case 1: case 3: case 5: case 7: case 8: case 10: case 12:
+            if(d>31) { return false; }
+            break;
+        case 4: case 6: case 9: case 11:
+            if(d>30) { return false; }
+            break;
+        case 2:
+            if(d > ((new Date(y, 1, 29).getMonth() === 1) ? 29 : 28) ) { return false; }
+            break;
+        default: return false;
+    }
+    return true;
+};
+
+bestGlobals.date.isReal = function isReal(dt) {
+    if(! (dt instanceof Date)
+       || isNaN(dt.getTime())
+       || ! bestGlobals.date.isValid(dt.getFullYear(), dt.getMonth()+1, dt.getDay()+1)
+    ) { return false }
+    return true;
+}
+
 bestGlobals.date.ymd = function ymd(y, m, d) {
-    if(! dateIsValid(y, m, d)) { throw new Error('invalid date'); }
+    if(! bestGlobals.date.isValid(y, m, d)) { throw new Error('invalid date'); }
     return bestGlobals.date(new Date(y, m-1, d, 0, 0, 0, 0));
 };
 

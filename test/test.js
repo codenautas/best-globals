@@ -273,7 +273,7 @@ describe("date", function(){
        expect(parse).withArgs("2016_12_02").to.throwError(invalidDate);
        expect(parse("2016-2-30")).to.eql({y:2016, m:2, d:30}); // right format, wrong date
     });
-    it.skip("should validate y/d/m", function() {
+    it("should validate y/d/m", function() {
         var isValid = bestGlobals.date.isValid;
         expect(isValid(1900,1,1)).to.be.ok();
         expect(isValid(2016,2,28)).to.be.ok();
@@ -288,7 +288,7 @@ describe("date", function(){
         expect(isValid(-1940,3,33)).to.not.be.ok();
         expect(isValid(194,5,31)).to.be.ok();
     });
-    it.skip("should validate a date object", function() {
+    it("should validate a date object", function() {
        var isReal = bestGlobals.date.isReal;
        expect(isReal(new Date())).to.be.ok();
        expect(isReal(new Date("wrong"))).to.not.be.ok();
