@@ -245,8 +245,25 @@ bestGlobals.datetime.iso = function iso(dateStr) {
 
 bestGlobals.timeInterval = function timeInterval(time) {
     var dt = new Date(0,0,0,0,0,0,0);
-    dt.setTime(dt.getTime()+Math.abs(time));
-    return bestGlobals.datetime(dt);
+    dt.setTime(time);
+    var d = bestGlobals.datetime(dt);
+    d.toHms = function toHms() {
+        var tdiff = [];
+        var x = Math.abs(this.getTime());
+        x /= 1000;
+        var s = Math.floor(x % 60);
+        x /= 60
+        var m = Math.floor(x % 60);
+        x /= 60
+        var h = Math.floor(x);
+        // atencion la diferencia es negativa o no a partir de la creacion de timeInterval()
+        // si timeInterval se modifica, el signo no cambia (revisar!)
+        tdiff.push((time<0?'-':'')+(h<10?'0':'')+h);
+        tdiff.push((m<10?'0':'')+m);
+        tdiff.push((s<10?'0':'')+s);
+        return tdiff.join(':');
+    }
+    return d;
 };
 
 bestGlobals.createOptionsToFunction(bestGlobals.changing);

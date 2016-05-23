@@ -226,9 +226,13 @@ describe("date", function(){
         // expect(d1.toISOString()).to.eql(new Date(1916,7-1,9,10,32));
         expect(d1).to.eql(new Date(1916,7-1,9,10,32));
     });
-    it.skip("create timeInterval from integer and format it", function(){
-        expect(timeInterval(new Date(1916,7,09,10,32,0)-new Date(1916,7,09,10,32,11)).toHms).eql('-00:00:11');
-        expect(timeInterval(new Date(1916,7,7,11,0,0)-new Date(1916,7,09,10,32,11)).toHms).eql('48:27:49');
+    it("create timeInterval from integer and format it", function(){
+        expect(timeInterval(new Date(1916,7,9,10,32,0)-new Date(1916,7,09,10,32,11)).toHms()).eql('-00:00:11');
+        expect(timeInterval(new Date(1916,7,9,11,0,0)-new Date(1916,7,7,11,0,0)).toHms()).eql('48:00:00');
+        expect(timeInterval(new Date(1916,7,8,11,0,0)-new Date(1916,7,7,12,0,0)).toHms()).eql('23:00:00');
+        expect(timeInterval(new Date(1916,7,7,11,0,0)-new Date(1916,7,9,11,0,0)).toHms()).eql('-48:00:00');
+        expect(timeInterval(new Date(1916,7,7,11,0,0)-new Date(1916,7,9,10,32,11)).toHms()).eql('-47:32:11');
+        //expect(timeInterval(new Date(1916,7,7,11, 0,0)-new Date(1916,7,09,10,32,11)).toHms()).eql('48:27:49');
     });
     [ ["1997-12"], [1997,12], [1997,0,1], [[1997,0,1]], [(new Date(1916,7-1,9)).getTime()]].forEach(function(invalidParams){
         it("rejects invalid date: "+JSON.stringify(invalidParams), function(){
