@@ -115,7 +115,7 @@ function npad(num, width) {
     return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
 }
 
-function dateFix(dt) {
+function addDateMethods(dt) {
     dt.toYmd = function toYmd() {
         var r = [];
         r.push(this.getFullYear());
@@ -146,7 +146,7 @@ function dateFix(dt) {
 ////////// date
 bestGlobals.date = function date(dt) {
     if(! bestGlobals.date.isReal(dt)) { throw new Error('invalid date'); }
-    var d = dateFix(dt);
+    var d = addDateMethods(dt);
     if(d.getHours() || d.getMinutes() || d.getSeconds() || d.getMilliseconds()) {
         throw new Error('invalid date "'+d.toDateString()+'"because it has time');
     }
@@ -205,7 +205,7 @@ bestGlobals.date.array = function array(arr) {
 /////// datetime
 bestGlobals.datetime=function datetime(dt) {
     if(! bestGlobals.date.isReal(dt)) { throw new Error('invalid date'); }
-    var d = dateFix(dt);
+    var d = addDateMethods(dt);
     d.isRealDateTime = true;
     return d;
 };
@@ -241,6 +241,12 @@ bestGlobals.datetime.parseFormat = function parseFormat(dateStr) {
 bestGlobals.datetime.iso = function iso(dateStr) {
     var parsed=bestGlobals.datetime.parseFormat(dateStr);
     return bestGlobals.datetime.ymdHmsM(parsed.y, parsed.m, parsed.d, parsed.hh, parsed.mm, parsed.ss, parsed.ms);
+};
+
+bestGlobals.timeInterval = function timeInterval(time) {
+    var dt = new Date(0,0,0,0,0,0,0);
+    dt.setTime(dt.getTime()+Math.abs(time));
+    return bestGlobals.datetime(dt);
 };
 
 bestGlobals.createOptionsToFunction(bestGlobals.changing);

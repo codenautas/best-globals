@@ -185,6 +185,7 @@ describe("date", function(){
     var nateConstantino = new Date(272,2-1,27);
     var date = bestGlobals.date;
     var datetime = bestGlobals.datetime;
+    var timeInterval = bestGlobals.timeInterval;
     function control(fechaConstruida, fechaControl){
         expect(fechaConstruida.isRealDate).to.eql(true);
         expect(fechaConstruida.toISOString()).to.eql(fechaControl.toISOString());
