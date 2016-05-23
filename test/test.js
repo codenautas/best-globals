@@ -264,16 +264,23 @@ describe("date", function(){
             }).to.throwError(/invalid date/);
         });
     });
-    it("should parse the format of a string", function() {
+    it("date should parse the format of a string", function() {
        var parse = date.parseFormat;
-       var invalidDate = /invalid date/;
+       var invalidErr = /invalid date/;
        expect(parse("2016-12-02")).to.eql({y:2016, m:12, d:2});
        expect(parse("2016-1-02")).to.eql({y:2016, m:1, d:2});
        expect(parse("2016/1/02")).to.eql({y:2016, m:1, d:2});
-       expect(parse).withArgs("2016-12/02").to.throwError(invalidDate);
-       expect(parse).withArgs("2016/12-02").to.throwError(invalidDate);
-       expect(parse).withArgs("2016_12_02").to.throwError(invalidDate);
+       expect(parse).withArgs("2016-12/02").to.throwError(invalidErr);
+       expect(parse).withArgs("2016/12-02").to.throwError(invalidErr);
+       expect(parse).withArgs("2016_12_02").to.throwError(invalidErr);
        expect(parse("2016-2-30")).to.eql({y:2016, m:2, d:30}); // right format, wrong date
+    });
+    it("datetime should parse the format of a string", function() {
+       var parse = datetime.parseFormat;
+       var invalidErr = /invalid datetime/;
+       expect(parse("2016-12-02")).to.eql({y:2016, m:12, d:2, hh:0, mm:0, ss:0, ms:0});
+       expect(parse("2016-12-02 01:02:03")).to.eql({y:2016, m:12, d:2, hh:1, mm:2, ss:3, ms:0});
+       expect(parse).withArgs("2016-12/02").to.throwError(invalidErr);
     });
     it("should validate y/d/m", function() {
         var isValidDate = bestGlobals.date.isValidDate;
