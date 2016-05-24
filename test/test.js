@@ -184,12 +184,15 @@ describe("date", function(){
     var first = new Date(1910,5-1,25);
     var nateConstantino = new Date(272,2-1,27);
     var date = bestGlobals.date;
+    var datetime = bestGlobals.datetime;
+    var timeInterval = bestGlobals.timeInterval;
     function control(fechaConstruida, fechaControl){
         expect(fechaConstruida.isRealDate).to.eql(true);
         expect(fechaConstruida.toISOString()).to.eql(fechaControl.toISOString());
         expect(fechaConstruida.toUTCString()).to.eql(fechaControl.toUTCString());
         expect(fechaConstruida.getTime()).to.eql(fechaControl.getTime());
         expect(fechaConstruida - fechaControl).to.eql(0);
+        expect(fechaConstruida).to.eql(date(fechaControl));
     }
     it("create date from string", function(){
         var d1 = date.iso("1916-07-09");
@@ -212,6 +215,24 @@ describe("date", function(){
         control(d1, indep);
         var d1 = date.iso("1916-07-09T00:00:00Z");
         control(d1, indep);
+    });
+    it("create datetime from string", function(){
+        var d1 = datetime.iso("1916-07-09 10:32:00.000");
+        expect(d1.isRealDateTime).to.be.ok();
+        expect(d1.toISOString()).to.eql(new Date(1916,7-1,9,10,32).toISOString());
+    });
+    it("create datetime from integer", function(){
+        var d1 = datetime.ymdHms(1916,7,9,10,32,0);
+        // expect(d1.toISOString()).to.eql(new Date(1916,7-1,9,10,32));
+        expect(d1).to.eql(new Date(1916,7-1,9,10,32));
+    });
+    it("create timeInterval from integer and format it", function(){
+        expect(timeInterval(new Date(1916,7,9,10,32,0)-new Date(1916,7,09,10,32,11)).toHms()).eql('-00:00:11');
+        expect(timeInterval(new Date(1916,7,9,11,0,0)-new Date(1916,7,7,11,0,0)).toHms()).eql('48:00:00');
+        expect(timeInterval(new Date(1916,7,8,11,0,0)-new Date(1916,7,7,12,0,0)).toHms()).eql('23:00:00');
+        expect(timeInterval(new Date(1916,7,7,11,0,0)-new Date(1916,7,9,11,0,0)).toHms()).eql('-48:00:00');
+        expect(timeInterval(new Date(1916,7,7,11,0,0)-new Date(1916,7,9,10,32,11)).toHms()).eql('-47:32:11');
+        //expect(timeInterval(new Date(1916,7,7,11, 0,0)-new Date(1916,7,09,10,32,11)).toHms()).eql('48:27:49');
     });
     [ ["1997-12"], [1997,12], [1997,0,1], [[1997,0,1]], [(new Date(1916,7-1,9)).getTime()]].forEach(function(invalidParams){
         it("rejects invalid date: "+JSON.stringify(invalidParams), function(){
@@ -240,7 +261,7 @@ describe("date", function(){
             .then(done, done);
         });
     };
-    [ [7], ["1992-12-12"], [new Date(1999,12,31,23,0,0)], [new Date("abcd")], [new Date('23/25/2014')], [null] ].forEach(function(invalidParams){
+    [ [7], ["1992-12-12"], /*[new Date(1999,12,31,23,0,0)],*/ [new Date("abcd")], [new Date('23/25/2014')], [null] ].forEach(function(invalidParams){
         it("setDateValue rejects invalid date: "+JSON.stringify(invalidParams), function(){
             expect(function(){
                 var d1 = date.iso("2016-04-03");
@@ -248,31 +269,48 @@ describe("date", function(){
             }).to.throwError(/invalid date/);
         });
     });
-    it("should parse the format of a string", function() {
+    it("date should parse the format of a string", function() {
        var parse = date.parseFormat;
-       var invalidDate = /invalid date/;
+       var invalidErr = /invalid date/;
        expect(parse("2016-12-02")).to.eql({y:2016, m:12, d:2});
        expect(parse("2016-1-02")).to.eql({y:2016, m:1, d:2});
        expect(parse("2016/1/02")).to.eql({y:2016, m:1, d:2});
-       expect(parse).withArgs("2016-12/02").to.throwError(invalidDate);
-       expect(parse).withArgs("2016/12-02").to.throwError(invalidDate);
-       expect(parse).withArgs("2016_12_02").to.throwError(invalidDate);
+       expect(parse).withArgs("2016-12/02").to.throwError(invalidErr);
+       expect(parse).withArgs("2016/12-02").to.throwError(invalidErr);
+       expect(parse).withArgs("2016_12_02").to.throwError(invalidErr);
        expect(parse("2016-2-30")).to.eql({y:2016, m:2, d:30}); // right format, wrong date
     });
+    it("datetime should parse the format of a string", function() {
+       var parse = datetime.parseFormat;
+       var invalidErr = /invalid datetime/;
+       expect(parse("2016-12-02")).to.eql({y:2016, m:12, d:2, hh:0, mm:0, ss:0, ms:0});
+       expect(parse("2016-12-02 01:02:03")).to.eql({y:2016, m:12, d:2, hh:1, mm:2, ss:3, ms:0});
+       expect(parse).withArgs("2016-12/02").to.throwError(invalidErr);
+    });
     it("should validate y/d/m", function() {
-        var isValid = bestGlobals.date.isValid;
-        expect(isValid(1900,1,1)).to.be.ok();
-        expect(isValid(2016,2,28)).to.be.ok();
-        expect(isValid(1969,12,31)).to.be.ok();
-        expect(isValid(2016,2,29)).to.be.ok();
-        expect(isValid(2015,2,29)).to.not.be.ok();
-        expect(isValid(15,2,29)).to.not.be.ok();
-        expect(isValid(1940,13,29)).to.not.be.ok();
-        expect(isValid(1940,11,31)).to.not.be.ok();
-        expect(isValid(1940,4,31)).to.not.be.ok();
-        expect(isValid(1940,3,33)).to.not.be.ok();
-        expect(isValid(-1940,3,33)).to.not.be.ok();
-        expect(isValid(194,5,31)).to.be.ok();
+        var isValidDate = bestGlobals.date.isValidDate;
+        expect(isValidDate(1900,1,1)).to.be.ok();
+        expect(isValidDate(2016,2,28)).to.be.ok();
+        expect(isValidDate(1969,12,31)).to.be.ok();
+        expect(isValidDate(2016,2,29)).to.be.ok();
+        expect(isValidDate(2015,2,29)).to.not.be.ok();
+        expect(isValidDate(15,2,29)).to.not.be.ok();
+        expect(isValidDate(1940,13,29)).to.not.be.ok();
+        expect(isValidDate(1940,11,31)).to.not.be.ok();
+        expect(isValidDate(1940,4,31)).to.not.be.ok();
+        expect(isValidDate(1940,3,33)).to.not.be.ok();
+        expect(isValidDate(-1940,3,33)).to.not.be.ok();
+        expect(isValidDate(194,5,31)).to.be.ok();
+    });
+    it("should validate h/m/s/ms", function() {
+        var isValidTime = bestGlobals.datetime.isValidTime;
+        expect(isValidTime(0,0,0,0)).to.be.ok();
+        expect(isValidTime(23,59,59,999)).to.be.ok();
+        expect(isValidTime(-1,59,59,999)).to.not.be.ok();
+        expect(isValidTime(0,59,59,1999)).to.not.be.ok();
+        expect(isValidTime(0,-59,59,1999)).to.not.be.ok();
+        expect(isValidTime(0,59,-59,1999)).to.not.be.ok();
+        expect(isValidTime(0,59,59,-1)).to.not.be.ok();
     });
     it("should validate a date object", function() {
        var isReal = bestGlobals.date.isReal;
@@ -296,53 +334,50 @@ describe("date", function(){
             }).to.throwError(/invalid date/);
         });
     });
+    [
+      {y:-2000, m:1, d:2, hh:0,  mm:0, ss:0, ms:0},
+      {y:2000,  m:1, d:2, hh:-1, mm:0, ss:0, ms:0}
+    ].forEach(function(invalidParams){
+        it("datetime.ymdHmsM rejects invalid input: "+JSON.stringify(invalidParams), function(){
+            expect(function(){
+                datetime.ymdHmsM(invalidParams.y, invalidParams.m, invalidParams.d,
+                                 invalidParams.y, invalidParams.m, invalidParams.d, invalidParams.x);
+            }).to.throwError(/invalid date/);
+        });
+    });
     describe("to string", function(){
-        ['ymdString', 'hmsString', 'ymdHmsString','ymdHmsMString'].forEach(function(func) {
-            [ {} , 1000, 'un string', 232.3, []  ].forEach(function(invalidParams){
-                it(func+"() rejects "+JSON.stringify(invalidParams), function(){
-                    expect(function(){ date[func](invalidParams); }).to.throwError(/invalid date/);
-                });
+        [ {} , 'un string', 232.3, [], 1000  ].forEach(function(invalidParams){
+            it("date() rejects "+JSON.stringify(invalidParams), function(){
+                expect(function(){ date(invalidParams); }).to.throwError(/invalid date/);
+                expect(function(){ datetime(invalidParams); }).to.throwError(/invalid date/);
             });
         });
-        [
-            {i:new Date(2015,  1, 10),          o:'2015-02-10'},
-            {i:new Date(1935, 11,  1),          o:'1935-12-01'},
-            {i:new Date(1935, 11, 31),          o:'1935-12-31'},
-            {i:new Date(2035,  0,  1),          o:'2035-01-01'},
-            {i:new Date(2035,  0,  1, 3, 3),    o:'2035-01-01'},
-        ].forEach(function(param){
-            it("ymdString("+param.i.toLocaleString()+") => ["+param.o+"]", function(){
-                expect(date.ymdString(param.i)).to.eql(param.o);
-            });
+        it("rejects time in date", function(){
+            expect(function(){ date(new Date(1999,11,12,10,20)); }).to.throwError(/invalid date.*because it has time/);
         });
         [
-            {i:new Date(2015,  1, 10),              o:'00:00:00'},
-            {i:new Date(1935, 11, 1),               o:'00:00:00'},
-            {i:new Date(1935, 11, 1, 10, 11, 12),   o:'10:11:12'},
-            {i:new Date(1935, 11, 1, 0, 1, 2),      o:'00:01:02'},
+            {i:new Date(2015,  1, 10),            toYmd:'2015-02-10', toHms:'00:00:00', toYmdHms:'2015-02-10 00:00:00', toYmdHmsM:'2015-02-10 00:00:00.000'},
+            {i:new Date(1935, 11,  1),            toYmd:'1935-12-01', toHms:'00:00:00', toYmdHms:'1935-12-01 00:00:00'},
+            {i:new Date(1935, 11, 31),            toYmd:'1935-12-31', toHms:'00:00:00'},
+            {i:new Date(2035,  0,  1),            toYmd:'2035-01-01', toHms:'00:00:00'},
+            {i:new Date(2035,  0,  1,  3,  3),    toYmd:'2035-01-01', toHms:'03:03:00', hasHour:true},
+            {i:new Date(1935, 11,  1, 10, 11, 12),                    toHms:'10:11:12', hasHour:true},
+            {i:new Date(1935, 11,  1,  0,  1, 2 ),                    toHms:'00:01:02', hasHour:true},
+            {i:new Date(1969,  1,  2, 14, 2, 30),                     toYmdHms:'1969-02-02 14:02:30', hasHour:true},
+            {i:new Date(1969,  1,  2, 14, 2),                         toYmdHms:'1969-02-02 14:02:00', hasHour:true},
+            {i:new Date(2015, 11,  1,  0,  0,   0, 100),              toYmdHmsM:'2015-12-01 00:00:00.100', hasHour:true},
+            {i:new Date(1969,  1,  2, 14,  2,  30),                   toYmdHmsM:'1969-02-02 14:02:30.000', hasHour:true},
+            {i:new Date(1969,  1,  2, 11, 22,  33, 444),              toYmdHmsM:'1969-02-02 11:22:33.444', hasHour:true},
         ].forEach(function(param){
-            it("hmsString("+param.i.toLocaleString()+") => ["+param.o+"]", function(){
-                expect(date.hmsString(param.i)).to.eql(param.o);
-            });
-        });
-        [
-            {i:new Date(2015,  1, 10),              o:'2015-02-10 00:00:00'},
-            {i:new Date(2015, 11,  1),              o:'2015-12-01 00:00:00'},
-            {i:new Date(1969,  1,  2, 14, 2, 30),   o:'1969-02-02 14:02:30'},
-            {i:new Date(1969,  1,  2, 14, 2),       o:'1969-02-02 14:02:00'},
-        ].forEach(function(param){
-            it("ymdHmsString("+param.i.toLocaleString()+") => ["+param.o+"]", function(){
-                expect(date.ymdHmsString(param.i)).to.eql(param.o);
-            });
-        });
-        [
-            {i:new Date(2015,  1, 10),                   o:'2015-02-10 00:00:00.000'},
-            {i:new Date(2015, 11,  1,  0,  0,   0, 100), o:'2015-12-01 00:00:00.100'},
-            {i:new Date(1969,  1,  2, 14,  2,  30),      o:'1969-02-02 14:02:30.000'},
-            {i:new Date(1969,  1,  2, 11, 22,  33, 444), o:'1969-02-02 11:22:33.444'},
-        ].forEach(function(param){
-            it("ymdHmsMString("+param.i.toLocaleString()+") => ["+param.o+"]", function(){
-                expect(date.ymdHmsMString(param.i)).to.eql(param.o);
+            "toYmd,toHms,toYmdHms,toYmdHmsM".split(',').forEach(function(functionName){
+                if(param[functionName]) {
+                    it(functionName+"("+param.i.toLocaleString()+") => ["+param[functionName]+"]", function(){
+                        if(! param.hasHour){
+                            expect(date(param.i)[functionName]()).to.eql(param[functionName]);
+                        }
+                        expect(datetime(param.i)[functionName]()).to.eql(param[functionName]);
+                    });
+                }
             });
         });
     });
