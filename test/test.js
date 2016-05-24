@@ -313,12 +313,12 @@ describe("date", function(){
         expect(isValidTime(0,59,59,-1)).to.not.be.ok();
     });
     it("should validate a date object", function() {
-       var isReal = bestGlobals.date.isReal;
-       expect(isReal(new Date())).to.be.ok();
-       expect(isReal(new Date("wrong"))).to.not.be.ok();
-       expect(isReal(new Date('23/25/2014'))).to.not.be.ok();
-       expect(isReal(2016)).to.not.be.ok();
-       //expect(isReal(new Date('foo-bar 2014'))).to.not.be.ok();
+       var isOK = bestGlobals.date.isOK;
+       expect(isOK(new Date())).to.be.ok();
+       expect(isOK(new Date("wrong"))).to.not.be.ok();
+       expect(isOK(new Date('23/25/2014'))).to.not.be.ok();
+       expect(isOK(2016)).to.not.be.ok();
+       //expect(isOK(new Date('foo-bar 2014'))).to.not.be.ok();
     });
     [ [7], [3,4], [3,4,2010,4], [1992,4,4,1], ["1992-12-12"], [null] ].forEach(function(invalidParams){
         it("date.array rejects invalid input: "+JSON.stringify(invalidParams), function(){

@@ -137,7 +137,7 @@ function addDateMethods(dt) {
         return this.toYmdHms()+'.'+npad(this.getMilliseconds(),3);
     };
     dt.setDateValue = function setDateValue(dateVal) {
-        if(! bestGlobals.date.isReal(dateVal)) { throw new Error('invalid date'); }
+        if(! bestGlobals.date.isOK(dateVal)) { throw new Error('invalid date'); }
         dt.setTime(dateVal.valueOf()); 
     };
     return dt;
@@ -145,7 +145,7 @@ function addDateMethods(dt) {
 
 ////////// date
 bestGlobals.date = function date(dt) {
-    if(! bestGlobals.date.isReal(dt)) { throw new Error('invalid date'); }
+    if(! bestGlobals.date.isOK(dt)) { throw new Error('invalid date'); }
     var d = addDateMethods(dt);
     if(d.getHours() || d.getMinutes() || d.getSeconds() || d.getMilliseconds()) {
         throw new Error('invalid date "'+d.toDateString()+'"because it has time');
@@ -170,7 +170,7 @@ bestGlobals.date.isValidDate = function isValidDate(y, m, d) {
     return true;
 };
 
-bestGlobals.date.isReal = function isReal(dt) {
+bestGlobals.date.isOK = function isOK(dt) {
     if(! (dt instanceof Date) || isNaN(dt.getTime()) || ! bestGlobals.date.isValidDate(dt.getFullYear(), dt.getMonth()+1, dt.getDay()+1)) { return false; }
     return true;
 };
@@ -204,7 +204,7 @@ bestGlobals.date.array = function array(arr) {
 
 /////// datetime
 bestGlobals.datetime=function datetime(dt) {
-    if(! bestGlobals.date.isReal(dt)) { throw new Error('invalid date'); }
+    if(! bestGlobals.date.isOK(dt)) { throw new Error('invalid date'); }
     var d = addDateMethods(dt);
     d.isRealDateTime = true;
     return d;
