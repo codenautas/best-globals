@@ -252,13 +252,13 @@ bestGlobals.timeInterval = function timeInterval(time) {
     d.setTime(time);
     d.toHms = function toHms() {
         var tdiff = [];
-        var tm = this.getTime()
+        var tm = this.getTime();
         var x = Math.abs(tm);
         x /= 1000;
         var s = Math.floor(x % 60);
-        x /= 60
+        x /= 60;
         var m = Math.floor(x % 60);
-        x /= 60
+        x /= 60;
         var h = Math.floor(x);
         tdiff.push((tm<0?'-':'')+(h<10?'0':'')+h);
         tdiff.push((m<10?'0':'')+m);
