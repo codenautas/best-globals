@@ -327,6 +327,13 @@ describe("date", function(){
             }).to.throwError(/invalid date array/);
         });
     });
+    [ [7], [3,4], [3,4,2010,4], [1992,4,4,-1], ["1992-12-12"], [1992,4,-1], [null] ].forEach(function(invalidParams){
+        it("datetime.array rejects invalid input: "+JSON.stringify(invalidParams), function(){
+            expect(function(){
+                datetime.array(invalidParams);
+            }).to.throwError(/invalid date(time array)?/);
+        });
+    });
     [ {y:-1, m:7, d:4} , {y:1000, m:13, d:4}, {y:2000, m:7, d:34}  ].forEach(function(invalidParams){
         it("date.ymd rejects invalid input: "+JSON.stringify(invalidParams), function(){
             expect(function(){
