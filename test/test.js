@@ -226,6 +226,10 @@ describe("date", function(){
         // expect(d1.toISOString()).to.eql(new Date(1916,7-1,9,10,32));
         expect(d1).to.eql(new Date(1916,7-1,9,10,32));
     });
+    it("create datetime from array", function(){
+        var d1 = datetime.array([1916,7,09,0,0,0,0]);
+        control(d1, indep);
+    });
     it("create timeInterval from integer and format it", function(){
         expect(timeInterval(new Date(1916,7,9,10,32,0)-new Date(1916,7,09,10,32,11)).toHms()).eql('-00:00:11');
         expect(timeInterval(new Date(1916,7,9,11,0,0)-new Date(1916,7,7,11,0,0)).toHms()).eql('48:00:00');
