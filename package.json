@@ -6,7 +6,8 @@
   "license": "MIT",
   "repository": "codenautas/best-globals",
   "contributors": [{
-    "name": "Emilio Platzer", "email": "emilioplatzer@gmail.com"
+    "name": "Emilio Platzer", "email": "emilioplatzer@gmail.com",
+    "name": "Diego Florio", "email": "diegoefe@gmail.com"
   }],
   "dependencies": {
   },
