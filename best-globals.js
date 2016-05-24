@@ -244,9 +244,8 @@ bestGlobals.datetime.iso = function iso(dateStr) {
 };
 
 bestGlobals.timeInterval = function timeInterval(time) {
-    var dt = new Date(0,0,0,0,0,0,0);
-    dt.setTime(time);
-    var d = bestGlobals.datetime(dt);
+    var d = new Date(0,0,0,0,0,0,0);
+    d.setTime(time);
     d.toHms = function toHms() {
         var tdiff = [];
         var tm = this.getTime()
