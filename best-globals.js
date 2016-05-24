@@ -206,7 +206,6 @@ bestGlobals.date.array = function array(arr) {
 bestGlobals.datetime=function datetime(dt) {
     if(! bestGlobals.date.isOK(dt)) { throw new Error('invalid date'); }
     var d = addDateMethods(dt);
-    d.isRealDate = true;
     d.isRealDateTime = true;
     return d;
 };

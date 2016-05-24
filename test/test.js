@@ -186,8 +186,8 @@ describe("date", function(){
     var date = bestGlobals.date;
     var datetime = bestGlobals.datetime;
     var timeInterval = bestGlobals.timeInterval;
-    function control(fechaConstruida, fechaControl){
-        expect(fechaConstruida.isRealDate).to.eql(true);
+    function control(fechaConstruida, fechaControl, isDateTime){
+        expect(isDateTime ? fechaConstruida.isRealDateTime : fechaConstruida.isRealDate).to.eql(true);
         expect(fechaConstruida.toISOString()).to.eql(fechaControl.toISOString());
         expect(fechaConstruida.toUTCString()).to.eql(fechaControl.toUTCString());
         expect(fechaConstruida.getTime()).to.eql(fechaControl.getTime());
@@ -228,7 +228,7 @@ describe("date", function(){
     });
     it("create datetime from array", function(){
         var d1 = datetime.array([1916,7,09,0,0,0,0]);
-        control(d1, indep);
+        control(d1, indep, true);
     });
     it("create timeInterval from integer and format it", function(){
         expect(timeInterval(new Date(1916,7,9,10,32,0)-new Date(1916,7,09,10,32,11)).toHms()).eql('-00:00:11');
