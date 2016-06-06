@@ -284,7 +284,7 @@ bestGlobals.constructorName = function constructorName(obj) {
             return obj.constructor.toString().replace(/^\s*function\s*([^(]*)\((.|\s)*$/i,'$1');
         }
         return cn;
-    };
+    }
 };
 
 return bestGlobals;
