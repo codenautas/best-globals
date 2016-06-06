@@ -404,7 +404,7 @@ describe("setGlobals",function(){
 
 describe('constructorName', function(){
     function MiObj() {};
-    function Tainted() {  if(! process.version.match(/^(0.12)/)) { this.constructor.name; } }; // coverage
+    function Tainted() {  if(! process.version.match(/^(0.12)/)) { delete this.constructor.name; } }; // coverage
     [
         {val:{}, name:'Object'},
         {val:new Date, name:'Date'},
