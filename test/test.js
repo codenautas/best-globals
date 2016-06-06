@@ -403,14 +403,21 @@ describe("setGlobals",function(){
 });
 
 describe('constructorName', function(){
+    function MiObj() {};
+    function Tainted() { delete this.constructor.name; }; // coverage
     [
         {val:{}, name:'Object'},
         {val:new Date, name:'Date'},
         {val:[], name:'Array'},
         {val:new Array(), name:'Array'},
         {val:new RegExp('bla'), name:'RegExp'},
+        {val:undefined, name:undefined},
+        {val:null, name:undefined},
+        {val:function MiObj() {}, name:'Function'},
+        {val:new MiObj(), name:'MiObj'},
+        {val:new Tainted(), name:'Tainted'},
     ].forEach(function(input) {
-        it("recognizes "+JSON.stringify(input.name) ,function(){
+        it(JSON.stringify(input.val)+" should be "+JSON.stringify(input.name) ,function(){
             expect(bestGlobals.constructorName(input.val)).to.eql(input.name);
         }); 
     });
