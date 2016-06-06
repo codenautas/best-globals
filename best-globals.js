@@ -277,6 +277,16 @@ bestGlobals.setGlobals = function setGlobals(theGlobalObj){
     /*jshint forin:true */
 };
 
+bestGlobals.constructorName = function constructorName(obj) {
+    if(obj){
+        var cn = obj.constructor.name;
+        if(!cn){
+            return obj.constructor.toString().replace(/^\s*function\s*([^(]*)\((.|\s)*$/i,'$1');
+        }
+        return cn;
+    };
+};
+
 return bestGlobals;
 
 });

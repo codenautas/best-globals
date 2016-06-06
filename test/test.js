@@ -401,3 +401,17 @@ describe("setGlobals",function(){
         expect(fakeGlobal.coalesce instanceof Function).to.ok();
     });
 });
+
+describe('constructorName', function(){
+    [
+        {val:{}, name:'Object'},
+        {val:new Date, name:'Date'},
+        {val:[], name:'Array'},
+        {val:new Array(), name:'Array'},
+        {val:new RegExp('bla'), name:'RegExp'},
+    ].forEach(function(input) {
+        it("recognizes "+JSON.stringify(input.name) ,function(){
+            expect(bestGlobals.constructorName(input.val)).to.eql(input.name);
+        }); 
+    });
+});
