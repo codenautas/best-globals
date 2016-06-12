@@ -215,6 +215,8 @@ describe("date", function(){
         control(d1, indep);
         var d1 = date.iso("1916-07-09T00:00:00Z");
         control(d1, indep);
+        var d1 = date.iso("1916-07-09T00:00:00.000Z");
+        control(d1, indep);
     });
     it("create datetime from string", function(){
         var d1 = datetime.iso("1916-07-09 10:32:00.000");

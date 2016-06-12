@@ -185,7 +185,7 @@ var reDate = '([0-9]+)([-/])(([1][0-2])|(0?[1-9]))\\3(([0123][0-9]))';
 
 bestGlobals.date.parseFormat = function parseFormat(dateStr) {
     var reTz1 = ' [0-9]{2}:[0-9]{2}:[0-9]{2}-[0-9]{2}:[0-9]{2}';
-    var reTz2 = 'T([0-9]{2}):[0-9]{2}:[0-9]{2}Z';
+    var reTz2 = 'T([0-9]{2}):[0-9]{2}:[0-9]{2}\.?[0-9]*Z';
     var re = new RegExp('^('+reDate+'('+reTz1+'|'+reTz2+')?)$');
     var match = re.exec(dateStr);
     if(! match) { throw new Error('invalid date'); }
