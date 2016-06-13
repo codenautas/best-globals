@@ -66,9 +66,17 @@ En caso de recibir como parámetro `coalesce.throwError(message)`
 y que los parámetros anteriores no están definidos o son distintos de null
 lanza una excepción con ese mensaje. 
 
+En caso de recibir como parámetro `coalesce.throwErrorIfUndefined(message)` 
+y que los parámetros anteriores no están definidos 
+lanza una excepción con ese mensaje. 
+
 <!--lang:en--]
 
-Returns the first not null nor undefined parameter
+Returns the first not null nor undefined parameter. 
+
+Use `coalesce.throwError(message)` for throw an Exception if all parameters are null or undefined.
+
+Use `coalesce.throwErrorIfUndefined(message)` for throw an Exception if all parameters are undefined.
 
 [!--lang:*-->
 

@@ -28,13 +28,25 @@ var bestGlobals = {};
 
 bestGlobals.coalesce=function coalesce(){
     var i=0;
-    while(i<arguments.length-1 && arguments[i]==null){
+    var hasNull=false;
+    while(i<arguments.length && arguments[i]==null){
+        hasNull=hasNull || arguments[i]===null;
         i++;
     }
     if(arguments[i] instanceof bestGlobals.coalesce.throwError){
-        throw new Error(arguments[i].message);
+        if(arguments[i] instanceof bestGlobals.coalesce.throwErrorIfUndefined && hasNull){
+            return null;
+        }else{
+            throw new Error(arguments[i].message);
+        }
     }
-    return arguments[i];
+    if(i>=arguments.length){
+        if(hasNull){
+            return null;
+        }
+    }else{
+        return arguments[i];
+    }
 };
 
 bestGlobals.coalesce.throwError=function throwError(message){
@@ -44,6 +56,16 @@ bestGlobals.coalesce.throwError=function throwError(message){
         this.message=message;
     }
 };
+
+bestGlobals.coalesce.throwErrorIfUndefined=function throwErrorIfUndefined(message){
+    if(this === bestGlobals.coalesce){
+        return new bestGlobals.coalesce.throwErrorIfUndefined(message);
+    }else{
+        this.message=message;
+    }
+}
+
+bestGlobals.coalesce.throwErrorIfUndefined.prototype=Object.create(bestGlobals.coalesce.throwError.prototype);
 
 function retreiveOptions(functionCallee, functionAruguments, mandatoryPositionCountingFromOne){
     if(functionAruguments.length<mandatoryPositionCountingFromOne){

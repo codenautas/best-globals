@@ -10,18 +10,34 @@ describe('best-globals', function(){
         it('return the first value if is not null',function(){
             expect(bestGlobals.coalesce(7,8)).to.be(7);
             expect(bestGlobals.coalesce(7,8,bestGlobals.coalesce.throwError)).to.be(7);
+            expect(bestGlobals.coalesce(7,8,bestGlobals.coalesce.throwErrorIfUndefined)).to.be(7);
         });
         it('return the first not null value',function(){
             expect(bestGlobals.coalesce(null,null,null,null,null,null,null,null,null,null,null,null,null,17,8)).to.be(17);
             expect(bestGlobals.coalesce(null,null,null,null,null,null,null,null,null,null,null,null,null,17,8,bestGlobals.coalesce.throwError)).to.be(17);
+            expect(bestGlobals.coalesce(null,null,null,null,null,null,null,null,null,null,null,null,null,17,8,bestGlobals.coalesce.throwErrorIfUndefined)).to.be(17);
         });
-        it('return the last value if all are nulls',function(){
-            expect(typeof bestGlobals.coalesce(null,{}.inex)).to.be("undefined");
+        it('coalesce(null,undefined)===null',function(){
+            expect(bestGlobals.coalesce(null,{}.inex)+"").to.be("null");
+        });
+        it('coalesce(undefined,undefined)===undefined',function(){
+            expect(typeof bestGlobals.coalesce(undefined,{}.inex)).to.be("undefined");
         });
         it('throw error if all are nulls',function(){
             expect(function(){
-                typeof bestGlobals.coalesce(null,{}.inex,bestGlobals.coalesce.throwError("this message"));
+                typeof bestGlobals.coalesce(null,null,bestGlobals.coalesce.throwError("this message"));
             }).to.throwError(/this message/);
+            expect(
+                bestGlobals.coalesce(null,null,bestGlobals.coalesce.throwErrorIfUndefined("m2"))+""
+            ).to.eql("null");
+        });
+        it('throw error if all are undefined',function(){
+            expect(function(x){
+                bestGlobals.coalesce({}.inex,undefined,x,bestGlobals.coalesce.throwError("msgE"))
+            }).to.throwError(/msgE/);
+            expect(function(x){
+                typeof bestGlobals.coalesce(x,undefined,{}.inex,bestGlobals.coalesce.throwErrorIfUndefined("msgU"));
+            }).to.throwError(/msgU/);
         });
         var valids=[
             { element:[]         },
