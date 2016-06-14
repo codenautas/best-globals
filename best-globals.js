@@ -63,7 +63,7 @@ bestGlobals.coalesce.throwErrorIfUndefined=function throwErrorIfUndefined(messag
     }else{
         this.message=message;
     }
-}
+};
 
 bestGlobals.coalesce.throwErrorIfUndefined.prototype=Object.create(bestGlobals.coalesce.throwError.prototype);
 

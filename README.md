@@ -36,7 +36,11 @@ Have handy some common global functions
 ### coalesce(a [...,b] [,coalesce.throwError(message)])
 
 
-Returns the first not null nor undefined parameter
+Returns the first not null nor undefined parameter.
+
+Use `coalesce.throwError(message)` for throw an Exception if all parameters are null or undefined.
+
+Use `coalesce.throwErrorIfUndefined(message)` for throw an Exception if all parameters are undefined.
 
 
 ```js
