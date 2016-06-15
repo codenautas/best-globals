@@ -117,6 +117,7 @@ bestGlobals.changing = function changing(original, changes){
                 if(!(name in changes)){
                     result[name] = original[name];
                 }else if('deletingValue' in opts && changes[name]===opts.deletingValue){
+                    // empty
                 }else{
                     result[name] = changing(original[name], changes[name]);
                 }
