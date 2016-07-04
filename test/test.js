@@ -323,6 +323,7 @@ describe("date", function(){
         expect(isValidDate(1940,3,33)).to.not.be.ok();
         expect(isValidDate(-1940,3,33)).to.not.be.ok();
         expect(isValidDate(194,5,31)).to.be.ok();
+        expect(isValidDate(1940,3,33)).to.not.be.ok();
     });
     it("should validate h/m/s/ms", function() {
         var isValidTime = bestGlobals.datetime.isValidTime;

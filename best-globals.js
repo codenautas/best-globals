@@ -179,15 +179,10 @@ bestGlobals.date = function date(dt) {
 
 bestGlobals.date.isValidDate = function isValidDate(year, month, day) {
     if(year<0 || month<1 || day<0) { return false; } 
-    try {
-        month -= 1;
-        var d = new Date(year, month, day);
-        return d.getFullYear()===year && d.getMonth()===month && d.getDate()===day;
-    } catch(e) {
-        // console.log("wrong date: "+e);
-        return false;
-    }
-};
+    month -= 1;
+    var d = new Date(year, month, day);
+    return d.getFullYear()===year && d.getMonth()===month && d.getDate()===day;
+ };
 
 bestGlobals.date.isOK = function isOK(dt) {
     if(! (dt instanceof Date)
