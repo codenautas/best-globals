@@ -175,26 +175,27 @@ bestGlobals.date = function date(dt) {
     }
     d.isRealDate = true;
     return d;
-};
-bestGlobals.date.isValidDate = function isValidDate(y, m, d) {
-    if(y<0 || m<0 || d<0) { return false; }
-    switch(m) {
-        case 1: case 3: case 5: case 7: case 8: case 10: case 12:
-            if(d>31) { return false; }
-            break;
-        case 4: case 6: case 9: case 11:
-            if(d>30) { return false; }
-            break;
-        case 2:
-            if(d > ((new Date(y, 1, 29).getMonth() === 1) ? 29 : 28) ) { return false; }
-            break;
-        default: return false;
+};
+
+bestGlobals.date.isValidDate = function isValidDate(year, month, day) {
+    if(year<0 || month<1 || day<0) { return false; } 
+    try {
+        month -= 1;
+        var d = new Date(year, month, day);
+        return d.getFullYear()===year && d.getMonth()===month && d.getDate()===day;
+    } catch(e) {
+        // console.log("wrong date: "+e);
+        return false;
     }
-    return true;
 };
 
 bestGlobals.date.isOK = function isOK(dt) {
-    if(! (dt instanceof Date) || isNaN(dt.getTime()) || ! bestGlobals.date.isValidDate(dt.getFullYear(), dt.getMonth()+1, dt.getDay()+1)) { return false; }
+    if(! (dt instanceof Date)
+       || isNaN(dt.getTime())
+       || ! bestGlobals.date.isValidDate(dt.getFullYear(), dt.getMonth()+1, dt.getDate()))
+    {
+        return false;
+    }
     return true;
 };
 
