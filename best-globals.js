@@ -101,7 +101,7 @@ bestGlobals.isPlainObject = function isPlainObject(x){
 
 bestGlobals.changing = function changing(original, changes){
     var opts = bestGlobals.changing.retreiveOptions(arguments);
-    if(!bestGlobals.isPlainObject(original) || original===null){
+    if(original===null || !bestGlobals.isPlainObject(original) && !(original instanceof Error)){
         if(changes!==undefined){
             return changes;
         }else{
@@ -111,7 +111,7 @@ bestGlobals.changing = function changing(original, changes){
         if(typeof changes!=="object"){
             throw new Error("ERROR changing object with non-object");
         }else{
-            var result={};
+            var result=original instanceof Error?original:{};
             /*jshint forin:false */
             for(var name in original){
                 if(!(name in changes)){

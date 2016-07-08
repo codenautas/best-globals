@@ -53,7 +53,7 @@ describe('best-globals', function(){
             { element:0          },
         ];
         valids.forEach(function(valid){
-            it('return the valid element '||valid, function(){
+            it('return the valid element '+JSON.stringify(valid.element), function(){
                 var result=bestGlobals.coalesce(null, {}.inexis, valid.element, 'last');
                 expect(result).to.be(valid.element);
             });
@@ -192,6 +192,15 @@ describe('mini-tools config functions', function(){
             a: new Date('3/2/3'),
             b: ['a', 'd']
         });
+    });
+    it("error objects must be interpreted as special object", function(){
+        var err = new Error("this error");
+        var obtained = bestGlobals.changing(err,{code: 'A12', "z-number":12});
+        expect(obtained).to.be.an(Error);
+        expect(obtained).to.be(err);
+        expect(obtained.message).to.eql("this error");
+        expect(obtained.code).to.eql("A12");
+        expect(obtained["z-number"]).to.eql(12);
     });
 });
 
