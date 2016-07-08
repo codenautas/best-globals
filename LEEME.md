@@ -135,6 +135,32 @@ console.log(newConfig);
 
 <!--lang:*-->
 
+### changing(new Error(msg), changes)
+
+<!--lang:es-->
+
+Si el primer parámetro es de clase Error retorna el mismo objeto con los cambios en él.
+
+<!--lang:en--]
+
+If the first argument is an instance of Error, It returns the same object with the changes reflected
+
+[!--lang:*-->
+
+```js
+var chaging = require('best-globals').chaging;
+
+try{
+  //something
+  throw changing(new Error('error in example', {Gravity:'Falls'}));
+}catch(err){
+  console.log(err.message); // error in example
+  consoel.log(err.Gravity); // Falls
+}
+```
+
+<!--lang:*-->
+
 ### setGlobals(globalObject)
 
 <!--lang:es-->

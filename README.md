@@ -90,6 +90,25 @@ console.log(newConfig);
 ```
 
 
+### changing(new Error(msg), changes)
+
+
+If the first argument is an instance of Error, It returns the same object with the changes reflected
+
+
+```js
+var chaging = require('best-globals').chaging;
+
+try{
+  //something
+  throw changing(new Error('error in example', {Gravity:'Falls'}));
+}catch(err){
+  console.log(err.message); // error in example
+  consoel.log(err.Gravity); // Falls
+}
+```
+
+
 ### setGlobals(globalObject)
 
 

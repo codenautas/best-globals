@@ -74,8 +74,15 @@ describe('is Plain Object', function(){
 });
 
 describe('mini-tools config functions', function(){
+    var changing=function(original){
+        var obtained = bestGlobals.changing.apply(null, arguments);
+        if(obtained === original && !(obtained instanceof Error)){
+            throw new Error('changing: obtained must be a new object, not the original one');
+        }
+        return obtained;
+    }
     it("deep 'changing' function", function(){
-        var obtained = bestGlobals.changing({
+        var obtained = changing({
             soloOriginal:2,
             enAmbos:3,
             hijo:{
@@ -134,7 +141,7 @@ describe('mini-tools config functions', function(){
         })
     });
     it("deep 'bestGlobals.changing' function must delete", function(){
-        var obtained = bestGlobals.changing({
+        var obtained = changing({
             normal:1,
             forDelete:2,
         },{
@@ -146,7 +153,7 @@ describe('mini-tools config functions', function(){
         })
     });
     it("deep 'bestGlobals.changing' function must delete undefineds", function(){
-        var obtained = bestGlobals.changing({
+        var obtained = changing({
             normal:1,
             forDelete:2,
         },{
@@ -159,7 +166,7 @@ describe('mini-tools config functions', function(){
     });
     it("must reject plain options", function(){
         expect(function(){
-            var obtained = bestGlobals.changing({
+            var obtained = changing({
                 normal:1,
                 forDelete:2,
             },{
@@ -170,7 +177,7 @@ describe('mini-tools config functions', function(){
     });
     it("must reject non-object changer", function(){
         expect(function(){
-            var obtained = bestGlobals.changing({
+            var obtained = changing({
                 normal:{
                     one:1,
                     two:2
@@ -181,7 +188,7 @@ describe('mini-tools config functions', function(){
         }).to.throwError(/changing object with non-object/);
     });
     it("non plain objects must be interpreted as values", function(){
-        var obtained = bestGlobals.changing({
+        var obtained = changing({
             a: new Date('1/2/3'),
             b: ['a', 'b', 'c']
         },{
@@ -195,7 +202,7 @@ describe('mini-tools config functions', function(){
     });
     it("error objects must be interpreted as special object", function(){
         var err = new Error("this error");
-        var obtained = bestGlobals.changing(err,{code: 'A12', "z-number":12});
+        var obtained = changing(err,{code: 'A12', "z-number":12});
         expect(obtained).to.be.an(Error);
         expect(obtained).to.be(err);
         expect(obtained.message).to.eql("this error");

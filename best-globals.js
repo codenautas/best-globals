@@ -185,10 +185,10 @@ bestGlobals.date.isValidDate = function isValidDate(year, month, day) {
  };
 
 bestGlobals.date.isOK = function isOK(dt) {
-    if(! (dt instanceof Date)
-       || isNaN(dt.getTime())
-       || ! bestGlobals.date.isValidDate(dt.getFullYear(), dt.getMonth()+1, dt.getDate()))
-    {
+    if(! (dt instanceof Date) ||
+       isNaN(dt.getTime()) ||
+       ! bestGlobals.date.isValidDate(dt.getFullYear(), dt.getMonth()+1, dt.getDate())
+    ){
         return false;
     }
     return true;
