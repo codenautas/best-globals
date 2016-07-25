@@ -457,3 +457,27 @@ describe('constructorName', function(){
         }); 
     });
 });
+
+describe('escapeRegExp', function(){
+    [
+        {exp:'a.b' , no:'acb' , escaped:'a\\.b'     },
+        {exp:'[ab]', no:'ab'  , escaped:'\\[ab\\]'  },
+        {exp:'ab*c', no:'abbc', escaped:'ab\\*c'    },
+        {exp:'ab+c', no:'abbc', escaped:'ab\\+c'    },
+        {exp:'[^a]', no:'bcde', escaped:'\\[\\^a\\]'},
+        {exp:'a|b' , no:'a'   , escaped:'a\\|b'     },
+        {exp:'(a)' , no:'a'   , escaped:'\\(a\\)'   },
+        {exp:'a{2}', no:'aa'  , escaped:'a\\{2\\}'  },
+    ].forEach(function(fixture) {
+        it(JSON.stringify(fixture),function(){
+            var escaped = bestGlobals.escapeRegExp(fixture.exp);
+            var r = RegExp(escaped);
+            expect(r.test(fixture.exp)).to.be.ok();
+            expect(r.test(fixture.no)).to.not.be.ok();
+            expect(RegExp(fixture.exp).test(fixture.no)).to.be.ok();
+            if('escaped' in fixture){
+                expect(escaped).to.be(fixture.escaped);
+            }
+        }); 
+    });
+});

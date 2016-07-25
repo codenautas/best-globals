@@ -306,6 +306,11 @@ bestGlobals.constructorName = function constructorName(obj) {
     }
 };
 
+bestGlobals.escapeRegExp = function escapeRegExp(string){
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#Using_special_characters
+  return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+};
+
 return bestGlobals;
 
 });

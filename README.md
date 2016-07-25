@@ -109,6 +109,21 @@ try{
 ```
 
 
+### escapeRegExp(text)
+
+
+Returns de text that must be passed to `RegExp` for detects the exact original text.
+
+
+```js
+var escapeRegExp = require('best-globals').escapeRegExp;
+
+console.log(RegExp(escapeRegExp('a|b')).test('a|b')); // true
+console.log(RegExp(escapeRegExp('a|b')).test('a')); // false
+console.log(RegExp(/a|b/).test('a')); // true
+```
+
+
 ### setGlobals(globalObject)
 
 

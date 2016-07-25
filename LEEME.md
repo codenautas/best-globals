@@ -161,6 +161,29 @@ try{
 
 <!--lang:*-->
 
+### escapeRegExp(text)
+
+<!--lang:es-->
+
+Produce el texto que debe ser enviado a `RegExp` para que detecte exacto ese texto
+(aún cuando en el texto haya caracteres especiales de una regexp). 
+
+<!--lang:en--]
+
+Returns de text that must be passed to `RegExp` for detects the exact original text.
+
+[!--lang:*-->
+
+```js
+var escapeRegExp = require('best-globals').escapeRegExp;
+
+console.log(RegExp(escapeRegExp('a|b')).test('a|b')); // true
+console.log(RegExp(escapeRegExp('a|b')).test('a')); // false
+console.log(RegExp(/a|b/).test('a')); // true
+```
+
+<!--lang:*-->
+
 ### setGlobals(globalObject)
 
 <!--lang:es-->
