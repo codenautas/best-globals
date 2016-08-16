@@ -103,7 +103,7 @@ Returns a new object like originalConfig with the changes reflected
 [!--lang:*-->
 
 ```js
-var chaging = require('best-globals').chaging;
+var changing = require('best-globals').changing;
 
 var newConfig = changing(
     {
@@ -148,7 +148,7 @@ If the first argument is an instance of Error, It returns the same object with t
 [!--lang:*-->
 
 ```js
-var chaging = require('best-globals').chaging;
+var changing = require('best-globals').changing;
 
 try{
   //something
