@@ -124,6 +124,19 @@ console.log(RegExp(/a|b/).test('a')); // true
 ```
 
 
+### forOrder(text)
+
+
+Returns a unreadeable text that can be used to order the text in an human way
+
+
+```js
+var forOrder = require('best-globals').forOrder;
+
+console.log(forOrder('code X9')<forOrder('code X11')); // true
+```
+
+
 ### setGlobals(globalObject)
 
 

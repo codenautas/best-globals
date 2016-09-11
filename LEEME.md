@@ -184,6 +184,26 @@ console.log(RegExp(/a|b/).test('a')); // true
 
 <!--lang:*-->
 
+### forOrder(text)
+
+<!--lang:es-->
+
+Produce un texto que puede ser comparado para un orden "mas humano" de modo de que sea cierto:
+
+<!--lang:en--]
+
+Returns a unreadeable text that can be used to order the text in an human way
+
+[!--lang:*-->
+
+```js
+var forOrder = require('best-globals').forOrder;
+
+console.log(forOrder('code X9')<forOrder('code X11')); // true
+```
+
+<!--lang:*-->
+
 ### setGlobals(globalObject)
 
 <!--lang:es-->

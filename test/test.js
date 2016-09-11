@@ -481,3 +481,42 @@ describe('escapeRegExp', function(){
         }); 
     });
 });
+
+describe('ordering', function(){
+    [
+        {a:'ABC'        , b:'abd'       , label:'ignore case                 '},
+        {a:'abc'        , b:'ABD'       , label:'ignore case                 '},
+        {a:'x9b'        , b:'x11a'      , label:'natural number ordering     '},
+        {a:'x9.51b'     , b:'x9.9a'     , label:'decimal numbers             '},
+        {a:'x9.51b'     , b:'x009.9a'   , label:'trailing ceros              '},
+        {a:'x009.51b'   , b:'x19.9a'    , label:'trailing ceros              '},
+        {a:'The Zeta'   , b:'There'     , label:'word by word                '},
+        {a:'The~Zeta'   , b:'There'     , label:'word by word, any separator '},
+        {a:'The, 1'     , b:'The 2'     , label:'any secuence of separators  '},
+        {a:'The 1'      , b:'The, 2'    , label:'any secuence of separators  '},
+        {a:'ábcéno'     , b:'Abceña'    , label:'spanish                     '},
+        {a:'abceño'     , b:'abcepa'    , label:'spanish                     '},
+        {a:'{A}'        , b:'{AB}'      , label:'shortest                    '},
+        {a:' A'         , b:'B'         , label:'ignore trailing spaces      '},
+        {a:'A'          , b:' B'        , label:'ignore trailing spaces      '},
+        {a:'a b'        , b:'A!B'       , label:'at the end signs defines    '},
+        {a:'aBc'        , b:'abC'       , label:'uppers first                '},
+        {a:'aBc'        , b:'abC.'      , label:'trailing signs last         '},
+        {a:'aBc'        , b:' abC'      , label:'trailing left signs last    '},
+        {a:' aBc'       , b:'abC '      , label:'trailing left signs last    '},
+        {a:'7'          , b:'a'         , label:'numbers first               '},
+        {a:7            , b:'11'        , label:'numbers                     '},
+        {a:'other'      , b:null        , label:'nulls last                  '},
+        {a:new Date(2012,9,15,8), b:new Date() , label:'dates                '},
+    ].forEach(function(fixture) {
+        it(JSON.stringify(fixture),function(){
+            var a1 = bestGlobals.forOrder(fixture.a);
+            var b1 = bestGlobals.forOrder(fixture.b);
+            expect(a1<b1).to.be.ok();
+            expect(a1>b1).to.not.be.ok();
+            expect(a1==b1).to.not.be.ok();
+            expect(a1!=null).to.be.ok();
+            expect(typeof a1=="string").to.be.ok();
+        }); 
+    });
+});
