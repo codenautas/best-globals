@@ -155,7 +155,7 @@ require('best-globals').setGlobals(global);
   coalesce and the other functions are now global
 */
 
-console.log(coalesce(null, 'yes));
+console.log(coalesce(null, 'yes'));
 
 ```
 
