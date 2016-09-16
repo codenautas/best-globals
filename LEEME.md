@@ -133,7 +133,21 @@ console.log(newConfig);
 
 ```
 
-<!--lang:*-->
+<!--lang:es-->
+
+opciones        |predeterminado |uso
+----------------|---------------|----------------------------
+`deletingValue` | *apagado*     |valor que se usa como señal de que la propiedad debe ser eliminada
+`mostlyPlain`   | `false`       |permite cambiar un objeto de una clase que no es "plain"
+
+<!--lang:en--]
+
+options         |default  |use
+----------------|---------|----------------------------
+`deletingValue` | *off*   |value used to delete a property
+`mostlyPlain`   | `false` |allows non plain object to be changed property by property
+
+[!--lang:*-->
 
 ### changing(new Error(msg), changes)
 

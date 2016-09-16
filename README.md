@@ -90,6 +90,12 @@ console.log(newConfig);
 ```
 
 
+options         |default  |use
+----------------|---------|----------------------------
+`deletingValue` | *off*   |value used to delete a property
+`mostlyPlain`   | `false` |allows non plain object to be changed property by property
+
+
 ### changing(new Error(msg), changes)
 
 
