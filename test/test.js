@@ -74,6 +74,10 @@ describe('is Plain Object', function(){
 });
 
 describe('mini-tools config functions', function(){
+    function Other(obj){
+        this.alpha='alpha';
+        this.one=1;
+    }
     var changing=function(original){
         var obtained = bestGlobals.changing.apply(null, arguments);
         if(obtained === original && !(obtained instanceof Error)){
@@ -163,6 +167,19 @@ describe('mini-tools config functions', function(){
         expect(obtained).to.eql({
             normal:3
         })
+    });
+    it("must try into non plain objects when mostlyPlain:true", function(){
+        var obtained=changing(new Other(), {alpha:'a'}, bestGlobals.changing.options({mostlyPlain:true}));
+        expect(bestGlobals.isPlainObject(obtained)).to.be.ok();
+        expect(obtained).to.eql({alpha:'a', one:1});
+    });
+    it("must reject non plain original", function(){
+        expect(function(){
+            var obtained = changing(Other,{
+                normal:3,
+                forDelete:undefined
+            });
+        }).to.throwError(/changing with non Plain Object/);
     });
     it("must reject plain options", function(){
         expect(function(){
