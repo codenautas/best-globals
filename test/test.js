@@ -537,3 +537,51 @@ describe('ordering', function(){
         }); 
     });
 });
+
+describe('comparing', function(){
+    var columnsOrder=[
+        {column:'b', order: 1},
+        {column:'c', order: 1, func:bestGlobals.forOrder.Native},
+        {column:'d', order:-1},
+    ];
+    it('sorts tuples',function(){
+        var data=[
+            [11,  11, 11],
+            [11,null, 11],
+            [null,11, 11],
+            [ 9,  11, 11],
+            [11,   9, 11],
+            [11,  11,  9],
+        ];
+        var expected=[
+            [11,   9, 11],
+            [11,  11,  9],
+            [11,  11, 11],
+            [ 9,  11, 11],
+            [null,11, 11],
+            [11,null, 11],
+        ]
+        var criteria=[
+            {column:1, func:bestGlobals.forOrder.Native},
+            {column:2, },
+            {column:0, order:-1},
+        ]
+        data.sort(bestGlobals.compareForOrder(criteria));
+        expect(data).to.eql(expected);
+    })
+    var compareFunction=bestGlobals.compareForOrder(columnsOrder);
+    [
+        {a:{a:1, b:2,   c:3,   d:4}, b:{a:4, b:4,   c:4,   d:4}, expected:-1, label:'fist field <               '},
+        {a:{a:1, b:5,   c:3,   d:4}, b:{a:4, b:4,   c:4,   d:4}, expected: 1, label:'fist field >               '},
+        {a:{a:1, b:'ñ', c:3,   d:4}, b:{a:4, b:'z', c:4,   d:4}, expected:-1, label:'fist field <Alpha          '},
+        {a:{a:1, b:4,   c:3,   d:4}, b:{a:4, b:4,   c:4,   d:4}, expected:-1, label:'= <                        '},
+        {a:{a:1, b:4,   c:'z', d:4}, b:{a:4, b:4,   c:'ñ', d:4}, expected:-1, label:'= <Native                  '},
+        {a:{a:1, b:4,   c:4,   d:5}, b:{a:4, b:4,   c:4,   d:4}, expected:-1, label:'= = > desc                 '},
+        {a:{a:1, b:4,   c:4,   d:4}, b:{a:4, b:4,   c:4,   d:4}, expected: 0, label:'= = =                      '},
+    ].forEach(function(fixture) {
+        it(JSON.stringify(fixture),function(){
+            var result = compareFunction(fixture.a, fixture.b);
+            expect(result).to.eql(fixture.expected);
+        }); 
+    });
+});

@@ -361,6 +361,37 @@ bestGlobals.forOrder = function forOrder(text){
     return main.join('')+signs.join('')+'   '+text;
 };
 
+bestGlobals.forOrder.Native = function forOrderNative(a){
+    return a;
+};
+
+bestGlobals.compareForOrder = function compareForOrder(sortColumns){
+    var thisModule = this;
+    return function forOrderComparator(row1,row2){
+        var column;
+        var i=0;
+        do{
+            var order = bestGlobals.coalesce(sortColumns[i].order, 1);
+            column=sortColumns[i].column;
+            if(row1[column]==null){
+                return 1;
+            }
+            if(row2[column]==null){
+                return -1;
+            }
+            var a=(sortColumns[i].func||thisModule.forOrder)(row1[column]);
+            var b=(sortColumns[i].func||thisModule.forOrder)(row2[column]);
+            if(a>b){
+                return 1*order;
+            }else if(a<b){
+                return -1*order;
+            }
+            i++;
+        }while(i<sortColumns.length);
+        return 0;
+    };
+};
+
 return bestGlobals;
 
 });

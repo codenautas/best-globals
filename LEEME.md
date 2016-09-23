@@ -218,6 +218,36 @@ console.log(forOrder('code X9')<forOrder('code X11')); // true
 
 <!--lang:*-->
 
+### compareForOrder(criteria)
+
+<!--lang:es-->
+
+Crea una función para ser utilizada con la función sort de arreglos
+
+<!--lang:en--]
+
+Returns a function to be pased to the sort array function.
+
+[!--lang:*-->
+
+```js
+var compareForOrder = require('best-globals').compareForOrder;
+
+var data=[
+    {lastName:'Smith', firstName:'Bob'  },
+    {lastName:'Kerry', firstName:'Kelly'},
+];
+
+data.sort(compareForOrder([
+    {column:'lastName' },
+    {column:'firstName', order:-1}, // descending
+]));
+
+console.log(data);
+```
+
+<!--lang:*-->
+
 ### setGlobals(globalObject)
 
 <!--lang:es-->

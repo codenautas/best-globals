@@ -143,6 +143,29 @@ console.log(forOrder('code X9')<forOrder('code X11')); // true
 ```
 
 
+### compareForOrder(criteria)
+
+
+Returns a function to be pased to the sort array function.
+
+
+```js
+var compareForOrder = require('best-globals').compareForOrder;
+
+var data=[
+    {lastName:'Smith', firstName:'Bob'  },
+    {lastName:'Kerry', firstName:'Kelly'},
+];
+
+data.sort(compareForOrder([
+    {column:'lastName' },
+    {column:'firstName', order:-1}, // descending
+]));
+
+console.log(data);
+```
+
+
 ### setGlobals(globalObject)
 
 
