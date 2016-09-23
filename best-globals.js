@@ -365,6 +365,8 @@ bestGlobals.forOrder.Native = function forOrderNative(a){
     return a;
 };
 
+bestGlobals.nullsOrder = 1; // 1=last -1=first;
+
 bestGlobals.compareForOrder = function compareForOrder(sortColumns){
     var thisModule = this;
     return function forOrderComparator(row1,row2){
@@ -374,10 +376,14 @@ bestGlobals.compareForOrder = function compareForOrder(sortColumns){
             var order = bestGlobals.coalesce(sortColumns[i].order, 1);
             column=sortColumns[i].column;
             if(row1[column]==null){
-                return 1;
+                if(row2[column]==null){
+                    return 0;
+                }else{
+                    return thisModule.nullsOrder;
+                }
             }
             if(row2[column]==null){
-                return -1;
+                return -thisModule.nullsOrder;
             }
             var a=(sortColumns[i].func||thisModule.forOrder)(row1[column]);
             var b=(sortColumns[i].func||thisModule.forOrder)(row2[column]);
