@@ -376,21 +376,19 @@ bestGlobals.compareForOrder = function compareForOrder(sortColumns){
             var order = bestGlobals.coalesce(sortColumns[i].order, 1);
             column=sortColumns[i].column;
             if(row1[column]==null){
-                if(row2[column]==null){
-                    return 0;
-                }else{
+                if(row2[column]!=null){
                     return thisModule.nullsOrder;
                 }
-            }
-            if(row2[column]==null){
+            }else if(row2[column]==null){
                 return -thisModule.nullsOrder;
-            }
-            var a=(sortColumns[i].func||thisModule.forOrder)(row1[column]);
-            var b=(sortColumns[i].func||thisModule.forOrder)(row2[column]);
-            if(a>b){
-                return 1*order;
-            }else if(a<b){
-                return -1*order;
+            }else{
+                var a=(sortColumns[i].func||thisModule.forOrder)(row1[column]);
+                var b=(sortColumns[i].func||thisModule.forOrder)(row2[column]);
+                if(a>b){
+                    return 1*order;
+                }else if(a<b){
+                    return -1*order;
+                }
             }
             i++;
         }while(i<sortColumns.length);

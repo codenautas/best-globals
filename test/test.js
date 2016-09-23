@@ -578,7 +578,7 @@ describe('comparing', function(){
         {a:{a:1, b:4,   c:'z', d:4}, b:{a:4, b:4,   c:'ñ', d:4}, expected:-1, label:'= <Native                  '},
         {a:{a:1, b:4,   c:4,   d:5}, b:{a:4, b:4,   c:4,   d:4}, expected:-1, label:'= = > desc                 '},
         {a:{a:1, b:4,   c:4,   d:4}, b:{a:4, b:4,   c:4,   d:4}, expected: 0, label:'= = =                      '},
-        {a:{a:1, b:4,   c:4,d:null}, b:{a:4, b:4,   c:4,   d:4}, expected:-1, label:'= = null first             '},
+        {a:{a:1, b:4,c:null,d:null}, b:{a:4, b:4,c:null,   d:4}, expected:-1, label:'= = null first             '},
     ].forEach(function(fixture) {
         it(JSON.stringify(fixture),function(){
             bestGlobals.nullsOrder = -1;
