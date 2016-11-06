@@ -396,6 +396,12 @@ bestGlobals.compareForOrder = function compareForOrder(sortColumns){
     };
 };
 
+bestGlobals.sleep = function sleep(milliseconds){
+    return new Promise(function(resolve){
+        setTimeout(resolve,milliseconds);
+    });
+};
+
 return bestGlobals;
 
 });

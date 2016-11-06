@@ -587,3 +587,13 @@ describe('comparing', function(){
         }); 
     });
 });
+
+describe("Promises", function(){
+    it("sleeps", function(){
+        var now=new Date();
+        return bestGlobals.sleep(1000).then(function(){
+            expect(new Date().getTime()-now.getTime() >= 1000).to.be.ok();
+            expect(new Date().getTime()-now.getTime() < 2000).to.be.ok();
+        })
+    });
+});
