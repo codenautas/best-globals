@@ -166,6 +166,24 @@ console.log(data);
 ```
 
 
+### sleep(milliseconds)
+
+
+Suspends a promises chain for a while
+
+
+```js
+var sleep = require('best-globals').sleep;
+
+sleep(2000).then(function(){
+    console.log('two seconds waited');
+    return sleep(1000);
+}).then(function(){
+    console.log('another second waited');
+});
+```
+
+
 ### setGlobals(globalObject)
 
 

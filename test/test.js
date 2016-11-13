@@ -454,6 +454,33 @@ describe("setGlobals",function(){
     });
 });
 
+function globalFun(){
+}
+
+describe('functionName', function(){
+    function localFun(){}
+    var vf = function varFun(){};
+    var anonymous = function(){};
+    var forceAno = function(){};
+    Object.defineProperty(forceAno, 'name', {get: function(){ return null; }});
+    [
+        {val:globalFun, name:'globalFun'},
+        {val:localFun , name:'localFun' },
+        {val:vf       , name:'varFun'   },
+        {val:anonymous, name:'anonymous'},
+        {val:forceAno , name:'anonymous'},
+    ].forEach(function(input) {
+        it(JSON.stringify(input.val)+" should be "+JSON.stringify(input.name) ,function(){
+            expect(bestGlobals.functionName(input.val)).to.eql(input.name);
+        }); 
+    });
+    it("rejects non functions", function(){
+        expect(function(){
+            bestGlobals.functionName({});
+        }).to.throwError(/non function/);
+    });
+});
+
 describe('constructorName', function(){
     function MiObj() {};
     function Tainted() {  if(! process.version.match(/^(v0.12)/)) { delete this.constructor.name; } }; // coverage
