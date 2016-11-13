@@ -462,7 +462,10 @@ describe('functionName', function(){
     var vf = function varFun(){};
     var anonymous = function(){};
     var forceAno = function(){};
-    Object.defineProperty(forceAno, 'name', {get: function(){ return null; }});
+    if(process.version>='4'){
+        // for coverage: emulate previous version anonymous functions:
+        Object.defineProperty(forceAno, 'name', {get: function(){ return null; }});
+    }
     [
         {val:globalFun, name:'globalFun'},
         {val:localFun , name:'localFun' },
