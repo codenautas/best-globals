@@ -462,7 +462,7 @@ describe('functionName', function(){
     var vf = function varFun(){};
     var anonymous = function(){};
     var forceAno = function(){};
-    if(process.version>='4'){
+    if(process.versions.node>='4'){
         // for coverage: emulate previous version anonymous functions:
         Object.defineProperty(forceAno, 'name', {get: function(){ return null; }});
     }
