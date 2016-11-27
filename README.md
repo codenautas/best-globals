@@ -184,23 +184,6 @@ sleep(2000).then(function(){
 ```
 
 
-### setGlobals(globalObject)
-
-
-Receives the global object and populates all the module functions
-
-
-```js
-require('best-globals').setGlobals(global);
-/*
-  coalesce and the other functions are now global
-*/
-
-console.log(coalesce(null, 'yes'));
-
-```
-
-
 ## License
 
 

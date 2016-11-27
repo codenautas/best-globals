@@ -446,14 +446,6 @@ describe("date", function(){
     });
 });
 
-describe("setGlobals",function(){
-    it("populate globals", function(){
-        var fakeGlobal={};
-        bestGlobals.setGlobals(fakeGlobal);
-        expect(fakeGlobal.coalesce instanceof Function).to.ok();
-    });
-});
-
 function globalFun(){
 }
 

@@ -271,30 +271,6 @@ sleep(2000).then(function(){
 });
 ```
 
-<!--lang:*-->
-
-### setGlobals(globalObject)
-
-<!--lang:es-->
-
-Recibe el objeto que tiene las variables globales y publica ahí todas las funciones del módulo best-globals
-
-<!--lang:en--]
-
-Receives the global object and populates all the module functions
-
-[!--lang:*-->
-
-```js
-require('best-globals').setGlobals(global);
-/*
-  coalesce and the other functions are now global
-*/
-
-console.log(coalesce(null, 'yes'));
-
-```
-
 <!--lang:es-->
 
 ## Licencia
