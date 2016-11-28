@@ -441,7 +441,8 @@ describe("date", function(){
                             expect(date(param.i)[functionName]()).to.eql(param[functionName]);
                         }
                         expect(datetime(param.i)[functionName]()).to.eql(param[functionName]);
-                        assert.deepStrictEqual(auditCopy.inObject(param),auditCopyParam);
+                        var equalComparation = assert.deepStrictEqual || assert.deepEqual;
+                        equalComparation(auditCopy.inObject(param),auditCopyParam);
                     });
                 }
             });
