@@ -177,7 +177,7 @@ function addDateMethods(dt) {
 ////////// date
 bestGlobals.date = function date(dt) {
     if(! bestGlobals.date.isOK(dt)) { throw new Error('invalid date'); }
-    var d = addDateMethods(new Date(dt));
+    var d = addDateMethods(new Date(dt.getTime()));
     if(d.getHours() || d.getMinutes() || d.getSeconds() || d.getMilliseconds()) {
         throw new Error('invalid date "'+d.toDateString()+'"because it has time');
     }
@@ -232,7 +232,7 @@ bestGlobals.date.array = function array(arr) {
 /////// datetime
 bestGlobals.datetime=function datetime(dt) {
     if(! bestGlobals.date.isOK(dt)) { throw new Error('invalid date'); }
-    var d = addDateMethods(new Date(dt));
+    var d = addDateMethods(new Date(dt.getTime()));
     d.isRealDateTime = true;
     return d;
 };
