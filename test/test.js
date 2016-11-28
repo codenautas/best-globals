@@ -2,8 +2,9 @@
 
 var expect = require('expect.js');
 var sinon = require('sinon');
-
+var assert = require('assert');
 var bestGlobals = require('..');
+var auditCopy = require('audit-copy');
 
 describe('best-globals', function(){
     describe('coalesce', function(){
@@ -435,10 +436,12 @@ describe("date", function(){
             "toYmd,toHms,toYmdHms,toYmdHmsM".split(',').forEach(function(functionName){
                 if(param[functionName]) {
                     it(functionName+"("+param.i.toLocaleString()+") => ["+param[functionName]+"]", function(){
+                        var auditCopyParam = auditCopy.inObject(param);
                         if(! param.hasHour){
                             expect(date(param.i)[functionName]()).to.eql(param[functionName]);
                         }
                         expect(datetime(param.i)[functionName]()).to.eql(param[functionName]);
+                        assert.deepStrictEqual(auditCopy.inObject(param),auditCopyParam);
                     });
                 }
             });
@@ -614,7 +617,7 @@ describe("Promises", function(){
     it("sleeps", function(){
         var now=new Date();
         return bestGlobals.sleep(1000).then(function(){
-            expect(new Date().getTime()-now.getTime() >= 1000).to.be.ok();
+            expect(new Date().getTime()-now.getTime() >= 900).to.be.ok();
             expect(new Date().getTime()-now.getTime() < 2000).to.be.ok();
         })
     });

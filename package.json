@@ -16,7 +16,9 @@
     "expect.js": "~0.3.1",
     "istanbul": "~0.4.5",
     "mocha": "~3.1.2",
-    "sinon": "~1.17.6"
+    "sinon": "~1.17.6",
+    
+    "audit-copy": "~0.0.2"
   },
   "main": "best-globals.js",
   "engines": {
