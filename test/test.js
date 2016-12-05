@@ -432,6 +432,8 @@ describe("date", function(){
             {i:new Date(2015, 11,  1,  0,  0,   0, 100),              toYmdHmsM:'2015-12-01 00:00:00.100', hasHour:true},
             {i:new Date(1969,  1,  2, 14,  2,  30),                   toYmdHmsM:'1969-02-02 14:02:30.000', hasHour:true},
             {i:new Date(1969,  1,  2, 11, 22,  33, 444),              toYmdHmsM:'1969-02-02 11:22:33.444', hasHour:true},
+            {i:new Date(10511,1,3),              toYmd:'10511-02-03'},
+            {i:new Date(511,1,3),                toYmd:'511-02-03'},
         ].forEach(function(param){
             "toYmd,toHms,toYmdHms,toYmdHmsM".split(',').forEach(function(functionName){
                 if(param[functionName]) {
