@@ -268,7 +268,11 @@ sleep(2000).then(function(){
     return sleep(1000);
 }).then(function(){
     console.log('another second waited');
+    return 42;
+}).then(sleep(3000)).then(function(result){
+    console.log('wait three seconds and pass the result to the next "then"');
 });
+
 ```
 
 <!--lang:es-->

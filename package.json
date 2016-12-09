@@ -1,7 +1,7 @@
 {
   "name": "best-globals",
   "description": "common global function and constants - i.e. coalesce",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "author": "Codenautas <codenautas@googlegroups.com>",
   "license": "MIT",
   "repository": "codenautas/best-globals",
@@ -15,7 +15,7 @@
     "colors": "~1.1.2",
     "expect.js": "~0.3.1",
     "istanbul": "~0.4.5",
-    "mocha": "~3.1.2",
+    "mocha": "~3.2.0",
     "sinon": "~1.17.6",
     
     "audit-copy": "~0.0.2"

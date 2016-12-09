@@ -617,11 +617,19 @@ describe('comparing', function(){
 });
 
 describe("Promises", function(){
-    it("sleeps", function(){
+    it("sleeps and pass the returned value", function(){
         var now=new Date();
-        return bestGlobals.sleep(1000).then(function(){
-            expect(new Date().getTime()-now.getTime() >= 900).to.be.ok();
-            expect(new Date().getTime()-now.getTime() < 2000).to.be.ok();
+        return Promise.resolve(42).then(bestGlobals.sleep(200)).then(function(value){
+            expect(value).to.eql(42);
+            expect(new Date().getTime()-now.getTime() >=200).to.be.ok();
+            expect(new Date().getTime()-now.getTime() < 250).to.be.ok();
+        })
+    });
+    it("sleeps directly", function(){
+        var now=new Date();
+        return bestGlobals.sleep(400).then(function(){
+            expect(new Date().getTime()-now.getTime() >=400).to.be.ok();
+            expect(new Date().getTime()-now.getTime() < 450).to.be.ok();
         })
     });
 });
