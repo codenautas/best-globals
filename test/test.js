@@ -678,3 +678,31 @@ describe("Promises", function(){
         })
     });
 });
+
+describe("Array.find polyfill", function(){
+    it("founds one", function(){
+        var searched={};
+        var toSearch=[{num:3},{num:1},{num:5}];
+        var theThis={ f: function(a,i){
+            a[i]=true;
+        }};
+        var founded = bestGlobals.arrayFind.call(toSearch,function(element, index, array){
+            this.f(searched,index);
+            if(element.num===index){
+                return true;
+            }else{
+                array[index]='x';
+            }
+        },theThis);
+        expect(founded === toSearch[1]).to.be.ok();
+        expect(searched).to.eql({0:true, 1:true});
+        expect(toSearch).to.eql(['x',{num:1},{num:5}]);
+    });
+    it("not found", function(){
+        var toSearch=[{num:3},{num:1},{num:5}];
+        var founded = bestGlobals.arrayFind.call(toSearch,function(element){
+            return element.num==2;
+        });
+        expect(founded === undefined).to.be.ok();
+    });
+});
