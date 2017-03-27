@@ -98,6 +98,25 @@ bestGlobals.isPlainObject = function isPlainObject(x){
     return typeof x==="object" && x && x.constructor === Object;
 };
 
+function deepCopy(object){
+    var rta=object;
+    if(bestGlobals.isPlainObject(object)){
+        rta={};
+        for(var attr in object){
+            rta[attr]=deepCopy(object[attr]);
+        }
+    }
+    if(object instanceof Array){
+        rta=[];
+        for(var attr in object){
+            rta[attr]=deepCopy(object[attr]);
+        }
+    }
+    return rta;
+}
+
+bestGlobals.deepCopy = deepCopy;
+
 bestGlobals.changing = function changing(original, changes){
     var opts = bestGlobals.changing.retreiveOptions(arguments);
     if(original===null ||
@@ -109,9 +128,9 @@ bestGlobals.changing = function changing(original, changes){
         if(!arguments[3]){
             throw new Error("changing with non Plain Object");
         }else if(changes!==undefined){
-            return changes;
+            return deepCopy(changes);
         }else{
-            return original;
+            return deepCopy(original);
         }
     }else{
         if(typeof changes!=="object"){
@@ -121,7 +140,7 @@ bestGlobals.changing = function changing(original, changes){
             /*jshint forin:false */
             for(var name in original){
                 if(!(name in changes)){
-                    result[name] = original[name];
+                    result[name] = deepCopy(original[name]);
                 }else if('deletingValue' in opts && changes[name]===opts.deletingValue){
                     // empty
                 }else{
@@ -130,7 +149,7 @@ bestGlobals.changing = function changing(original, changes){
             }
             for(name in changes){
                 if(!(name in original)){
-                    result[name] = changes[name];
+                    result[name] = deepCopy(changes[name]);
                 }
             }
             /*jshint forin:true */

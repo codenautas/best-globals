@@ -706,3 +706,35 @@ describe("Array.find polyfill", function(){
         expect(founded === undefined).to.be.ok();
     });
 });
+
+describe("deep-copy", function(){
+    [
+        {object:{a:'a'}                       , modif:function(x){ x.a='A';            }},
+        {object:{a:{b:{c:['d', {e:{f:'g'}}]}}}, modif:function(x){ x.a.b.c[1].e.f='h'; }},
+    ].forEach(function(fixture){
+        var object=fixture.object;
+        it("for "+JSON.stringify(object), function(){
+            var original=JSON.stringify(object);
+            var result=bestGlobals.deepCopy(object);
+            expect(JSON.stringify(result)).to.eql(original);
+            fixture.modif(result);
+            expect(JSON.stringify(object)).to.eql(original);
+        });
+    });
+});
+
+describe("deep-copy when changing with {}", function(){
+    [
+        function(object){ return bestGlobals.changing({},object);},
+        function(object){ return bestGlobals.changing(object,{});},
+    ].forEach(function(f, i){
+        it("step "+i+": "+f, function(){
+            var object={a:{b:{c:['d', {e:{f:'g'}}]}}};
+            var original=JSON.stringify(object);
+            var result=f(object);
+            expect(JSON.stringify(result)).to.eql(original);
+            result.a.b.c[1].e.f='h';
+            expect(JSON.stringify(object)).to.eql(original);
+        });
+    });
+});
