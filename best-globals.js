@@ -349,6 +349,10 @@ var letterTranslatorRegexp = new RegExp(
     ']','g'
 );
 
+bestGlobals.auxComplementInteger = function auxComplementInteger(integerText){
+    return integerText.split('').map(function(digitText){ return digitText==='.'?'.':''+(9-digitText); }).join('');
+}
+
 bestGlobals.forOrder = function forOrder(text){
     if(text==null){
         return 'zzz(null)';
@@ -359,19 +363,29 @@ bestGlobals.forOrder = function forOrder(text){
     var coalesce = bestGlobals.coalesce;
     var main=[];
     var signs=[];
+    var canBeNegative=true;
     var normal=text.toString()
     .replace(letterTranslatorRegexp, function(letter){ return letterTranslator[letter]; })
     .replace(
-        /([a-z]+)|(0*([1-9][0-9]*)(\.[0-9]+)?)|([^a-z0-9])/ig, 
-        function(t, letters, nums, integer, decimals, sign){
+        /([a-z]+)|((-?)0*(0|[1-9][0-9]*)(\.[0-9]+)?)|([^a-z0-9])/ig, 
+        function(t, letters, nums, sign, integer, decimals, others){
             if(letters){
                 main.push(' '+letters.toLowerCase());
             }
             if(nums){
-                main.push('  '+String.fromCharCode(64+coalesce(integer,'').length)+coalesce(integer,'')+coalesce(decimals,''));
+                if(!integer){
+                    integer='0';
+                }
+                if(sign && canBeNegative){
+                    integer = bestGlobals.auxComplementInteger(integer||'');
+                    decimals = bestGlobals.auxComplementInteger(decimals||'');
+                }
+                main.push('  '+(sign?'A':'')+String.fromCharCode(65+coalesce(integer,'').length)+coalesce(integer,'')+coalesce(decimals,''));
             }
-            if(sign){
-                signs.push(' , '+sign);
+            canBeNegative=false;
+            if(others){
+                canBeNegative=true;
+                signs.push(' , '+others);
             }
         }
     );

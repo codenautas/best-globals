@@ -528,6 +528,11 @@ describe('escapeRegExp', function(){
 });
 
 describe('ordering', function(){
+    it("calculates integer complement", function(){
+        expect(bestGlobals.auxComplementInteger('12')).to.eql('87');
+        expect(bestGlobals.auxComplementInteger('1002')).to.eql('8997');
+        expect(bestGlobals.auxComplementInteger('0')).to.eql('9');
+    });
     [
         {a:'ABC'        , b:'abd'       , label:'ignore case                 '},
         {a:'abc'        , b:'ABD'       , label:'ignore case                 '},
@@ -551,6 +556,14 @@ describe('ordering', function(){
         {a:' aBc'       , b:'abC '      , label:'trailing left signs last    '},
         {a:'7'          , b:'a'         , label:'numbers first               '},
         {a:7            , b:'11'        , label:'numbers                     '},
+        {a:'-7'         , b:'6'         , label:'text of negative numbers    '},
+        {a:-7           , b:6           , label:'negative numbers            '},
+        {a:-7           , b:1           , label:'negative numbers 2          '},
+        {a:'0.2134'     , b:1           , label:'small decimals              '},
+        {a:'0.2134'     , b:'0.4134'    , label:'small decimals 2            '},
+        {a:'-0.4134'    , b:'0.21349'   , label:'small decimals neg          '},
+        {a:'a-1'        , b:'a-2'       , label:'code with number            '},
+        {a:'999-123-456', b:'999-321-456',label:'telephones                  '},
         {a:'other'      , b:null        , label:'nulls last                  '},
         {a:new Date(2012,9,15,8), b:new Date() , label:'dates                '},
     ].forEach(function(fixture) {
