@@ -564,6 +564,10 @@ describe('ordering', function(){
         {a:'-0.4134'    , b:'0.21349'   , label:'small decimals neg          '},
         {a:'a-1'        , b:'a-2'       , label:'code with number            '},
         {a:'999-123-456', b:'999-321-456',label:'telephones                  '},
+        {a:'11'         , b:'11-2'      , label:'subcodes 1                  '},
+        {a:'11-2'       , b:'11-2-1'    , label:'subcodes 2                  '},
+        {a:'11-2-3'     , b:'11-2-3-1'  , label:'subcodes 3                  '},
+        {a:'06-0001'    , b:'06-0001-060028',label:'subcodes 0               '},
         {a:'other'      , b:null        , label:'nulls last                  '},
         {a:new Date(2012,9,15,8), b:new Date() , label:'dates                '},
     ].forEach(function(fixture) {
