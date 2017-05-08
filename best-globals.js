@@ -512,7 +512,6 @@ function arrayFind(predicate){
 }
 
 if(!Array.prototype.find){
-  console.log('xxxxxxxxxxxxxxxxxxx no find');
   Object.defineProperty(Array.prototype, 'find', {
     value: arrayFind
   });
