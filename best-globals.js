@@ -376,11 +376,15 @@ bestGlobals.forOrder = function forOrder(text){
                 if(!integer){
                     integer='0';
                 }
+                var negative;
                 if(sign && canBeNegative){
                     integer = bestGlobals.auxComplementInteger(integer||'');
                     decimals = bestGlobals.auxComplementInteger(decimals||'');
+                    negative = true;
+                }else{
+                    negative = false;
                 }
-                main.push('  '+(sign?'A':'')+String.fromCharCode(65+coalesce(integer,'').length)+coalesce(integer,'')+coalesce(decimals,''));
+                main.push(' '+(negative?'A':'')+String.fromCharCode(65+coalesce(integer,'').length)+coalesce(integer,'')+coalesce(decimals,''));
             }
             canBeNegative=false;
             if(others){

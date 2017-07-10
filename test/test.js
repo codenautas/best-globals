@@ -567,6 +567,9 @@ describe('ordering', function(){
         {a:'11'         , b:'11-2'      , label:'subcodes 1                  '},
         {a:'11-2'       , b:'11-2-1'    , label:'subcodes 2                  '},
         {a:'11-2-3'     , b:'11-2-3-1'  , label:'subcodes 3                  '},
+        {a:'1 2 3'      , b:'1-2*4'     , label:'mix spaces and separators   '},
+        {a:'1-2*3'      , b:'1 2 4'     , label:'mix spaces and separators   '},
+        {a:'1 2 3'      , b:'1 2 3 4'   , label:'many numbers                '},
         {a:'06-0001'    , b:'06-0001-060028',label:'subcodes 0               '},
         {a:'other'      , b:null        , label:'nulls last                  '},
         {a:new Date(2012,9,15,8), b:new Date() , label:'dates                '},
@@ -574,6 +577,11 @@ describe('ordering', function(){
         it(JSON.stringify(fixture),function(){
             var a1 = bestGlobals.forOrder(fixture.a);
             var b1 = bestGlobals.forOrder(fixture.b);
+            if(a1<b1){
+            }else{
+                console.log('a1', a1);
+                console.log('b1', b1);
+            }
             expect(a1<b1).to.be.ok();
             expect(a1>b1).to.not.be.ok();
             expect(a1==b1).to.not.be.ok();
