@@ -274,6 +274,26 @@ sleep(2000).then(function(){
 });
 
 ```
+<!--lang:*-->
+
+### serie([a,]n) 
+
+<!--lang:es-->
+
+Devuelve un arreglo con *n* números empezando por *a* (o por cero)
+
+<!--lang:en--]
+
+Returns an array with *n* numbers starting with *a* (or zero)
+
+[!--lang:*-->
+
+```js
+var serie = require('best-globals').serie;
+
+console.log(serie(3)); // [0,1,2]
+console.log(serie(2,3)); // [2,3,4]
+```
 
 <!--lang:es-->
 

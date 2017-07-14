@@ -763,3 +763,22 @@ describe("deep-copy when changing with {}", function(){
         });
     });
 });
+
+
+describe("serie", function(){
+    [
+        {a:1, b:0, res:[]},
+        {a:1, b:1, res:[1]},
+        {a:1, b:4, res:[1,2,3,4]},
+        {a:0     , res:[]},
+        {a:1     , res:[0]},
+        {a:0, b:2, res:[0,1]},
+        {a:5     , res:[0,1,2,3,4]},
+    ].forEach(function(fixture){
+        it("for "+JSON.stringify(fixture), function(){
+            var obtained = bestGlobals.serie(fixture.a, fixture.b);
+            expect(obtained).to.eql(fixture.res);
+        });
+    });
+});
+

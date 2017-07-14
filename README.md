@@ -187,6 +187,19 @@ sleep(2000).then(function(){
 
 ```
 
+### serie([a,]n)
+
+
+Returns an array with *n* numbers starting with *a* (or zero)
+
+
+```js
+var serie = require('best-globals').serie;
+
+console.log(serie(3)); // [0,1,2]
+console.log(serie(2,3)); // [2,3,4]
+```
+
 
 ## License
 

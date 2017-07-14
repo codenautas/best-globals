@@ -523,6 +523,12 @@ if(!Array.prototype.find){
 
 bestGlobals.arrayFind = arrayFind;
 
+bestGlobals.serie = function serie(NorFirst, NifNoFirst){
+    var n     = NifNoFirst==null ? NorFirst : NifNoFirst;
+    var first = NifNoFirst==null ? 0        : NorFirst  ;
+    return Array.apply(null, Array(n)).map(function (_, i) {return i+first;});
+};
+
 return bestGlobals;
 
 });
