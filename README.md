@@ -200,6 +200,18 @@ console.log(serie(3)); // [0,1,2]
 console.log(serie(2,3)); // [2,3,4]
 ```
 
+### today()
+
+
+Returns today with hour
+
+
+```js
+var today = require('best-globals').today;
+
+console.log(today()); // 2017-03-31 current date!
+```
+
 
 ## License
 

@@ -248,6 +248,18 @@ bestGlobals.date.array = function array(arr) {
     return bestGlobals.date.ymd(arr[0], arr[1], arr[2]);
 };
 
+bestGlobals.date.round = function round(timedDate){
+    console.log('xxxxxxxxxxxxxx td',timedDate);   
+    var milisec = timedDate.getTime();
+    var rawDate=new Date(milisec-milisec%(1000*60*60*24));
+    console.log(bestGlobals.date.ymd(rawDate.getUTCFullYear(), rawDate.getUTCMonth()+1, rawDate.getUTCDate()));
+    return bestGlobals.date.ymd(rawDate.getUTCFullYear(), rawDate.getUTCMonth()+1, rawDate.getUTCDate());
+}
+
+bestGlobals.date.today = function today(){
+    return bestGlobals.date.round(new Date());
+}
+
 /////// datetime
 bestGlobals.datetime=function datetime(dt) {
     if(! bestGlobals.date.isOK(dt)) { throw new Error('invalid date'); }

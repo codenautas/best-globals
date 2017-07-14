@@ -294,6 +294,25 @@ var serie = require('best-globals').serie;
 console.log(serie(3)); // [0,1,2]
 console.log(serie(2,3)); // [2,3,4]
 ```
+<!--lang:*-->
+
+### today() 
+
+<!--lang:es-->
+
+Devuelve un date sin hora
+
+<!--lang:en--]
+
+Returns today with hour
+
+[!--lang:*-->
+
+```js
+var today = require('best-globals').today;
+
+console.log(today()); // 2017-03-31 current date!
+```
 
 <!--lang:es-->
 

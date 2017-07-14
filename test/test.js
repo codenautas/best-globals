@@ -450,6 +450,42 @@ describe("date", function(){
             });
         });
     });
+    describe("date from Date", function(){
+        var fixtures=[
+            {e:'2017-12-20T00:00:00', res:'2017-12-20'},
+            {e:'2017-12-21T10:00:00', res:'2017-12-21'},
+            {e:'2017-12-22T20:33:33', res:'2017-12-22'},
+            {e:'2017-12-23T23:33:33', res:'2017-12-23'},
+            /*
+            {e:[2017,11,20, 0,0,0], res:'2017-12-20'},
+            {e:[2017,11,21, 1,1,1], res:'2017-12-21'},
+            {e:[2017,11,22, 20,33,33], res:'2017-12-22'},
+            {e:[2017,11,23, 23,33,33], res:'2017-12-23'},
+            */
+        ];
+        fixtures.forEach(function(fixture){
+            it("fixture "+JSON.stringify(fixture), function(){
+                var e=fixture.e;
+                var d = new Date(e);
+                console.log('xxxxxxxxxxxxxxxxx ', d);
+                expect(bestGlobals.date.round(d).toYmd()).to.eql(fixture.res);
+            });
+        });
+    });
+    it("creates today", function(){
+        var today = bestGlobals.date.today();
+        var rawToday = new Date();
+        console.log('xxxxxxxxxxxxxxxxxxxx today',rawToday, rawToday.getHours(), rawToday.getMonth());
+        expect([
+            today.getFullYear(),
+            today.getMonth(),
+            today.getDate(),
+        ]).to.eql([
+            rawToday.getFullYear(),
+            rawToday.getMonth(),
+            rawToday.getDate(),
+        ]);
+    });
 });
 
 function globalFun(){
