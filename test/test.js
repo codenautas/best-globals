@@ -283,11 +283,11 @@ describe("date", function(){
         control(d1, indep, true);
     });
     it("create timeInterval from integer and format it", function(){
-        expect(timeInterval(new Date(1916,7,9,10,32,0)-new Date(1916,7,09,10,32,11)).toHms()).eql('-00:00:11');
-        expect(timeInterval(new Date(1916,7,9,11,0,0)-new Date(1916,7,7,11,0,0)).toHms()).eql('48:00:00');
-        expect(timeInterval(new Date(1916,7,8,11,0,0)-new Date(1916,7,7,12,0,0)).toHms()).eql('23:00:00');
-        expect(timeInterval(new Date(1916,7,7,11,0,0)-new Date(1916,7,9,11,0,0)).toHms()).eql('-48:00:00');
-        expect(timeInterval(new Date(1916,7,7,11,0,0)-new Date(1916,7,9,10,32,11)).toHms()).eql('-47:32:11');
+        expect(timeInterval({ms:new Date(1916,7,9,10,32,0)-new Date(1916,7,09,10,32,11)}).toHms()).eql('-00:00:11');
+        expect(timeInterval({ms:new Date(1916,7,9,11,0,0)-new Date(1916,7,7,11,0,0)  }).toHms()).eql('48:00:00');
+        expect(timeInterval({ms:new Date(1916,7,8,11,0,0)-new Date(1916,7,7,12,0,0)  }).toHms()).eql('23:00:00');
+        expect(timeInterval({ms:new Date(1916,7,7,11,0,0)-new Date(1916,7,9,11,0,0)  }).toHms()).eql('-48:00:00');
+        expect(timeInterval({ms:new Date(1916,7,7,11,0,0)-new Date(1916,7,9,10,32,11)}).toHms()).eql('-47:32:11');
         //expect(timeInterval(new Date(1916,7,7,11, 0,0)-new Date(1916,7,09,10,32,11)).toHms()).eql('48:27:49');
     });
     [ ["1997-12"], [1997,12], [1997,0,1], [[1997,0,1]], [(new Date(1916,7-1,9)).getTime()]].forEach(function(invalidParams){
@@ -467,15 +467,28 @@ describe("date", function(){
             it("fixture "+JSON.stringify(fixture), function(){
                 var e=fixture.e;
                 var d = new Date(e);
-                console.log('xxxxxxxxxxxxxxxxx ', d);
                 expect(bestGlobals.date.round(d).toYmd()).to.eql(fixture.res);
+            });
+        });
+    });
+    describe("date add", function(){
+        var fixtures=[
+            {d:'2017-12-20', days: 0 , res:'2017-12-20'},
+            {d:'2017-12-21', days: 1 , res:'2017-12-22'},
+            {d:'2017-12-22', days:30 , res:'2018-01-21'},
+            {d:'2017-12-23', days:-30, res:'2017-11-23'},
+        ];
+        fixtures.forEach(function(fixture){
+            it("fixture "+JSON.stringify(fixture), function(){
+                var d = bestGlobals.date.iso(fixture.d);
+                d.add({days:fixture.days});
+                expect(d).to.eql(bestGlobals.date.iso(fixture.res));
             });
         });
     });
     it("creates today", function(){
         var today = bestGlobals.date.today();
         var rawToday = new Date();
-        console.log('xxxxxxxxxxxxxxxxxxxx today',rawToday, rawToday.getHours(), rawToday.getMonth());
         expect([
             today.getFullYear(),
             today.getMonth(),

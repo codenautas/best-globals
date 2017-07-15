@@ -190,6 +190,12 @@ function addDateMethods(dt) {
         if(! bestGlobals.date.isOK(dateVal)) { throw new Error('invalid date'); }
         dt.setTime(dateVal.valueOf()); 
     };
+    dt.add = function add(objectOrTimeInterval){
+        if(!objectOrTimeInterval.timeInterval){
+            objectOrTimeInterval=bestGlobals.timeInterval(objectOrTimeInterval);
+        }
+        dt.setTime(dt.getTime()+objectOrTimeInterval.timeInterval.ms);
+    };
     return dt;
 }
 
@@ -249,7 +255,6 @@ bestGlobals.date.array = function array(arr) {
 };
 
 bestGlobals.date.round = function round(timedDate){
-    console.log('xxxxxxxxxxxxxx td',timedDate);   
     var milisec = timedDate.getTime();
     var rawDate=new Date(milisec-milisec%(1000*60*60*24));
     console.log(bestGlobals.date.ymd(rawDate.getUTCFullYear(), rawDate.getUTCMonth()+1, rawDate.getUTCDate()));
@@ -304,9 +309,27 @@ bestGlobals.datetime.array = function array(arr) {
     return bestGlobals.datetime.ymdHmsM(arr[0], arr[1], arr[2], arr[3]||0, arr[4]||0, arr[5]||0, arr[6]||0);
 };
 
-bestGlobals.timeInterval = function timeInterval(time) {
+bestGlobals.timeInterval = function timeInterval(timePack) {
     var d = new Date(0,0,0,0,0,0,0);
+    if(typeof timePack === 'number'){
+        timePack={ms:timePack};
+        console.log('|-----------------------------|');
+        console.log('| DEPRECATED timeInterval(ms) |');
+        console.log('|-----------------------------|');
+    }
+    var timeValues={
+        ms   :1,
+        sec  :1000*60,
+        min  :1000*60,
+        hours:1000*60*60,
+        days :1000*60*60*24,
+    }
+    var time=0;
+    for(var attr in timePack){
+        time+=timePack[attr]*timeValues[attr];
+    }
     d.setTime(time);
+    d.timeInterval={ms:time};
     d.toHms = function toHms() {
         var tdiff = [];
         var tm = this.getTime();
