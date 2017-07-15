@@ -5,6 +5,7 @@ var sinon = require('sinon');
 var assert = require('assert');
 var bestGlobals = require('..');
 var auditCopy = require('audit-copy');
+var discrepances = require('discrepances');
 
 describe('best-globals', function(){
     describe('coalesce', function(){
@@ -248,6 +249,12 @@ describe("date", function(){
         var d1 = date.iso("1916-07-09");
         control(d1, indep);
     });
+    /*
+    it("create date from ms", function(){
+        var d1 = date.ms(2*24*60*60*1000);
+        control(d1, date.iso("1970-01-03"));
+    });
+    */  
     it("create date from string without trainling zeros", function(){
         var d1 = date.iso("272-2-27");
         control(d1, nateConstantino);
@@ -285,10 +292,38 @@ describe("date", function(){
     it("create timeInterval from integer and format it", function(){
         expect(timeInterval({ms:new Date(1916,7,9,10,32,0)-new Date(1916,7,09,10,32,11)}).toHms()).eql('-00:00:11');
         expect(timeInterval({ms:new Date(1916,7,9,11,0,0)-new Date(1916,7,7,11,0,0)  }).toHms()).eql('48:00:00');
+        expect(timeInterval({ms:new Date(1916,7,9,11,0,0)-new Date(1916,7,7,11,0,0)  }).toPlainString()).eql('2D');
+        expect(timeInterval({ms:new Date(1916,7,9,12,0,0)-new Date(1916,7,7,11,0,0)  }).toPlainString()).eql('2D 1:00:00');
+        expect(timeInterval({ms:new Date(1916,7,7,12,0,0)-new Date(1916,7,7,11,0,0)  }).toPlainString()).eql('1:00:00');
         expect(timeInterval({ms:new Date(1916,7,8,11,0,0)-new Date(1916,7,7,12,0,0)  }).toHms()).eql('23:00:00');
         expect(timeInterval({ms:new Date(1916,7,7,11,0,0)-new Date(1916,7,9,11,0,0)  }).toHms()).eql('-48:00:00');
         expect(timeInterval({ms:new Date(1916,7,7,11,0,0)-new Date(1916,7,9,10,32,11)}).toHms()).eql('-47:32:11');
+        expect(timeInterval({ms:new Date(1916,7,7,11,0,0)-new Date(1916,7,9,10,32,11)}).toHm()).eql('-47:32');
         //expect(timeInterval(new Date(1916,7,7,11, 0,0)-new Date(1916,7,09,10,32,11)).toHms()).eql('48:27:49');
+    });
+    it("accept any interval", function(){
+        discrepances.showAndThrow(
+            timeInterval({ms:1, seconds:2, minutes:3, hours:4, days:5}),
+            timeInterval({ms:1+1000*(2+60*(3+60*(4+24*5)))})
+        );
+        /*
+        expect(timeInterval({ms:1, seconds:2, minutes:3, hours:4, days:5}))
+        .to.eql(timeInterval({ms:1+1000*(2+60*(3+60*(4+24*5)))}));
+        */
+    });
+    it("get allhours from interval", function(){
+        expect(timeInterval({hours:44, minutes:3}).getAllHours()).to.eql(44);
+        expect(timeInterval({hours:-44, minutes:3}).getAllHours()).to.eql(-44);
+    });
+    it("substact intervals", function(){
+        discrepances.showAndThrow(
+            timeInterval({ms:65000}).sub(timeInterval({seconds:60})),
+            timeInterval({seconds:5})
+        );
+        discrepances.showAndThrow(
+            timeInterval({ms:65000}).sub({seconds:60}),
+            timeInterval({seconds:5})
+        );
     });
     [ ["1997-12"], [1997,12], [1997,0,1], [[1997,0,1]], [(new Date(1916,7-1,9)).getTime()]].forEach(function(invalidParams){
         it("rejects invalid date: "+JSON.stringify(invalidParams), function(){
@@ -481,8 +516,8 @@ describe("date", function(){
         fixtures.forEach(function(fixture){
             it("fixture "+JSON.stringify(fixture), function(){
                 var d = bestGlobals.date.iso(fixture.d);
-                d.add({days:fixture.days});
-                expect(d).to.eql(bestGlobals.date.iso(fixture.res));
+                var obtained = d.add({days:fixture.days});
+                expect(obtained).to.eql(bestGlobals.date.iso(fixture.res));
             });
         });
     });

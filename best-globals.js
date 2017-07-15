@@ -194,7 +194,7 @@ function addDateMethods(dt) {
         if(!objectOrTimeInterval.timeInterval){
             objectOrTimeInterval=bestGlobals.timeInterval(objectOrTimeInterval);
         }
-        dt.setTime(dt.getTime()+objectOrTimeInterval.timeInterval.ms);
+        return bestGlobals.date(new Date(dt.getTime()+objectOrTimeInterval.timeInterval.ms));
     };
     return dt;
 }
@@ -244,10 +244,18 @@ bestGlobals.date.parseFormat = function parseFormat(dateStr) {
     return { y:parseInt(match[2],10), m:parseInt(match[4],10), d:parseInt(match[7],10) };
 };
 
-bestGlobals.date.iso =  function iso(dateStr) {
+bestGlobals.date.iso = function iso(dateStr) {
     var parsed=bestGlobals.date.parseFormat(dateStr);
     return bestGlobals.date.ymd(parsed.y, parsed.m, parsed.d);
 };
+
+/*
+bestGlobals.date.ms = function ms(ms){
+    console.log('xxxxxxxxxxxxxxxx ', ms);
+    console.log('xxxxxxxxxxxxxxxx ', new Date(ms));
+    return bestGlobals.date(new Date(ms));
+};
+*/
 
 bestGlobals.date.array = function array(arr) {
     if(arr.length !== 3) { throw new Error('invalid date array'); }
@@ -309,8 +317,7 @@ bestGlobals.datetime.array = function array(arr) {
     return bestGlobals.datetime.ymdHmsM(arr[0], arr[1], arr[2], arr[3]||0, arr[4]||0, arr[5]||0, arr[6]||0);
 };
 
-bestGlobals.timeInterval = function timeInterval(timePack) {
-    var d = new Date(0,0,0,0,0,0,0);
+bestGlobals.TimeInterval = function TimeInterval(timePack){
     if(typeof timePack === 'number'){
         timePack={ms:timePack};
         console.log('|-----------------------------|');
@@ -318,21 +325,22 @@ bestGlobals.timeInterval = function timeInterval(timePack) {
         console.log('|-----------------------------|');
     }
     var timeValues={
-        ms   :1,
-        sec  :1000*60,
-        min  :1000*60,
-        hours:1000*60*60,
-        days :1000*60*60*24,
+        ms     :1,
+        seconds:1000,
+        minutes:1000*60,
+        hours  :1000*60*60,
+        days   :1000*60*60*24,
     }
     var time=0;
     for(var attr in timePack){
         time+=timePack[attr]*timeValues[attr];
     }
-    d.setTime(time);
-    d.timeInterval={ms:time};
-    d.toHms = function toHms() {
+    this.timeInterval={ms:time};
+    this.toHms = function toHms(omitSeconds, withDays, omitLeftCeros) {
+        var leftCero = omitLeftCeros?'':'0';
+        var tm = this.timeInterval.ms;
+        var prefix = (tm<0?'-':'');
         var tdiff = [];
-        var tm = this.getTime();
         var x = Math.abs(tm);
         x /= 1000;
         var s = Math.floor(x % 60);
@@ -340,12 +348,51 @@ bestGlobals.timeInterval = function timeInterval(timePack) {
         var m = Math.floor(x % 60);
         x /= 60;
         var h = Math.floor(x);
-        tdiff.push((tm<0?'-':'')+(h<10?'0':'')+h);
+        if(withDays){
+            h = Math.floor(x % 24);
+            x /= 24;
+            var d = Math.floor(x);
+            if(d){
+                prefix+=(Math.abs(d)<10?leftCero:'')+d+'D';
+                if(!h && !m && !s){
+                    return prefix;
+                }
+                prefix+=' ';
+            }
+        }
+        tdiff.push((h<10?leftCero:'')+h);
         tdiff.push((m<10?'0':'')+m);
-        tdiff.push((s<10?'0':'')+s);
-        return tdiff.join(':');
+        if(!omitSeconds){
+            tdiff.push((s<10?'0':'')+s);
+        }
+        var hourPart=tdiff.join(':');
+        return prefix+hourPart;
     };
-    return d;
+    this.toHm = function toHm() {
+        return this.toHms(true);
+    }
+    this.toPlainString = function toPlainString(){
+        return this.toHms(false,true,true);
+    }
+    this.add = function add(objectOrTimeInterval, factor){
+        if(!objectOrTimeInterval.timeInterval){
+            objectOrTimeInterval=bestGlobals.timeInterval(objectOrTimeInterval);
+        }
+        return new bestGlobals.TimeInterval({ms:this.timeInterval.ms+objectOrTimeInterval.timeInterval.ms*(factor||1)});
+    };
+    this.sub = function sub(objectOrTimeInterval){
+        return this.add(objectOrTimeInterval,-1);
+    }
+    this.getAllHours = function getAllHours(){
+        return Math.floor(this.timeInterval.ms/(1000*60*60));
+    }
+    this.sameValue = function sameValue(otherInterval){
+        return this.timeInterval.ms == otherInterval.timeInterval.ms;
+    }
+}
+
+bestGlobals.timeInterval = function timeInterval(timePack) {
+    return new bestGlobals.TimeInterval(timePack);
 };
 
 bestGlobals.functionName = function functionName(fun) {
