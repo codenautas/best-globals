@@ -384,11 +384,15 @@ bestGlobals.TimeInterval = function TimeInterval(timePack){
         return this.add(objectOrTimeInterval,-1);
     }
     this.getAllHours = function getAllHours(){
-        return Math.floor(this.timeInterval.ms/(1000*60*60));
+        return this.timeInterval.ms/(1000*60*60);
     }
     this.sameValue = function sameValue(otherInterval){
         return this.timeInterval.ms == otherInterval.timeInterval.ms;
     }
+}
+
+bestGlobals.TimeInterval.prototype.toString = function toString(){
+    return this.toHms(false,true,false);
 }
 
 bestGlobals.timeInterval = function timeInterval(timePack) {

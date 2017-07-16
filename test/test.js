@@ -312,8 +312,30 @@ describe("date", function(){
         */
     });
     it("get allhours from interval", function(){
-        expect(timeInterval({hours:44, minutes:3}).getAllHours()).to.eql(44);
-        expect(timeInterval({hours:-44, minutes:3}).getAllHours()).to.eql(-44);
+        expect(timeInterval({hours:44, minutes:30}).getAllHours()).to.eql(44.5);
+        expect(timeInterval({hours:-44, minutes:0}).getAllHours()).to.eql(-44);
+    });
+    it("indexing with dates", function(){
+        var obj={};
+        var d1=date.iso('2017-07-16');
+        var d2=date.iso('2017-07-17');
+        obj[d1]=42;
+        obj[d2]=43;
+        expect(obj[d1]).to.eql(42);
+        expect(obj[d2]).to.eql(43);
+    });
+    it("indexing with timeInterval", function(){
+        var obj={};
+        var d1=bestGlobals.timeInterval({hours:3});
+        var d2=bestGlobals.timeInterval({minutes:3, seconds:4});
+        var d3=bestGlobals.timeInterval({days:5, minutes:3, seconds:4});
+        obj[d1]=42;
+        obj[d2]=43;
+        obj[d3]=44;
+        console.log('xxxxxxxxxxxxxxx',obj);
+        expect(obj[d1]).to.eql(42);
+        expect(obj[d2]).to.eql(43);
+        expect(obj[d3]).to.eql(44);
     });
     it("substact intervals", function(){
         discrepances.showAndThrow(
