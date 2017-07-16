@@ -387,7 +387,9 @@ bestGlobals.TimeInterval = function TimeInterval(timePack){
         return this.timeInterval.ms/(1000*60*60);
     }
     this.sameValue = function sameValue(otherInterval){
-        return this.timeInterval.ms == otherInterval.timeInterval.ms;
+        return otherInterval && 
+            otherInterval instanceof bestGlobals.TimeInterval && 
+            this.timeInterval.ms == otherInterval.timeInterval.ms;
     }
 }
 
