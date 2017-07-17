@@ -397,6 +397,10 @@ bestGlobals.TimeInterval.prototype.toString = function toString(){
     return this.toHms(false,true,false);
 }
 
+bestGlobals.TimeInterval.prototype.toPostgres = function toPostgres(){
+    return this.timeInterval.ms+'ms';
+}
+
 bestGlobals.timeInterval = function timeInterval(timePack) {
     return new bestGlobals.TimeInterval(timePack);
 };
