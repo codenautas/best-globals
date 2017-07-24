@@ -239,11 +239,13 @@ describe("date", function(){
     var timeInterval = bestGlobals.timeInterval;
     function control(fechaConstruida, fechaControl, isDateTime){
         expect(isDateTime ? fechaConstruida.isRealDateTime : fechaConstruida.isRealDate).to.eql(true);
-        expect(fechaConstruida.toISOString()).to.eql(fechaControl.toISOString());
-        expect(fechaConstruida.toUTCString()).to.eql(fechaControl.toUTCString());
+        if(!isDateTime){
+            expect(fechaConstruida.toISOString()).to.eql(fechaControl.toISOString());
+            expect(fechaConstruida.toUTCString()).to.eql(fechaControl.toUTCString());
+            expect(fechaConstruida).to.eql(date(fechaControl));
+        }
         expect(fechaConstruida.getTime()).to.eql(fechaControl.getTime());
         expect(fechaConstruida - fechaControl).to.eql(0);
-        expect(fechaConstruida).to.eql(date(fechaControl));
     }
     it("create date from string", function(){
         var d1 = date.iso("1916-07-09");
@@ -275,15 +277,23 @@ describe("date", function(){
         var d1 = date.iso("1916-07-09T00:00:00.000Z");
         control(d1, indep);
     });
+    function toPlainString(date){
+        var shiftedDate = new Date(date.getTime()-date.getTimezoneOffset()*60*1000)
+        return shiftedDate.toISOString().replace(/[T]/g,' ').replace(/[Z]/g,'');
+    }
     it("create datetime from string", function(){
         var d1 = datetime.iso("1916-07-09 10:32:00.000");
         expect(d1.isRealDateTime).to.be.ok();
-        expect(d1.toISOString()).to.eql(new Date(1916,7-1,9,10,32).toISOString());
+        expect(d1.toPlainString()).to.eql("1916-07-09 10:32");
+    });
+    it("create datetime from string with 6 digits", function(){
+        var d1 = datetime.iso("1916-07-09 10:32:00.000001");
+        expect(d1.isRealDateTime).to.be.ok();
+        expect(d1.toPlainString()).to.eql(toPlainString(new Date(1916,7-1,9,10,32))+'001');
     });
     it("create datetime from integer", function(){
-        var d1 = datetime.ymdHms(1916,7,9,10,32,0);
-        // expect(d1.toISOString()).to.eql(new Date(1916,7-1,9,10,32));
-        expect(d1).to.eql(new Date(1916,7-1,9,10,32));
+        var d1 = datetime.ymdHms(1916,7,9,10,32,10);
+        expect(d1.toPlainString()).to.eql("1916-07-09 10:32:10");
     });
     it("create datetime from array", function(){
         var d1 = datetime.array([1916,7,09,0,0,0,0]);
@@ -315,6 +325,32 @@ describe("date", function(){
         expect(timeInterval({hours:44, minutes:30}).getAllHours()).to.eql(44.5);
         expect(timeInterval({hours:-44, minutes:0}).getAllHours()).to.eql(-44);
     });
+    it("no sameValue if not the same class", function(){
+        expect(timeInterval({hours:44, minutes:30}).sameValue({hours:44, minutes:30})).to.not.ok();
+    });
+    it("no sameValue if not the same ms", function(){
+        expect(timeInterval({hours:44, minutes:30}).sameValue(timeInterval({hours:44, minutes:31}))).to.not.ok();
+    });
+    it("sameValue because the same ms", function(){
+        expect(timeInterval({hours:44, minutes:30}).sameValue(timeInterval({minutes:30+44*60}))).to.ok();
+    });
+    it("interval toPostgres", function(){
+        expect(timeInterval({hours:44, minutes:30}).toPostgres()).to.eql((44*60+30)*60000+'ms');
+    });
+    it("timeInterval toHms without zeros",function(){
+        //var ti = timeInterval("1h 2m 3s");
+        var ti=timeInterval({hours:1, minutes:2, seconds:3})
+        expect(ti.toHms(false,false,true)).to.eql('1:02:03')
+    });
+    it("timeInterval toHms with date",function(){
+        //var ti = timeInterval("1h 2m 3s");
+        var ti=timeInterval({hours:26, minutes:2, seconds:3});
+        expect(ti.toHms(false,false,true)).to.eql('26:02:03');
+        expect(ti.toHms(false,true,true)).to.eql('1D 2:02:03');
+        var ti=timeInterval({days:11, hours:2, minutes:2, seconds:3});
+        expect(ti.toHms(false,false,false)).to.eql('266:02:03');
+        expect(ti.toHms(false,true ,false)).to.eql('11D 02:02:03');
+    });
     it("indexing with dates", function(){
         var obj={};
         var d1=date.iso('2017-07-16');
@@ -332,7 +368,6 @@ describe("date", function(){
         obj[d1]=42;
         obj[d2]=43;
         obj[d3]=44;
-        console.log('xxxxxxxxxxxxxxx',obj);
         expect(obj[d1]).to.eql(42);
         expect(obj[d2]).to.eql(43);
         expect(obj[d3]).to.eql(44);
@@ -345,6 +380,10 @@ describe("date", function(){
         discrepances.showAndThrow(
             timeInterval({ms:65000}).sub({seconds:60}),
             timeInterval({seconds:5})
+        );
+        discrepances.showAndThrow(
+            timeInterval({ms:65000}).add({seconds:60}),
+            timeInterval({seconds:125})
         );
     });
     [ ["1997-12"], [1997,12], [1997,0,1], [[1997,0,1]], [(new Date(1916,7-1,9)).getTime()]].forEach(function(invalidParams){
@@ -396,9 +435,9 @@ describe("date", function(){
     it("datetime should parse the format of a string", function() {
        var parse = datetime.parseFormat;
        var invalidErr = /invalid datetime/;
-       expect(parse("2016-12-02")).to.eql({y:2016, m:12, d:2, hh:0, mm:0, ss:0, ms:0});
-       expect(parse("2016-12-02 01:02:03")).to.eql({y:2016, m:12, d:2, hh:1, mm:2, ss:3, ms:0});
-       expect(parse).withArgs("2016-12/02").to.throwError(invalidErr);
+       expect(datetime.iso("2016-12-02")).to.eql(datetime.ymdHmsM(2016,12,2,0,0,0,0));
+       expect(datetime.iso("2016-12-02 01:02:03")).to.eql(datetime.ymdHmsM(2016,12,2,1,2,3,0));
+       expect(datetime.iso).withArgs("2016-12/02").to.throwError(invalidErr);
     });
     it("should validate y/d/m", function() {
         var isValidDate = bestGlobals.date.isValidDate;
@@ -417,7 +456,7 @@ describe("date", function(){
         expect(isValidDate(1940,3,33)).to.not.be.ok();
     });
     it("should validate h/m/s/ms", function() {
-        var isValidTime = bestGlobals.datetime.isValidTime;
+        var isValidTime = bestGlobals.Datetime.isValidTime;
         expect(isValidTime(0,0,0,0)).to.be.ok();
         expect(isValidTime(23,59,59,999)).to.be.ok();
         expect(isValidTime(-1,59,59,999)).to.not.be.ok();
@@ -470,7 +509,7 @@ describe("date", function(){
         [ {} , 'un string', 232.3, [], 1000  ].forEach(function(invalidParams){
             it("date() rejects "+JSON.stringify(invalidParams), function(){
                 expect(function(){ date(invalidParams); }).to.throwError(/invalid date/);
-                expect(function(){ datetime(invalidParams); }).to.throwError(/invalid date/);
+                /* expect(function(){ datetime(invalidParams); }).to.throwError(/invalid date/);*/ 
             });
         });
         it("rejects time in date", function(){
@@ -499,7 +538,7 @@ describe("date", function(){
                         if(! param.hasHour){
                             expect(date(param.i)[functionName]()).to.eql(param[functionName]);
                         }
-                        expect(datetime(param.i)[functionName]()).to.eql(param[functionName]);
+                        expect(datetime.ms(param.i.getTime())[functionName]()).to.eql(param[functionName]);
                         var equalComparation = assert.deepStrictEqual || assert.deepEqual;
                         equalComparation(auditCopy.inObject(param),auditCopyParam);
                     });
@@ -539,6 +578,8 @@ describe("date", function(){
             it("fixture "+JSON.stringify(fixture), function(){
                 var d = bestGlobals.date.iso(fixture.d);
                 var obtained = d.add({days:fixture.days});
+                expect(obtained).to.eql(bestGlobals.date.iso(fixture.res));
+                obtained = d.add(bestGlobals.timeInterval({days:fixture.days}));
                 expect(obtained).to.eql(bestGlobals.date.iso(fixture.res));
             });
         });
