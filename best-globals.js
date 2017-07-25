@@ -186,6 +186,9 @@ function addDateMethods(dt) {
     dt.toYmdHmsM = function toYmdHmsM() {
         return this.toYmdHms()+'.'+npad(this.getMilliseconds(),3);
     };
+    dt.toYmdHmsMm = function toYmdHmsMm() {
+        return this.toYmdHms()+'.'+npad(this.getMilliseconds(),3)+npad(this.getMicroseconds(),3);
+    };
     dt.setDateValue = function setDateValue(dateVal) {
         if(! bestGlobals.date.isOK(dateVal)) { throw new Error('invalid date'); }
         dt.setTime(dateVal.valueOf()); 
@@ -196,6 +199,11 @@ function addDateMethods(dt) {
         }
         return bestGlobals.date(new Date(dt.getTime()+objectOrTimeInterval.timeInterval.ms));
     };
+    dt.sameValue = function sameValue(other){
+        return other && 
+            other instanceof other.constructor && 
+            this.getTime() == other.getTime();
+    }
     return dt;
 }
 
@@ -257,7 +265,6 @@ bestGlobals.date.array = function array(arr) {
 bestGlobals.date.round = function round(timedDate){
     var milisec = timedDate.getTime();
     var rawDate=new Date(milisec-milisec%(1000*60*60*24));
-    console.log(bestGlobals.date.ymd(rawDate.getUTCFullYear(), rawDate.getUTCMonth()+1, rawDate.getUTCDate()));
     return bestGlobals.date.ymd(rawDate.getUTCFullYear(), rawDate.getUTCMonth()+1, rawDate.getUTCDate());
 }
 
@@ -266,50 +273,132 @@ bestGlobals.date.today = function today(){
 }
 
 /////// datetime
-bestGlobals.datetime=function datetime(dt) {
-    if(! bestGlobals.date.isOK(dt)) { throw new Error('invalid date'); }
-    var d = addDateMethods(new Date(dt.getTime()));
-    d.isRealDateTime = true;
-    return d;
+bestGlobals.Datetime=function Datetime(integerParts) {
+    this.parts=integerParts;
+    this.isRealDateTime = true;
+}
+
+addDateMethods(bestGlobals.Datetime.prototype);
+
+bestGlobals.Datetime.reTz3 = ' ([0-9]{2}):([0-9]{2})(:([0-9]{2}))?(.([0-9]{3,6}))?';
+bestGlobals.Datetime.re = new RegExp('^('+reDate+'('+bestGlobals.Datetime.reTz3+')?)$');
+
+bestGlobals.Datetime.prototype.getFullYear     = function getFullYear()     { return this.parts.year;     };
+bestGlobals.Datetime.prototype.getMonth        = function getMonth()        { return this.parts.month-1;  };
+bestGlobals.Datetime.prototype.getDate         = function getDate()         { return this.parts.day;      };
+bestGlobals.Datetime.prototype.getHours        = function getHours()        { return this.parts.hour;     };
+bestGlobals.Datetime.prototype.getMinutes      = function getMinutes()      { return this.parts.minutes;  };
+bestGlobals.Datetime.prototype.getSeconds      = function getSeconds()      { return this.parts.seconds;  };
+bestGlobals.Datetime.prototype.getMilliseconds = function getMilliseconds() { return this.parts.ms;       };
+bestGlobals.Datetime.prototype.getMicroseconds = function getMicroseconds() { return this.parts.micros;   };
+
+bestGlobals.Datetime.prototype.valueOf = function getTime() { 
+    return this.getTime();
+}
+bestGlobals.Datetime.prototype.getTime = function getTime() { 
+    return new Date(
+        this.parts.year   ,
+        this.parts.month-1,
+        this.parts.day    ,
+        this.parts.hour   ,
+        this.parts.minutes,
+        this.parts.seconds,
+        this.parts.ms     
+    ).getTime();
 };
 
-bestGlobals.datetime.isValidTime = function isValidTime(h, m, s, ms) {
-    if(h<0 || m<0 || s<0 || ms<0 || h>23 || m>59 || s>59 || ms>999) { return false; }
+bestGlobals.Datetime.prototype.toPlainString = function toPlainString(){ 
+    var str=this.toYmdHmsMm();
+    var prune = function(what){
+        if(str.substr(str.length-what.length)==what){
+            str=str.substr(0,str.length-what.length);
+            return true;
+        }
+        return false;
+    }
+    prune('000') && prune('.000') && prune(':00') && prune(' 00:00');
+    return str; 
+}
+// bestGlobals.Datetime.prototype.toUTCString = function toUTCString(){ return this.iso; }
+
+bestGlobals.Datetime.prototype.toPostgres = function toPostgres(){
+    return this.toPlainString();
+}
+
+bestGlobals.datetime={};
+
+bestGlobals.Datetime.isValidTime = function isValidTime(h, m, s, ms, micros) {
+    if(h<0 || m<0 || s<0 || ms<0 || h>23 || m>59 || s>59 || ms>999 || micros<0 || micros>999) { return false; }
     return true;
 };
 
-bestGlobals.datetime.ymdHms = function ymdHmsM(y, m, d, hh, mm, ss) {
+bestGlobals.datetime.ymdHms = function ymdHms(y, m, d, hh, mm, ss) {
     return bestGlobals.datetime.ymdHmsM(y, m, d, hh, mm, ss, 0);
 };
 
 bestGlobals.datetime.ymdHmsM = function ymdHmsM(y, m, d, hh, mm, ss, ms) {
-    if(! bestGlobals.date.isValidDate(y, m, d)) { throw new Error('invalid date'); }
-    if(! bestGlobals.datetime.isValidTime(hh, mm, ss, ms)) { throw new Error('invalid datetime'); }
-    return bestGlobals.datetime(new Date(y, m-1, d, hh, mm, ss, ms));
+    return bestGlobals.datetime.ymdHmsMm(y, m, d, hh, mm, ss, ms, 0)
+}
+
+bestGlobals.datetime.ymdHmsMm = function ymdHmsMm(year, month, day, hour, minutes, seconds, ms, micros){
+    if(! bestGlobals.date.isValidDate(year, month, day)) { throw new Error('invalid date'); }
+    if(! bestGlobals.Datetime.isValidTime(hour, minutes, seconds, ms, micros)) { throw new Error('invalid datetime'); }
+    var integerParts={
+        year   : year   ,
+        month  : month  ,
+        day    : day    ,
+        hour   : hour   ,
+        minutes: minutes,
+        seconds: seconds,
+        ms     : ms     ,
+        micros : micros ,
+    }
+    return new bestGlobals.Datetime(integerParts);
 };
 
-bestGlobals.datetime.parseFormat = function parseFormat(dateStr) {
-    var reTz3 = ' ([0-9]{2}):([0-9]{2})(:([0-9]{2}))?(.([0-9]{3}))?';
-    var re = new RegExp('^('+reDate+'('+reTz3+')?)$');
-    var match = re.exec(dateStr);
-    if(! match) { throw new Error('invalid datetime'); }
-    // for(var p=0; p<match.length; ++p) { console.log(p, match[p]); }
-    return {  y:parseInt(match[2],10), m:parseInt(match[4],10), d:parseInt(match[7],10),
-             hh:parseInt(match[10]||0,10), mm:parseInt(match[11]||0,10),
-             ss:parseInt(match[13]||0,10), ms:parseInt(match[15]||0,10) };
-};
+bestGlobals.datetime.ms = function ms(ms){
+    var d = new Date(ms);
+    var integerParts={
+        year   : d.getFullYear()    ,
+        month  : d.getMonth()+1     ,
+        day    : d.getDate()        ,
+        hour   : d.getHours()       ,
+        minutes: d.getMinutes()     ,
+        seconds: d.getSeconds()     ,
+        ms     : d.getMilliseconds(),
+        micros : 0
+    }
+    return new bestGlobals.Datetime(integerParts);
+}
 
 bestGlobals.datetime.iso = function iso(dateStr) {
-    var parsed=bestGlobals.datetime.parseFormat(dateStr);
-    return bestGlobals.datetime.ymdHmsM(parsed.y, parsed.m, parsed.d, parsed.hh, parsed.mm, parsed.ss, parsed.ms);
+    var match = bestGlobals.Datetime.re.exec(dateStr)
+    if(match){
+        var integerParts={};
+        integerParts.year    = parseInt(match[2],10)
+        integerParts.month   = parseInt(match[4],10)
+        integerParts.day     = parseInt(match[7],10)
+        integerParts.hour    = parseInt(match[10]||0,10)
+        integerParts.minutes = parseInt(match[11]||0,10)
+        integerParts.seconds = parseInt(match[13]||0,10)
+        integerParts.ms      = parseInt((match[15]||'000').substr(0,3),10)
+        var microPartWithoutMilliSecs = (match[15]||'000').substr(3);
+        microPartWithoutMilliSecs+='000';
+        microPartWithoutMilliSecs = microPartWithoutMilliSecs.substr(0,3);
+        integerParts.micros  = parseInt(microPartWithoutMilliSecs,10);
+    }else{
+        throw new Error('invalid datetime');
+    }
+    return new bestGlobals.Datetime(integerParts)
 };
 
 bestGlobals.datetime.array = function array(arr) {
-    if(arr.length < 3 || arr.length>7) { throw new Error('invalid datetime array'); }
-    return bestGlobals.datetime.ymdHmsM(arr[0], arr[1], arr[2], arr[3]||0, arr[4]||0, arr[5]||0, arr[6]||0);
+    if(arr.length < 3 || arr.length>8) { throw new Error('invalid datetime array'); }
+    return bestGlobals.datetime.ymdHmsMm(arr[0], arr[1], arr[2], arr[3]||0, arr[4]||0, arr[5]||0, arr[6]||0, arr[7]||0);
 };
 
 bestGlobals.TimeInterval = function TimeInterval(timePack){
+    /* istanbul ignore next */
     if(typeof timePack === 'number'){
         timePack={ms:timePack};
         console.log('|-----------------------------|');
@@ -457,12 +546,9 @@ bestGlobals.forOrder = function forOrder(text){
                 main.push(' '+letters.toLowerCase());
             }
             if(nums){
-                if(!integer){
-                    integer='0';
-                }
                 var negative;
                 if(sign && canBeNegative){
-                    integer = bestGlobals.auxComplementInteger(integer||'');
+                    integer = bestGlobals.auxComplementInteger(integer);
                     decimals = bestGlobals.auxComplementInteger(decimals||'');
                     negative = true;
                 }else{
@@ -555,6 +641,7 @@ bestGlobals.registerJson4All = function registerJson4All(JSON4all){
     });
 };
 
+/* istanbul ignore next */
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/find
 // 2017-03-26
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
@@ -599,6 +686,7 @@ function arrayFind(predicate){
   return undefined;
 }
 
+/* istanbul ignore next */
 if(!Array.prototype.find){
   Object.defineProperty(Array.prototype, 'find', {
     value: arrayFind
