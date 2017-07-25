@@ -249,14 +249,6 @@ bestGlobals.date.iso = function iso(dateStr) {
     return bestGlobals.date.ymd(parsed.y, parsed.m, parsed.d);
 };
 
-/*
-bestGlobals.date.ms = function ms(ms){
-    console.log('xxxxxxxxxxxxxxxx ', ms);
-    console.log('xxxxxxxxxxxxxxxx ', new Date(ms));
-    return bestGlobals.date(new Date(ms));
-};
-*/
-
 bestGlobals.date.array = function array(arr) {
     if(arr.length !== 3) { throw new Error('invalid date array'); }
     return bestGlobals.date.ymd(arr[0], arr[1], arr[2]);
@@ -395,6 +387,10 @@ bestGlobals.TimeInterval = function TimeInterval(timePack){
 
 bestGlobals.TimeInterval.prototype.toString = function toString(){
     return this.toHms(false,true,false);
+}
+
+bestGlobals.TimeInterval.prototype.toPostgres = function toPostgres(){
+    return this.timeInterval.ms+'ms';
 }
 
 bestGlobals.timeInterval = function timeInterval(timePack) {
