@@ -199,6 +199,11 @@ function addDateMethods(dt) {
         }
         return bestGlobals.date(new Date(dt.getTime()+objectOrTimeInterval.timeInterval.ms));
     };
+    dt.sameValue = function sameValue(other){
+        return other && 
+            other instanceof other.constructor && 
+            this.getTime() == other.getTime();
+    }
     return dt;
 }
 
