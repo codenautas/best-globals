@@ -316,6 +316,10 @@ bestGlobals.Datetime.prototype.toPlainString = function toPlainString(){
 }
 // bestGlobals.Datetime.prototype.toUTCString = function toUTCString(){ return this.iso; }
 
+bestGlobals.Datetime.prototype.toPostgres = function toPostgres(){
+    return this.toPlainString();
+}
+
 bestGlobals.datetime={};
 
 bestGlobals.Datetime.isValidTime = function isValidTime(h, m, s, ms, micros) {
