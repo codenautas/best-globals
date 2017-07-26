@@ -263,9 +263,11 @@ bestGlobals.date.array = function array(arr) {
 };
 
 bestGlobals.date.round = function round(timedDate){
-    var milisec = timedDate.getTime();
-    var rawDate=new Date(milisec-milisec%(1000*60*60*24));
-    return bestGlobals.date.ymd(rawDate.getUTCFullYear(), rawDate.getUTCMonth()+1, rawDate.getUTCDate());
+    // var milisec = timedDate.getTime();
+    // console.log('xxxxx timedDate',timedDate, timedDate.getUTCFullYear(), timedDate.getUTCMonth()+1, timedDate.getUTCDate());
+    // var rawDate=new Date(milisec-milisec%(1000*60*60*24));
+    // console.log('xxxxx rawDate',rawDate, rawDate.getUTCFullYear(), rawDate.getUTCMonth()+1, rawDate.getUTCDate());
+    return bestGlobals.date.ymd(timedDate.getFullYear(), timedDate.getMonth()+1, timedDate.getDate());
 }
 
 bestGlobals.date.today = function today(){
