@@ -356,8 +356,8 @@ bestGlobals.datetime.ymdHmsMm = function ymdHmsMm(year, month, day, hour, minute
     return new bestGlobals.Datetime(integerParts);
 };
 
-bestGlobals.datetime.ms = function ms(ms){
-    var d = new Date(ms);
+bestGlobals.datetime.ms = function ms(msTicks){
+    var d = new Date(msTicks);
     var integerParts={
         year   : d.getFullYear()    ,
         month  : d.getMonth()+1     ,
