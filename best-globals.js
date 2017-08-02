@@ -373,6 +373,10 @@ bestGlobals.datetime.ms = function ms(msTicks){
     return new bestGlobals.Datetime(integerParts);
 }
 
+bestGlobals.datetime.now = function now(){
+    return bestGlobals.datetime.ms(new Date().getTime());
+}
+
 bestGlobals.datetime.iso = function iso(dateStr) {
     var match = bestGlobals.Datetime.re.exec(dateStr)
     if(match){
