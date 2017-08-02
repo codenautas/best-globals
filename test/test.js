@@ -593,6 +593,27 @@ describe("date", function(){
             rawToday.getDate(),
         ]);
     });
+    it("creates now", function(){
+        var now = bestGlobals.datetime.now();
+        var rawNow = new Date();
+        expect([
+            now.getFullYear(),
+            now.getMonth(),
+            now.getDate(),
+            now.getHours(),
+            now.getMinutes(),
+            now.getSeconds(),
+            now.getMilliseconds()
+        ]).to.eql([
+            rawNow.getFullYear(),
+            rawNow.getMonth(),
+            rawNow.getDate(),
+            rawNow.getHours(),
+            rawNow.getMinutes(),
+            rawNow.getSeconds(),
+            rawNow.getMilliseconds()
+        ]);
+    });
 });
 
 function globalFun(){
