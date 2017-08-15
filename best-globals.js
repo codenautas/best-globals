@@ -282,7 +282,7 @@ bestGlobals.Datetime=function Datetime(integerParts) {
 
 addDateMethods(bestGlobals.Datetime.prototype);
 
-bestGlobals.Datetime.reTz3 = ' ([0-9]{2}):([0-9]{2})(:([0-9]{2}))?(.([0-9]{3,6}))?';
+bestGlobals.Datetime.reTz3 = ' ([0-9]{2}):([0-9]{2})(:([0-9]{2}))?(.([0-9]{1,6}))?';
 bestGlobals.Datetime.re = new RegExp('^('+reDate+'('+bestGlobals.Datetime.reTz3+')?)$');
 
 bestGlobals.Datetime.prototype.getFullYear     = function getFullYear()     { return this.parts.year;     };
@@ -387,8 +387,8 @@ bestGlobals.datetime.iso = function iso(dateStr) {
         integerParts.hour    = parseInt(match[10]||0,10)
         integerParts.minutes = parseInt(match[11]||0,10)
         integerParts.seconds = parseInt(match[13]||0,10)
-        integerParts.ms      = parseInt((match[15]||'000').substr(0,3),10)
-        var microPartWithoutMilliSecs = (match[15]||'000').substr(3);
+        integerParts.ms      = parseInt(((match[15]||'0')+'000000').substr(0,3),10)
+        var microPartWithoutMilliSecs = ((match[15]||'0')+'000000').substr(3);
         microPartWithoutMilliSecs+='000';
         microPartWithoutMilliSecs = microPartWithoutMilliSecs.substr(0,3);
         integerParts.micros  = parseInt(microPartWithoutMilliSecs,10);

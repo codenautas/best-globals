@@ -291,6 +291,16 @@ describe("date", function(){
         expect(d1.isRealDateTime).to.be.ok();
         expect(d1.toPlainString()).to.eql(toPlainString(new Date(1916,7-1,9,10,32))+'001');
     });
+    it("create datetime from string with 3 digits", function(){
+        var d1 = datetime.iso("1916-07-09 10:32:00.123");
+        expect(d1.isRealDateTime).to.be.ok();
+        expect(d1.toPlainString()).to.eql(toPlainString(new Date(1916,7-1,9,10,32,0,123)));
+    });
+    it("create datetime from string with 1 digits decimals", function(){
+        var d1 = datetime.iso("1916-07-09 10:32:00.2");
+        expect(d1.isRealDateTime).to.be.ok();
+        expect(d1.toPlainString()).to.eql(toPlainString(new Date(1916,7-1,9,10,32,0,200)));
+    });
     it("create datetime from integer", function(){
         var d1 = datetime.ymdHms(1916,7,9,10,32,10);
         expect(d1.toPlainString()).to.eql("1916-07-09 10:32:10");
