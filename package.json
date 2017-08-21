@@ -15,8 +15,8 @@
     "colors": "~1.1.2",
     "expect.js": "~0.3.1",
     "istanbul": "~0.4.5",
-    "mocha": "~3.4.2",
-    "sinon": "~2.3.8",
+    "mocha": "~3.5.0",
+    "sinon": "~3.2.1",
     
     "audit-copy": "~0.0.5",
     "discrepances": "~0.1.4"

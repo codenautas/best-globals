@@ -604,8 +604,13 @@ describe("date", function(){
         ]);
     });
     it("creates now", function(){
-        var now = bestGlobals.datetime.now();
-        var rawNow = new Date();
+        var now;
+        var rawNow;
+        var trys=4; // ocasionally rawNow is one millisec before now()
+        do{
+            now = bestGlobals.datetime.now();
+            rawNow = new Date();
+        }while(trys-- && now.getTime() != rawNow.getTime());
         expect([
             now.getFullYear(),
             now.getMonth(),
