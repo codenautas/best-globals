@@ -825,14 +825,14 @@ describe("Promises", function(){
         var now=new Date();
         return Promise.resolve(42).then(bestGlobals.sleep(200)).then(function(value){
             expect(value).to.eql(42);
-            expect(new Date().getTime()-now.getTime()).to.be.greaterThan(200);
+            expect(new Date().getTime()-now.getTime()).not.to.be.lessThan(200);
             expect(new Date().getTime()-now.getTime()).to.be.lessThan(200+d);
         })
     });
     it("sleeps directly", function(){
         var now=new Date();
         return bestGlobals.sleep(400).then(function(){
-            expect(new Date().getTime()-now.getTime()).to.be.greaterThan(400);
+            expect(new Date().getTime()-now.getTime()).not.to.be.lessThan(400);
             expect(new Date().getTime()-now.getTime()).to.be.lessThan(400+d);
             now=new Date();
             return bestGlobals.sleep(100);
@@ -841,14 +841,14 @@ describe("Promises", function(){
             console.log(err.stack);
             throw new Error("Must not be here");
         }).then(function(){
-            expect(new Date().getTime()-now.getTime()).to.be.greaterThan(100);
+            expect(new Date().getTime()-now.getTime()).not.to.be.lessThan(100);
             expect(new Date().getTime()-now.getTime()).to.be.lessThan(100+d);
         })
     });
     it("sleep catchs errors version 1", function(){
         var now=new Date();
         return bestGlobals.sleep(100).then(function(){
-            expect(new Date().getTime()-now.getTime()).to.be.greaterThan(100);
+            expect(new Date().getTime()-now.getTime()).not.to.be.lessThan(100);
             expect(new Date().getTime()-now.getTime()).to.be.lessThan(100+d);
             throw new Error("force");
         }).then(function(){
@@ -857,21 +857,21 @@ describe("Promises", function(){
             throw new Error("Must not be here 2");
         }).catch(function(err){
             expect(err.message).to.eql("force");
-            expect(new Date().getTime()-now.getTime()).to.be.greaterThan(100);
+            expect(new Date().getTime()-now.getTime()).not.to.be.lessThan(100);
             expect(new Date().getTime()-now.getTime()).to.be.lessThan(100+d);
         })
     });
     it("sleep catchs errors version 2", function(){
         var now=new Date();
         return bestGlobals.sleep(100).then(function(){
-            expect(new Date().getTime()-now.getTime()).to.be.greaterThan(100);
+            expect(new Date().getTime()-now.getTime()).not.to.be.lessThan(100);
             expect(new Date().getTime()-now.getTime()).to.be.lessThan(100+d);
             throw new Error("force");
         }).then(function(){
             return bestGlobals.sleep(200);
         }).catch(function(err){
             expect(err.message).to.eql("force");
-            expect(new Date().getTime()-now.getTime()).to.be.greaterThan(100);
+            expect(new Date().getTime()-now.getTime()).not.to.be.lessThan(100);
             expect(new Date().getTime()-now.getTime()).to.be.lessThan(100+d);
             throw new Error("force2");
         }).then(function(){
