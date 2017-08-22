@@ -7,8 +7,8 @@ var bestGlobals = require('..');
 var auditCopy = require('audit-copy');
 var discrepances = require('discrepances');
 
-describe('best-globals', function(){
-    describe('coalesce', function(){
+describe('best-globals', function(){ 
+    describe('coalesce', function(){ 
         it('return the first value if is not null',function(){
             expect(bestGlobals.coalesce(7,8)).to.be(7);
             expect(bestGlobals.coalesce(7,8,bestGlobals.coalesce.throwError)).to.be(7);
@@ -262,11 +262,11 @@ describe("date", function(){
         control(d1, nateConstantino);
     });
     it("create date from array", function(){
-        var d1 = date.array([1916,7,09]);
+        var d1 = date.array([1916,7,9]);
         control(d1, indep);
     });
     it("create date from integers", function(){
-        var d1 = date.ymd(1916,7,09);
+        var d1 = date.ymd(1916,7,9);
         control(d1, indep);
     });
     it("create date from string and ignore timezone in input", function(){
@@ -306,11 +306,11 @@ describe("date", function(){
         expect(d1.toPlainString()).to.eql("1916-07-09 10:32:10");
     });
     it("create datetime from array", function(){
-        var d1 = datetime.array([1916,7,09,0,0,0,0]);
+        var d1 = datetime.array([1916,7,9,0,0,0,0]);
         control(d1, indep, true);
     });
     it("create timeInterval from integer and format it", function(){
-        expect(timeInterval({ms:new Date(1916,7,9,10,32,0)-new Date(1916,7,09,10,32,11)}).toHms()).eql('-00:00:11');
+        expect(timeInterval({ms:new Date(1916,7,9,10,32,0)-new Date(1916,7,9,10,32,11)}).toHms()).eql('-00:00:11');
         expect(timeInterval({ms:new Date(1916,7,9,11,0,0)-new Date(1916,7,7,11,0,0)  }).toHms()).eql('48:00:00');
         expect(timeInterval({ms:new Date(1916,7,9,11,0,0)-new Date(1916,7,7,11,0,0)  }).toPlainString()).eql('2D');
         expect(timeInterval({ms:new Date(1916,7,9,12,0,0)-new Date(1916,7,7,11,0,0)  }).toPlainString()).eql('2D 1:00:00');
@@ -319,7 +319,7 @@ describe("date", function(){
         expect(timeInterval({ms:new Date(1916,7,7,11,0,0)-new Date(1916,7,9,11,0,0)  }).toHms()).eql('-48:00:00');
         expect(timeInterval({ms:new Date(1916,7,7,11,0,0)-new Date(1916,7,9,10,32,11)}).toHms()).eql('-47:32:11');
         expect(timeInterval({ms:new Date(1916,7,7,11,0,0)-new Date(1916,7,9,10,32,11)}).toHm()).eql('-47:32');
-        //expect(timeInterval(new Date(1916,7,7,11, 0,0)-new Date(1916,7,09,10,32,11)).toHms()).eql('48:27:49');
+        //expect(timeInterval(new Date(1916,7,7,11, 0,0)-new Date(1916,7,9,10,32,11)).toHms()).eql('48:27:49');
     });
     it("accept any interval", function(){
         discrepances.showAndThrow(
@@ -411,16 +411,15 @@ describe("date", function(){
         control(d3, first);
     });
     if(typeof Promise == 'function'){
-        it("add setDateValue function Promise version", function(done){
+        it("add setDateValue function Promise version", function(){
             var d1 = date.iso("1916-07-09");
             var d2 = date.iso("1910-05-25");
             var d3 = date.iso("1913-01-31");
-            Promise.resolve(d2)
+            return Promise.resolve(d2)
             .then(d3.setDateValue)
             .then(function(){
                 control(d3, first);
-            })
-            .then(done, done);
+            });
         });
     };
     [ [7], ["1992-12-12"], /*[new Date(1999,12,31,23,0,0)],*/ [new Date("abcd")], [new Date('23/25/2014')], [null] ].forEach(function(invalidParams){
@@ -826,15 +825,15 @@ describe("Promises", function(){
         var now=new Date();
         return Promise.resolve(42).then(bestGlobals.sleep(200)).then(function(value){
             expect(value).to.eql(42);
-            expect(new Date().getTime()-now.getTime() >=200  ).to.be.ok();
-            expect(new Date().getTime()-now.getTime() < 200+d).to.be.ok();
+            expect(new Date().getTime()-now.getTime()).to.be.greaterThan(200);
+            expect(new Date().getTime()-now.getTime()).to.be.lessThan(200+d);
         })
     });
     it("sleeps directly", function(){
         var now=new Date();
         return bestGlobals.sleep(400).then(function(){
-            expect(new Date().getTime()-now.getTime() >=400  ).to.be.ok();
-            expect(new Date().getTime()-now.getTime() < 400+d).to.be.ok();
+            expect(new Date().getTime()-now.getTime()).to.be.greaterThan(400);
+            expect(new Date().getTime()-now.getTime()).to.be.lessThan(400+d);
             now=new Date();
             return bestGlobals.sleep(100);
         }).catch(function(err){
@@ -842,15 +841,15 @@ describe("Promises", function(){
             console.log(err.stack);
             throw new Error("Must not be here");
         }).then(function(){
-            expect(new Date().getTime()-now.getTime() >=100  ).to.be.ok();
-            expect(new Date().getTime()-now.getTime() < 100+d).to.be.ok();
+            expect(new Date().getTime()-now.getTime()).to.be.greaterThan(100);
+            expect(new Date().getTime()-now.getTime()).to.be.lessThan(100+d);
         })
     });
     it("sleep catchs errors version 1", function(){
         var now=new Date();
         return bestGlobals.sleep(100).then(function(){
-            expect(new Date().getTime()-now.getTime() >=100  ).to.be.ok();
-            expect(new Date().getTime()-now.getTime() < 100+d).to.be.ok();
+            expect(new Date().getTime()-now.getTime()).to.be.greaterThan(100);
+            expect(new Date().getTime()-now.getTime()).to.be.lessThan(100+d);
             throw new Error("force");
         }).then(function(){
             return bestGlobals.sleep(200);
@@ -858,22 +857,22 @@ describe("Promises", function(){
             throw new Error("Must not be here 2");
         }).catch(function(err){
             expect(err.message).to.eql("force");
-            expect(new Date().getTime()-now.getTime() >=100  ).to.be.ok();
-            expect(new Date().getTime()-now.getTime() < 100+d).to.be.ok();
+            expect(new Date().getTime()-now.getTime()).to.be.greaterThan(100);
+            expect(new Date().getTime()-now.getTime()).to.be.lessThan(100+d);
         })
     });
     it("sleep catchs errors version 2", function(){
         var now=new Date();
         return bestGlobals.sleep(100).then(function(){
-            expect(new Date().getTime()-now.getTime() >=100  ).to.be.ok();
-            expect(new Date().getTime()-now.getTime() < 100+d).to.be.ok();
+            expect(new Date().getTime()-now.getTime()).to.be.greaterThan(100);
+            expect(new Date().getTime()-now.getTime()).to.be.lessThan(100+d);
             throw new Error("force");
         }).then(function(){
             return bestGlobals.sleep(200);
         }).catch(function(err){
             expect(err.message).to.eql("force");
-            expect(new Date().getTime()-now.getTime() >=100  ).to.be.ok();
-            expect(new Date().getTime()-now.getTime() < 100+d).to.be.ok();
+            expect(new Date().getTime()-now.getTime()).to.be.greaterThan(100);
+            expect(new Date().getTime()-now.getTime()).to.be.lessThan(100+d);
             throw new Error("force2");
         }).then(function(){
             throw new Error("Must not be here 2");
