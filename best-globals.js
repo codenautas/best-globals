@@ -707,6 +707,15 @@ bestGlobals.serie = function serie(NorFirst, NifNoFirst){
     return Array.apply(null, Array(n)).map(function (_, i) {return i+first;});
 };
 
+var MAX_SAFE_INTEGER = bestGlobals.MAX_SAFE_INTEGER = 9007199254740991;
+
+bestGlobals.sameValue = function sameValue(a,b){
+    return a==b ||
+      a instanceof Date && b instanceof Date && a.getTime() == b.getTime() ||
+      typeof a === 'number' && (a>MAX_SAFE_INTEGER || a< -MAX_SAFE_INTEGER) && Math.abs(a/b)<1.00000000000001 && Math.abs(a/b)>0.99999999999999 ||
+      a && !!a.sameValue && a.sameValue(b);
+}
+
 return bestGlobals;
 
 });
