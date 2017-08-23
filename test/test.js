@@ -403,33 +403,6 @@ describe("date", function(){
             }).to.throwError(/invalid date/);
         });
     });
-    it("add setDateValue function", function(){
-        var d1 = date.iso("1916-07-09");
-        var d2 = date.iso("1910-05-25");
-        var d3 = date.iso("1913-01-31");
-        d3.setDateValue(d2);
-        control(d3, first);
-    });
-    if(typeof Promise == 'function'){
-        it("add setDateValue function Promise version", function(){
-            var d1 = date.iso("1916-07-09");
-            var d2 = date.iso("1910-05-25");
-            var d3 = date.iso("1913-01-31");
-            return Promise.resolve(d2)
-            .then(d3.setDateValue)
-            .then(function(){
-                control(d3, first);
-            });
-        });
-    };
-    [ [7], ["1992-12-12"], /*[new Date(1999,12,31,23,0,0)],*/ [new Date("abcd")], [new Date('23/25/2014')], [null] ].forEach(function(invalidParams){
-        it("setDateValue rejects invalid date: "+JSON.stringify(invalidParams), function(){
-            expect(function(){
-                var d1 = date.iso("2016-04-03");
-                d1.setDateValue.apply(d1, invalidParams);
-            }).to.throwError(/invalid date/);
-        });
-    });
     it("date should parse the format of a string", function() {
        var parse = date.parseFormat;
        var invalidErr = /invalid date/;

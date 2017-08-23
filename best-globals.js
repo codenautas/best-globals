@@ -165,45 +165,47 @@ function npad(num, width) {
     return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
 }
 
-function addDateMethods(dt) {
-    dt.toYmd = function toYmd() {
+var dateMethods=[
+    {name: "toYmd", fun: function toYmd() {
         var r = [];
         r.push(this.getFullYear());
         r.push(npad(this.getMonth()+1,2));
         r.push(npad(this.getDate(),2));
         return r.join('-');        
-    };
-    dt.toHms = function toHms() {
+    }},
+    {name: "toHms", fun: function toHms() {
         var r = [];
         r.push(npad(this.getHours(),2));
         r.push(npad(this.getMinutes(),2));
         r.push(npad(this.getSeconds(),2));
         return r.join(':');
-    };
-    dt.toYmdHms = function toYmdHms() {
+    }},
+    {name: "toYmdHms", fun: function toYmdHms() {
         return this.toYmd()+' '+this.toHms();
-    };
-    dt.toYmdHmsM = function toYmdHmsM() {
+    }},
+    {name: "toYmdHmsM", fun: function toYmdHmsM() {
         return this.toYmdHms()+'.'+npad(this.getMilliseconds(),3);
-    };
-    dt.toYmdHmsMm = function toYmdHmsMm() {
+    }},
+    {name: "toYmdHmsMm", fun: function toYmdHmsMm() {
         return this.toYmdHms()+'.'+npad(this.getMilliseconds(),3)+npad(this.getMicroseconds(),3);
-    };
-    dt.setDateValue = function setDateValue(dateVal) {
-        if(! bestGlobals.date.isOK(dateVal)) { throw new Error('invalid date'); }
-        dt.setTime(dateVal.valueOf()); 
-    };
-    dt.add = function add(objectOrTimeInterval){
+    }},
+    {name: "add", fun: function add(objectOrTimeInterval){
         if(!objectOrTimeInterval.timeInterval){
             objectOrTimeInterval=bestGlobals.timeInterval(objectOrTimeInterval);
         }
-        return bestGlobals.date(new Date(dt.getTime()+objectOrTimeInterval.timeInterval.ms));
-    };
-    dt.sameValue = function sameValue(other){
+        return bestGlobals.date(new Date(this.getTime()+objectOrTimeInterval.timeInterval.ms));
+    }},
+    {name: "sameValue", fun: function sameValue(other){
         return other && 
             other instanceof other.constructor && 
             this.getTime() == other.getTime();
-    }
+    }}
+]
+
+function addDateMethods(dt) {
+    dateMethods.forEach(function(funDef){
+        dt[funDef.name] = funDef.fun;
+    });
     return dt;
 }
 
