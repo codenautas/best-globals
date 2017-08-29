@@ -647,6 +647,14 @@ bestGlobals.registerJson4All = function registerJson4All(JSON4all){
             return bestGlobals.date.iso(value);
         },
     });
+    JSON4all.addType(bestGlobals.Datetime, {
+        construct: function construct(value){
+            return bestGlobals.datetime.iso(value);
+        },
+        deconstruct: function construct(datetime){
+            return datetime.toPlainString();
+        },
+    });
 };
 
 /* istanbul ignore next */
