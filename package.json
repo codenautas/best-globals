@@ -1,25 +1,23 @@
 {
   "name": "best-globals",
   "description": "common global function and constants - i.e. coalesce",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "author": "Codenautas <codenautas@googlegroups.com>",
   "license": "MIT",
   "repository": "codenautas/best-globals",
-  "contributors": [{
-    "name": "Emilio Platzer", "email": "emilioplatzer@gmail.com",
-    "name": "Diego Florio", "email": "diegoefe@gmail.com"
-  }],
-  "dependencies": {
-  },
+  "contributors": [
+    {"name": "Emilio Platzer", "email": "emilioplatzer@gmail.com"},
+    {"name": "Diego Florio", "email": "diegoefe@gmail.com"}
+  ],
+  "dependencies": {},
   "devDependencies": {
     "colors": "~1.1.2",
     "expect.js": "~0.3.1",
     "istanbul": "~0.4.5",
-    "mocha": "~3.5.0",
-    "sinon": "~3.2.1",
-    
+    "mocha": "~4.0.1",
+    "sinon": "~4.1.2",
     "audit-copy": "~0.0.5",
-    "discrepances": "~0.2.1"
+    "discrepances": "~0.2.2"
   },
   "main": "best-globals.js",
   "engines": {
@@ -31,7 +29,9 @@
     "test-cov": "istanbul cover node_modules/mocha/bin/_mocha -- --reporter dot --check-leaks test/",
     "start": "node examples/server/server.js"
   },
-  "files": [ "best-globals.js" ],
+  "files": [
+    "best-globals.js"
+  ],
   "qa-control": {
     "package-version": "0.3.0",
     "run-in": "both",
