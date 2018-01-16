@@ -1,7 +1,7 @@
 {
   "name": "best-globals",
   "description": "common global function and constants - i.e. coalesce",
-  "version": "0.10.3",
+  "version": "0.10.4",
   "author": "Codenautas <codenautas@googlegroups.com>",
   "license": "MIT",
   "repository": "codenautas/best-globals",
@@ -30,7 +30,8 @@
     "start": "node examples/server/server.js"
   },
   "files": [
-    "best-globals.js"
+    "best-globals.js",
+    "index.d.ts"
   ],
   "qa-control": {
     "package-version": "0.3.0",
