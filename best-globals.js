@@ -213,8 +213,8 @@ function addDateMethods(dt) {
 bestGlobals.date = function date(dt) {
     if(! bestGlobals.date.isOK(dt)) { throw new Error('invalid date'); }
     var d = addDateMethods(new Date(dt.getTime()));
-    if(d.getHours() || d.getMinutes() || d.getSeconds() || d.getMilliseconds()) {
-        throw new Error('invalid date "'+d.toDateString()+'"because it has time');
+    if(new Date(d-1).getDate()==d.getDate()){
+        throw new Error('invalid date "'+d.toDateString()+'"because it is not at the begining of the date');
     }
     d.isRealDate = true;
     return d;

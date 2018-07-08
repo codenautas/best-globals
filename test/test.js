@@ -282,43 +282,43 @@ describe("date", function(){
         return shiftedDate.toISOString().replace(/[T]/g,' ').replace(/[Z]/g,'');
     }
     it("create datetime from string", function(){
-        var d1 = datetime.iso("1916-07-09 10:32:00.000");
+        var d1 = datetime.iso("1926-07-09 10:32:00.000");
         expect(d1.isRealDateTime).to.be.ok();
-        expect(d1.toPlainString()).to.eql("1916-07-09 10:32");
+        expect(d1.toPlainString()).to.eql("1926-07-09 10:32");
     });
     /*--*/ it("create datetime from string with 6 digits", function(){
-        var d1 = datetime.iso("1916-07-09 10:32:00.000001");
+        var d1 = datetime.iso("1926-07-09 10:32:00.000001");
         expect(d1.isRealDateTime).to.be.ok();
-        expect(d1.toPlainString()).to.eql(toPlainString(new Date(1916,7-1,9,10,32))+'001');
+        expect(d1.toPlainString()).to.eql(toPlainString(new Date(1926,7-1,9,10,32))+'001');
     });
     /*--*/ it("create datetime from string with 3 digits", function(){
-        var d1 = datetime.iso("1916-07-09 10:32:00.123");
+        var d1 = datetime.iso("1926-07-09 10:32:00.123");
         expect(d1.isRealDateTime).to.be.ok();
-        expect(d1.toPlainString()).to.eql(toPlainString(new Date(1916,7-1,9,10,32,0,123)));
+        expect(d1.toPlainString()).to.eql(toPlainString(new Date(1926,7-1,9,10,32,0,123)));
     });
     /*--*/ it("create datetime from string with 1 digits decimals", function(){
-        var d1 = datetime.iso("1916-07-09 10:32:00.2");
+        var d1 = datetime.iso("1926-07-09 10:32:00.2");
         expect(d1.isRealDateTime).to.be.ok();
-        expect(d1.toPlainString()).to.eql(toPlainString(new Date(1916,7-1,9,10,32,0,200)));
+        expect(d1.toPlainString()).to.eql(toPlainString(new Date(1926,7-1,9,10,32,0,200)));
     });
     it("create datetime from integer", function(){
-        var d1 = datetime.ymdHms(1916,7,9,10,32,10);
-        expect(d1.toPlainString()).to.eql("1916-07-09 10:32:10");
+        var d1 = datetime.ymdHms(1926,7,9,10,32,10);
+        expect(d1.toPlainString()).to.eql("1926-07-09 10:32:10");
     });
     it("create datetime from array", function(){
         var d1 = datetime.array([1916,7,9,0,0,0,0]);
         control(d1, indep, true);
     });
     it("create timeInterval from integer and format it", function(){
-        expect(timeInterval({ms:new Date(1916,7,9,10,32,0)-new Date(1916,7,9,10,32,11)}).toHms()).eql('-00:00:11');
-        expect(timeInterval({ms:new Date(1916,7,9,11,0,0)-new Date(1916,7,7,11,0,0)  }).toHms()).eql('48:00:00');
-        expect(timeInterval({ms:new Date(1916,7,9,11,0,0)-new Date(1916,7,7,11,0,0)  }).toPlainString()).eql('2D');
-        expect(timeInterval({ms:new Date(1916,7,9,12,0,0)-new Date(1916,7,7,11,0,0)  }).toPlainString()).eql('2D 1:00:00');
-        expect(timeInterval({ms:new Date(1916,7,7,12,0,0)-new Date(1916,7,7,11,0,0)  }).toPlainString()).eql('1:00:00');
-        expect(timeInterval({ms:new Date(1916,7,8,11,0,0)-new Date(1916,7,7,12,0,0)  }).toHms()).eql('23:00:00');
-        expect(timeInterval({ms:new Date(1916,7,7,11,0,0)-new Date(1916,7,9,11,0,0)  }).toHms()).eql('-48:00:00');
-        expect(timeInterval({ms:new Date(1916,7,7,11,0,0)-new Date(1916,7,9,10,32,11)}).toHms()).eql('-47:32:11');
-        expect(timeInterval({ms:new Date(1916,7,7,11,0,0)-new Date(1916,7,9,10,32,11)}).toHm()).eql('-47:32');
+        expect(timeInterval({ms:new Date(1926,7,9,10,32,0)-new Date(1926,7,9,10,32,11)}).toHms()).eql('-00:00:11');
+        expect(timeInterval({ms:new Date(1926,7,9,11,0,0)-new Date(1926,7,7,11,0,0)  }).toHms()).eql('48:00:00');
+        expect(timeInterval({ms:new Date(1926,7,9,11,0,0)-new Date(1926,7,7,11,0,0)  }).toPlainString()).eql('2D');
+        expect(timeInterval({ms:new Date(1926,7,9,12,0,0)-new Date(1926,7,7,11,0,0)  }).toPlainString()).eql('2D 1:00:00');
+        expect(timeInterval({ms:new Date(1926,7,7,12,0,0)-new Date(1926,7,7,11,0,0)  }).toPlainString()).eql('1:00:00');
+        expect(timeInterval({ms:new Date(1926,7,8,11,0,0)-new Date(1926,7,7,12,0,0)  }).toHms()).eql('23:00:00');
+        expect(timeInterval({ms:new Date(1926,7,7,11,0,0)-new Date(1926,7,9,11,0,0)  }).toHms()).eql('-48:00:00');
+        expect(timeInterval({ms:new Date(1926,7,7,11,0,0)-new Date(1926,7,9,10,32,11)}).toHms()).eql('-47:32:11');
+        expect(timeInterval({ms:new Date(1926,7,7,11,0,0)-new Date(1926,7,9,10,32,11)}).toHm()).eql('-47:32');
         //expect(timeInterval(new Date(1916,7,7,11, 0,0)-new Date(1916,7,9,10,32,11)).toHms()).eql('48:27:49');
     });
     it("accept any interval", function(){
@@ -497,7 +497,7 @@ describe("date", function(){
             });
         });
         it("rejects time in date", function(){
-            expect(function(){ date(new Date(1999,11,12,10,20)); }).to.throwError(/invalid date.*because it has time/);
+            expect(function(){ date(new Date(1999,11,12,10,20)); }).to.throwError(/invalid date.*begining/);
         });
         [
             {i:new Date(2015,  1, 10),            toYmd:'2015-02-10', toHms:'00:00:00', toYmdHms:'2015-02-10 00:00:00', toYmdHmsM:'2015-02-10 00:00:00.000'},
@@ -612,7 +612,6 @@ describe("date", function(){
                 expect(d.getDate()).to.eql(fixture.ymd[2]);
                 expect(d.getMonth()+1).to.eql(fixture.ymd[1]);
                 expect(d.getFullYear()).to.eql(fixture.ymd[0]);
-                expect(d.getHours()).to.eql(0);
             }
             it("from iso: "+fixture.iso,function(){
                 var d=date.iso(fixture.iso)
@@ -634,7 +633,7 @@ describe('functionName', function(){
     var vf = function varFun(){};
     var anonymous = function(){};
     var forceAno = function(){};
-    if(process.versions.node>='4'){
+    if(process.versions.node.split('.')[0]>=4){
         // for coverage: emulate previous version anonymous functions:
         Object.defineProperty(forceAno, 'name', {get: function(){ return null; }});
     }
