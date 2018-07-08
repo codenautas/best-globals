@@ -286,17 +286,17 @@ describe("date", function(){
         expect(d1.isRealDateTime).to.be.ok();
         expect(d1.toPlainString()).to.eql("1916-07-09 10:32");
     });
-    it("create datetime from string with 6 digits", function(){
+    /*--*/ it("create datetime from string with 6 digits", function(){
         var d1 = datetime.iso("1916-07-09 10:32:00.000001");
         expect(d1.isRealDateTime).to.be.ok();
         expect(d1.toPlainString()).to.eql(toPlainString(new Date(1916,7-1,9,10,32))+'001');
     });
-    it("create datetime from string with 3 digits", function(){
+    /*--*/ it("create datetime from string with 3 digits", function(){
         var d1 = datetime.iso("1916-07-09 10:32:00.123");
         expect(d1.isRealDateTime).to.be.ok();
         expect(d1.toPlainString()).to.eql(toPlainString(new Date(1916,7-1,9,10,32,0,123)));
     });
-    it("create datetime from string with 1 digits decimals", function(){
+    /*--*/ it("create datetime from string with 1 digits decimals", function(){
         var d1 = datetime.iso("1916-07-09 10:32:00.2");
         expect(d1.isRealDateTime).to.be.ok();
         expect(d1.toPlainString()).to.eql(toPlainString(new Date(1916,7-1,9,10,32,0,200)));
@@ -601,6 +601,29 @@ describe("date", function(){
             rawNow.getMilliseconds()
         ]);
     });
+    describe("timezone problems",function(){
+        [
+            {iso:"1968-10-05", ymd:[1968,10,5]},
+            {iso:"1968-10-06", ymd:[1968,10,6]},
+            {iso:"1968-10-07", ymd:[1968,10,7]},
+        ].forEach(function(fixture){
+            function controlDate(d){
+                expect(d.toYmd()).to.eql(fixture.iso);
+                expect(d.getDate()).to.eql(fixture.ymd[2]);
+                expect(d.getMonth()+1).to.eql(fixture.ymd[1]);
+                expect(d.getFullYear()).to.eql(fixture.ymd[0]);
+                expect(d.getHours()).to.eql(0);
+            }
+            it("from iso: "+fixture.iso,function(){
+                var d=date.iso(fixture.iso)
+                controlDate(d);
+            });
+            it("from ymd: "+fixture.ymd,function(){
+                var d=date.ymd(fixture.ymd[0],fixture.ymd[1],fixture.ymd[2])
+                controlDate(d);
+            });
+        });
+    })
 });
 
 function globalFun(){
