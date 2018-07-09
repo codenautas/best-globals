@@ -825,9 +825,10 @@ describe("Promises", function(){
         })
     });
     it("sleeps directly", function(){
+        var FUTURE_DELTA=1; // https://travis-ci.org/codenautas/best-globals/jobs/401541694 tardó un milisegundo menos
         var now=new Date();
         return bestGlobals.sleep(400).then(function(){
-            expect(new Date().getTime()-now.getTime()).not.to.be.lessThan(400);
+            expect(new Date().getTime()-now.getTime()).not.to.be.lessThan(400-FUTURE_DELTA);
             expect(new Date().getTime()-now.getTime()).to.be.lessThan(400+d);
             now=new Date();
             return bestGlobals.sleep(100);
@@ -836,7 +837,7 @@ describe("Promises", function(){
             console.log(err.stack);
             throw new Error("Must not be here");
         }).then(function(){
-            expect(new Date().getTime()-now.getTime()).not.to.be.lessThan(100);
+            expect(new Date().getTime()-now.getTime()).not.to.be.lessThan(100-FUTURE_DELTA);
             expect(new Date().getTime()-now.getTime()).to.be.lessThan(100+d);
         })
     });
