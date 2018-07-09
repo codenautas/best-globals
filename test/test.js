@@ -7,6 +7,28 @@ var bestGlobals = require('..');
 var auditCopy = require('audit-copy');
 var discrepances = require('discrepances');
 
+console.log('DATES');
+var now=new Date(Date.now());
+console.log('now',now)
+console.log('now.ISO',now.toISOString())
+console.log('now.tzo',now.getTimezoneOffset())
+console.log('now.LTS',now.toLocaleTimeString())
+console.log('now.LDS',now.toLocaleDateString())
+console.log('now.LS' ,now.toLocaleString())
+console.log('nAR.LTS',now.toLocaleTimeString('es-AR', { timeZone: 'America/Buenos_Aires' }));
+console.log('nAR.LDS',now.toLocaleDateString('es-AR', { timeZone: 'America/Buenos_Aires' }));
+console.log('nAR.LS' ,now.toLocaleString    ('es-AR', { timeZone: 'America/Buenos_Aires' }));
+console.log('nGB.LTS',now.toLocaleTimeString('en-GB', { timeZone: 'UTC' }));
+console.log('nGB.LDS',now.toLocaleDateString('en-GB', { timeZone: 'UTC' }));
+console.log('nGB.LS' ,now.toLocaleString    ('en-GB', { timeZone: 'UTC' }));
+console.log('NUMBERS');
+var number=1234.56;
+console.log('number',number);
+console.log('number',number.toLocaleString());
+console.log('num.AR',number.toLocaleString('es-AR'));
+console.log('num.GB',number.toLocaleString('en-GB'));
+
+
 describe('best-globals', function(){ 
     describe('coalesce', function(){ 
         it('return the first value if is not null',function(){
