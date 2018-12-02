@@ -1,5 +1,7 @@
 "use strict";
 
+/* eslint no-unused-expressions:0 */
+
 var expect = require('expect.js');
 var sinon = require('sinon');
 var assert = require('assert');
@@ -29,7 +31,7 @@ console.log('num.AR',number.toLocaleString('es-AR'));
 console.log('num.GB',number.toLocaleString('en-GB'));
 
 
-describe('best-globals', function(){ 
+describe('best-globals', function(){
     describe('coalesce', function(){ 
         it('return the first value if is not null',function(){
             expect(bestGlobals.coalesce(7,8)).to.be(7);
@@ -83,6 +85,20 @@ describe('best-globals', function(){
             });
         });
     });
+    describe("isLowerIdent",function(){
+        var valids=['valid','valid_yes','valid123__555','_valid'];
+        var invalids=['Invalid','it is invalid','','1234','valid!','@invalid','is$invalid','is-invalid'];
+        valids.forEach(function(value){
+            it("is valid: "+value, function(){
+                expect(bestGlobals.isLowerIdent(value)).to.be.ok();
+            });
+        });
+        invalids.forEach(function(value){
+            it("is invalid: "+value, function(){
+                expect(bestGlobals.isLowerIdent(value)).to.not.be.ok();
+            });
+        })
+    })
 });
 
 describe('is Plain Object', function(){
@@ -294,9 +310,9 @@ describe("date", function(){
     it("create date from string and ignore timezone in input", function(){
         var d1 = date.iso("1916-07-09 00:00:00-11:00");
         control(d1, indep);
-        var d1 = date.iso("1916-07-09T00:00:00Z");
+        d1 = date.iso("1916-07-09T00:00:00Z");
         control(d1, indep);
-        var d1 = date.iso("1916-07-09T00:00:00.000Z");
+        d1 = date.iso("1916-07-09T00:00:00.000Z");
         control(d1, indep);
     });
     function toPlainString(date){
@@ -379,7 +395,7 @@ describe("date", function(){
         var ti=timeInterval({hours:26, minutes:2, seconds:3});
         expect(ti.toHms(false,false,true)).to.eql('26:02:03');
         expect(ti.toHms(false,true,true)).to.eql('1D 2:02:03');
-        var ti=timeInterval({days:11, hours:2, minutes:2, seconds:3});
+        ti=timeInterval({days:11, hours:2, minutes:2, seconds:3});
         expect(ti.toHms(false,false,false)).to.eql('266:02:03');
         expect(ti.toHms(false,true ,false)).to.eql('11D 02:02:03');
     });
@@ -678,8 +694,8 @@ describe('functionName', function(){
 });
 
 describe('constructorName', function(){
-    function MiObj() {};
-    function Tainted() {  if(! process.version.match(/^(v0.12)/)) { delete this.constructor.name; } }; // coverage
+    function MiObj() {}
+    function Tainted() {  if(! process.version.match(/^(v0.12)/)) { delete this.constructor.name; } } // coverage
     [
         {val:{}, name:'Object'},
         {val:new Date, name:'Date'},
@@ -772,8 +788,7 @@ describe('ordering', function(){
         it(JSON.stringify(fixture),function(){
             var a1 = bestGlobals.forOrder(fixture.a);
             var b1 = bestGlobals.forOrder(fixture.b);
-            if(a1<b1){
-            }else{
+            if(!(a1<b1)){
                 console.log('a1', a1);
                 console.log('b1', b1);
             }

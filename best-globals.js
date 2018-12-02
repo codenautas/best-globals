@@ -108,7 +108,7 @@ function deepCopy(object){
     }
     if(object instanceof Array){
         rta=[];
-        for(var attr in object){
+        for(attr in object){
             rta[attr]=deepCopy(object[attr]);
         }
     }
@@ -320,6 +320,7 @@ bestGlobals.Datetime.prototype.toPlainString = function toPlainString(){
         }
         return false;
     }
+    /* eslint no-unused-expressions: 0 */
     prune('000') && prune('.000') && prune(':00') && prune(' 00:00');
     return str; 
 }
@@ -702,6 +703,7 @@ function arrayFind(predicate){
   return undefined;
 }
 
+/* eslint no-extend-native: 0 */
 /* istanbul ignore next */
 if(!Array.prototype.find){
   Object.defineProperty(Array.prototype, 'find', {
@@ -725,6 +727,11 @@ bestGlobals.sameValue = function sameValue(a,b){
       typeof a === 'number' && (a>MAX_SAFE_INTEGER || a< -MAX_SAFE_INTEGER) && Math.abs(a/b)<1.00000000000001 && Math.abs(a/b)>0.99999999999999 ||
       a && !!a.sameValue && a.sameValue(b);
 }
+
+bestGlobals.isLowerIdent = function isLowerIdent(text){
+    return text && typeof text === "string" && /^[_a-z][_a-z0-9]*$/.test(text);
+};
+
 
 return bestGlobals;
 
