@@ -32,7 +32,7 @@ console.log('num.GB',number.toLocaleString('en-GB'));
 
 
 describe('best-globals', function(){
-    describe('coalesce', function(){ 
+    describe('coalesce', function(){
         it('return the first value if is not null',function(){
             expect(bestGlobals.coalesce(7,8)).to.be(7);
             expect(bestGlobals.coalesce(7,8,bestGlobals.coalesce.throwError)).to.be(7);
@@ -660,6 +660,15 @@ describe("date", function(){
                 controlDate(d);
             });
         });
+    })
+    describe("datetime substracts", function(){
+        it("get an interval of 5s",function(){
+            var a=bestGlobals.datetime.ymdHms(2018,12,24,23, 0,10);
+            var b=bestGlobals.datetime.ymdHms(2018,12,24,22,59,50);
+            var i=a.sub(b);
+            expect(i.sameValue(timeInterval({ms:20000}))).to.be.ok();
+            expect(i.toHms()).to.eql('00:00:20');
+        })
     })
 });
 

@@ -330,6 +330,10 @@ bestGlobals.Datetime.prototype.toPostgres = function toPostgres(){
     return this.toPlainString();
 }
 
+bestGlobals.Datetime.prototype.sub = function sub(dt){
+    return bestGlobals.timeInterval({ms:this.getTime()-dt.getTime()});
+}
+
 bestGlobals.datetime={};
 
 bestGlobals.Datetime.isValidTime = function isValidTime(h, m, s, ms, micros) {
