@@ -205,7 +205,6 @@ var dateMethods=[
         }
     }},
     {name: "sameValue", fun: function sameValue(other){
-        console.log("*************** sameValue ",this, other)
         return other && 
             other instanceof other.constructor && 
             this.getTime() == other.getTime();
@@ -216,11 +215,7 @@ function addDateMethods(dt, constructor) {
     dateMethods.forEach(function(funDef){
         if(funDef.mustConstruct){
             dt[funDef.name] = function(){
-                var show = function(x){
-                    console.log('************** show mspack:',x);
-                    return x;
-                }
-                return constructor(show(funDef.fun.apply(this,arguments)));
+                return constructor(funDef.fun.apply(this,arguments));
             }
         }else{
             dt[funDef.name] = funDef.fun;
@@ -529,7 +524,6 @@ bestGlobals.timeInterval = function timeInterval(timePack) {
 bestGlobals.timeInterval.iso = function iso(s){
     var m = s.match(/^(-?)[T ]?(?:(\d+)M(?:inute(?:s)?)?)?(?:(\d+)S(?:econd(?:s)?)?)?$/i);
     if(m && m[0]){
-        console.log('AAAAAAAAAAAray like', m)
         m = [s,m[1],0,0,0,0,m[2],m[3],m[4]];
     }else{
         m = s.match(/^(-?)P?(?:(\d+)Y(?:ear(?:s)?)?)?(?:(\d+)M(?:onth(?:s)?)?)?(?:(\d+)D(?:ay(?:s)?)?)?[T ]?(?:(\d+)H(?:our(?:s)?)?)?(?:(\d+)M(?:inute(?:s)?)?)?(?:(\d+)S(?:econd(?:s)?)?)?$/i);
@@ -537,7 +531,6 @@ bestGlobals.timeInterval.iso = function iso(s){
             m = s.match(/^(-?)P?(?:(\d+)[/-](\d+)[/-](\d+))?[T ]?(?:(\d+):(\d+)(?::(\d+)))?$/i);
         }
     }
-    console.log('timestamp ',m,s)
     if(m){
         var sign=m[1]=='-'?-1:1;
         return bestGlobals.timeInterval({
