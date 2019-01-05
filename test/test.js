@@ -669,6 +669,18 @@ describe("date", function(){
             expect(i.sameValue(timeInterval({ms:20000}))).to.be.ok();
             expect(i.toHms()).to.eql('00:00:20');
         })
+        it("get an datetime 6s later",function(){
+            var a=bestGlobals.datetime.ymdHms(2018,12,24,23, 0,10);
+            var b=a.add({ms:6000});
+            expect(b.sameValue(bestGlobals.datetime.ymdHms(2018,12,24,23, 0,16))).to.be.ok();
+            expect(b.toHms()).to.eql('23:00:16');
+        })
+        it("get an datetime 5s behind",function(){
+            var a=bestGlobals.datetime.ymdHms(2018,12,24,23, 0,10);
+            var b=a.sub({ms:5000});
+            expect(b.sameValue(bestGlobals.datetime.ymdHms(2018,12,24,23, 0,5))).to.be.ok();
+            expect(b.toHms()).to.eql('23:00:05');
+        })
     })
 });
 

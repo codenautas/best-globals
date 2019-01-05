@@ -189,30 +189,50 @@ var dateMethods=[
     {name: "toYmdHmsMm", fun: function toYmdHmsMm() {
         return this.toYmdHms()+'.'+npad(this.getMilliseconds(),3)+npad(this.getMicroseconds(),3);
     }},
-    {name: "add", fun: function add(objectOrTimeInterval){
-        if(!objectOrTimeInterval.timeInterval){
+    {name: "add", fun: function add(objectOrTimeInterval, sign){
+        var ms=0;
+        if(!objectOrTimeInterval.getTime){
             objectOrTimeInterval=bestGlobals.timeInterval(objectOrTimeInterval);
+        }            
+        ms=objectOrTimeInterval.getTime();
+        return {ms:this.getTime()+ms*(sign||1)};
+    }, mustConstruct:true},
+    {name: "sub", fun: function sub(objectOrTimeIntervalOrDatetime){
+        if(objectOrTimeIntervalOrDatetime.isRealDate || objectOrTimeIntervalOrDatetime.isRealDateTime){
+            return bestGlobals.timeInterval({ms:this.getTime()-objectOrTimeIntervalOrDatetime.getTime()});
+        }else{
+            return this.add(objectOrTimeIntervalOrDatetime, -1);
         }
-        return bestGlobals.date(new Date(this.getTime()+objectOrTimeInterval.timeInterval.ms));
     }},
     {name: "sameValue", fun: function sameValue(other){
+        console.log("*************** sameValue ",this, other)
         return other && 
             other instanceof other.constructor && 
             this.getTime() == other.getTime();
     }}
 ]
 
-function addDateMethods(dt) {
+function addDateMethods(dt, constructor) {
     dateMethods.forEach(function(funDef){
-        dt[funDef.name] = funDef.fun;
+        if(funDef.mustConstruct){
+            dt[funDef.name] = function(){
+                var show = function(x){
+                    console.log('************** show mspack:',x);
+                    return x;
+                }
+                return constructor(show(funDef.fun.apply(this,arguments)));
+            }
+        }else{
+            dt[funDef.name] = funDef.fun;
+        }
     });
     return dt;
 }
 
 ////////// date
 bestGlobals.date = function date(dt) {
-    if(! bestGlobals.date.isOK(dt)) { throw new Error('invalid date'); }
-    var d = addDateMethods(new Date(dt.getTime()));
+    if(!dt.ms && ! bestGlobals.date.isOK(dt)) { throw new Error('invalid date'); }
+    var d = addDateMethods(new Date(dt.ms || dt.getTime()), bestGlobals.date);
     if(new Date(d-1).getDate()==d.getDate()){
         throw new Error('invalid date "'+d.toDateString()+'"because it is not at the begining of the date');
     }
@@ -282,8 +302,6 @@ bestGlobals.Datetime=function Datetime(integerParts) {
     this.isRealDateTime = true;
 }
 
-addDateMethods(bestGlobals.Datetime.prototype);
-
 bestGlobals.Datetime.reTz3 = ' ([0-9]{2}):([0-9]{2})(:([0-9]{2}))?(.([0-9]{1,6}))?';
 bestGlobals.Datetime.re = new RegExp('^('+reDate+'('+bestGlobals.Datetime.reTz3+')?)$');
 
@@ -329,11 +347,15 @@ bestGlobals.Datetime.prototype.toPlainString = function toPlainString(){
 bestGlobals.Datetime.prototype.toPostgres = function toPostgres(){
     return this.toPlainString();
 }
+/*
+bestGlobals.Datetime.prototype.add = function add(dt){
+    return bestGlobals.timeInterval({ms:this.getTime()+dt.getTime()});
+}
 
 bestGlobals.Datetime.prototype.sub = function sub(dt){
     return bestGlobals.timeInterval({ms:this.getTime()-dt.getTime()});
 }
-
+*/
 bestGlobals.datetime={};
 
 bestGlobals.Datetime.isValidTime = function isValidTime(h, m, s, ms, micros) {
@@ -410,6 +432,8 @@ bestGlobals.datetime.array = function array(arr) {
     return bestGlobals.datetime.ymdHmsMm(arr[0], arr[1], arr[2], arr[3]||0, arr[4]||0, arr[5]||0, arr[6]||0, arr[7]||0);
 };
 
+addDateMethods(bestGlobals.Datetime.prototype, function(msPack){ return bestGlobals.datetime.ms(msPack.ms);});
+
 bestGlobals.TimeInterval = function TimeInterval(timePack){
     /* istanbul ignore next */
     if(typeof timePack === 'number'){
@@ -484,6 +508,9 @@ bestGlobals.TimeInterval = function TimeInterval(timePack){
         return otherInterval && 
             otherInterval instanceof bestGlobals.TimeInterval && 
             this.timeInterval.ms == otherInterval.timeInterval.ms;
+    }
+    this.getTime = function getTime(){
+        return this.timeInterval.ms;
     }
 }
 
