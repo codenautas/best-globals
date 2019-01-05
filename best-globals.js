@@ -526,6 +526,31 @@ bestGlobals.timeInterval = function timeInterval(timePack) {
     return new bestGlobals.TimeInterval(timePack);
 };
 
+bestGlobals.timeInterval.iso = function iso(s){
+    var m = s.match(/^(-?)[T ]?(?:(\d+)M(?:inute(?:s)?)?)?(?:(\d+)S(?:econd(?:s)?)?)?$/i);
+    if(m && m[0]){
+        console.log('AAAAAAAAAAAray like', m)
+        m = [s,m[1],0,0,0,0,m[2],m[3],m[4]];
+    }else{
+        m = s.match(/^(-?)P?(?:(\d+)Y(?:ear(?:s)?)?)?(?:(\d+)M(?:onth(?:s)?)?)?(?:(\d+)D(?:ay(?:s)?)?)?[T ]?(?:(\d+)H(?:our(?:s)?)?)?(?:(\d+)M(?:inute(?:s)?)?)?(?:(\d+)S(?:econd(?:s)?)?)?$/i);
+        if(!m || !m[0]){
+            m = s.match(/^(-?)P?(?:(\d+)[/-](\d+)[/-](\d+))?[T ]?(?:(\d+):(\d+)(?::(\d+)))?$/i);
+        }
+    }
+    console.log('timestamp ',m,s)
+    if(m){
+        var sign=m[1]=='-'?-1:1;
+        return bestGlobals.timeInterval({
+            ms     : m[8]*sign||0,
+            seconds: m[7]*sign||0,
+            minutes: m[6]*sign||0,
+            hours  : m[5]*sign||0,
+            days   : m[4]*sign||0,
+        });
+    }
+    throw new Error('invalid timestamp '+s)
+}
+
 bestGlobals.functionName = function functionName(fun) {
     if(typeof fun !== "function"){
         throw new Error("non function in functionName");

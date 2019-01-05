@@ -359,6 +359,19 @@ describe("date", function(){
         expect(timeInterval({ms:new Date(1926,7,7,11,0,0)-new Date(1926,7,9,10,32,11)}).toHm()).eql('-47:32');
         //expect(timeInterval(new Date(1916,7,7,11, 0,0)-new Date(1916,7,9,10,32,11)).toHms()).eql('48:27:49');
     });
+    it("create timeInterval from string and format it", function(){
+        expect(timeInterval.iso("48H").toHms()).eql('48:00:00');
+        expect(timeInterval.iso("-11s").toHms()).eql('-00:00:11');
+        expect(timeInterval.iso("2Days").toPlainString()).eql('2D');
+        expect(timeInterval.iso("P2DT1H").toPlainString()).eql('2D 1:00:00');
+        expect(timeInterval.iso("1Hour").toPlainString()).eql('1:00:00');
+        expect(timeInterval.iso("23:00:00").toHms()).eql('23:00:00');
+        expect(timeInterval.iso("-48h").toHms()).eql('-48:00:00');
+        expect(timeInterval.iso("-47:32:11").toHms()).eql('-47:32:11');
+        expect(timeInterval.iso("-T47h32m").toHm()).eql('-47:32');
+        expect(timeInterval.iso("32m").toHm()).eql('00:32');
+        //expect(timeInterval(new Date(1916,7,7,11, 0,0)-new Date(1916,7,9,10,32,11)).toHms()).eql('48:27:49');
+    });
     it("accept any interval", function(){
         discrepances.showAndThrow(
             timeInterval({ms:1, seconds:2, minutes:3, hours:4, days:5}),
