@@ -158,6 +158,74 @@ bestGlobals.changing = function changing(original, changes){
     }
 };
 
+bestGlobals.dig = function dig(data, wanted){
+    if(wanted==null){
+        return bestGlobals.dig.include(data)
+    }
+    if(typeof wanted==="function"){
+        return wanted(data);
+    }else{
+        return bestGlobals.dig.include(wanted)(data);
+    }
+};
+
+bestGlobals.dig.include = function digInclude(wanted){
+    return function(data){
+        var result={};
+        for(var name in wanted){
+            var want=wanted[name];
+            if(typeof want !== "function"){
+                throw new Error("the value must be a dig object");
+            }
+            if(want===bestGlobals.dig){
+                if(name in data){
+                    result[name] = data[name];
+                }
+            }else{
+                result[name] = want(data[name]);
+            }
+        }
+        return result;
+    };
+};
+
+bestGlobals.dig.exclude = function digExclude(dontWanted){
+    return function(data){
+        var result={};
+        for(var name in data){
+            if(!(name in dontWanted) || !dontWanted[name]){
+                result[name] = data[name];
+            }
+        }
+        return result;
+    };
+}
+
+bestGlobals.dig.default = function (defaultValue){
+    return function(value){
+        return value===undefined?defaultValue:value;
+    };
+};
+
+bestGlobals.dig.idx = function digIdx(wanted){
+    return function(colection){
+        var result={};
+        for(var idx in colection){
+            result[idx] = bestGlobals.dig(colection[idx], wanted);
+        }
+        return result;
+    };
+}
+
+bestGlobals.dig.array = function array(wanted){
+    return function(array){
+        var result=array.map(function(element){ return bestGlobals.dig(element, wanted);});
+        return result;
+    };
+}
+
+
+
 bestGlobals.createOptionsToFunction(bestGlobals.changing);
 
 function npad(num, width) {

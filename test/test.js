@@ -8,6 +8,7 @@ var assert = require('assert');
 var bestGlobals = require('..');
 var auditCopy = require('audit-copy');
 var discrepances = require('discrepances');
+var dig = bestGlobals.dig;
 
 console.log('DATES');
 var now=new Date(Date.now());
@@ -266,6 +267,79 @@ describe('mini-tools config functions', function(){
         expect(obtained.code).to.eql("A12");
         expect(obtained["z-number"]).to.eql(12);
     });
+});
+
+describe('mini-tools dig', function(){
+    var _=dig;
+    if('example', function(){
+        var obtained = _({name:'Argentina', lang:'es', other:77, stats:{anualCpi:50, pob:400000}} , {name:_, stats:_({pob:_}), democray:_.defualt(true)});
+    })
+    var fixtures=[{
+        name:'simple',
+        input   :{want:'a', want2:'b', dont:'c', dont2:{}},
+        expected:{want:'a', want2:'b'},
+        opts    :{want:_, want2:_.default('x'),want3:_},
+    },{
+        name:'excluding',
+        input   :{want:'a', want2:'b', dont:'c', dont2:{}},
+        expected:{want:'a', want2:'b'},
+        fun     :_.exclude({dont:_, dont2:_}),
+    },{
+        name:'nested',
+        input   :{want:'a', want2:{alfa:'a', beta:'b'}, dont:'c', dont2:{}},
+        expected:{want:'a', want2:{alfa:'a'}},
+        opts    :{want:_, want2:_({alfa:_})},
+    },{
+        name:'indexed_object',
+        input   :{country:{
+            ar:{name:'Argentina', lang:'es', other:77},
+            de:{name:'Alemania' , lang:'de', other:99}
+        }},
+        expected:{country:{
+            ar:{name:'Argentina', lang:'es'},
+            de:{name:'Alemania' , lang:'de'}
+        }},
+        opts    :{country:_.idx({name:_, lang:_})},
+    },{
+        name:'array',
+        input   :{list:[{want:'a', want2:'b', dont:'c', dont2:{}},{want:1, dont:2},{want2:3,x:5}]},
+        expected:{list:[{want:'a', want2:'b'},{want:1},{want2:3}]},
+        opts    :{list:_.array({want:_, want2:_})},
+    },{
+        name:'inside array',
+        input   :[{want:'a', want2:'b', dont:'c', dont2:{}},{want:1, dont:2},{want2:3,x:5}],
+        expected:[{want:'a', want2:'b'},{want:1},{want2:3}],
+        opts    :_.array({want:_, want2:_}),
+        fun     :_.array({want:_, want2:_}),
+    },{
+        name:'array with default',
+        input   :{list:[{want:'a', want2:'b', dont:'c', dont2:{}},{want:1, dont:2},{want2:3,x:5}]},
+        expected:{list:[{want:'a', want2:'b'},{want:1},{want:'def', want2:3}]},
+        opts    :{list:_.array({want:_.default('def'), want2:_})},
+    },{
+        name:'force integer',
+        input   :{name:'Jesús', age:'33'},
+        expected:{name:'Jesús', age:33},
+        opts    :{name:_, age:Number},
+    }];
+    fixtures.forEach(function(fixture){
+        if(fixture.opts){
+            it('opts '+fixture.name, function(){
+                var obtained = dig(fixture.input, fixture.opts);
+                expect(obtained).to.eql(fixture.expected);
+            })
+        }
+        it('fun '+fixture.name, function(){
+            var fun = fixture.fun || dig(fixture.opts);
+            var obtained = fun(fixture.input);
+            expect(obtained).to.eql(fixture.expected);
+        })
+    })
+    it('rejects non object', function(){
+        expect(function(){
+            _({x:3},{y:{z:_}});
+        }).to.throwException(/must be a dig object/);
+    })
 });
 
 describe("date", function(){
