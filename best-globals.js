@@ -158,18 +158,26 @@ bestGlobals.changing = function changing(original, changes){
     }
 };
 
-bestGlobals.dig = function dig(data, wanted){
-    if(wanted==null){
-        return bestGlobals.dig.include(data)
+bestGlobals.dig = function dig(description, wanted){
+    if(arguments.length==1){
+        wanted=description;
+        description=null;
     }
     if(typeof wanted==="function"){
-        return wanted(data);
+        return wanted;
     }else{
-        return bestGlobals.dig.include(wanted)(data);
+        return bestGlobals.dig.record(wanted);
     }
 };
 
-bestGlobals.dig.include = function digInclude(wanted){
+bestGlobals.dig.record = function digrecord(description, wanted){
+    if(arguments.length==1){
+        if(typeof description==="string"){
+            return bestGlobals.dig;
+        }
+        wanted=description;
+        description=null;
+    }
     return function(data){
         var result={};
         for(var name in wanted){
@@ -189,7 +197,11 @@ bestGlobals.dig.include = function digInclude(wanted){
     };
 };
 
-bestGlobals.dig.exclude = function digExclude(dontWanted){
+bestGlobals.dig.exclude = function digExclude(description, dontWanted){
+    if(arguments.length==1){
+        dontWanted=description;
+        description=null;
+    }
     return function(data){
         var result={};
         for(var name in data){
@@ -201,29 +213,43 @@ bestGlobals.dig.exclude = function digExclude(dontWanted){
     };
 }
 
-bestGlobals.dig.default = function (defaultValue){
+bestGlobals.dig.default = function (description, defaultValue){
+    if(arguments.length==1){
+        defaultValue=description;
+        description=null;
+    }
     return function(value){
         return value===undefined?defaultValue:value;
     };
 };
 
-bestGlobals.dig.idx = function digIdx(wanted){
+bestGlobals.dig.indexedObject = function digIndexedObject(description, wanted){
+    if(arguments.length==1){
+        wanted=description;
+        description=null;
+    }
     return function(colection){
         var result={};
         for(var idx in colection){
-            result[idx] = bestGlobals.dig(colection[idx], wanted);
+            result[idx] = bestGlobals.dig(wanted)(colection[idx]);
         }
         return result;
     };
 }
+bestGlobals.dig.idx = bestGlobals.dig.indexedObject;
 
-bestGlobals.dig.array = function array(wanted){
+bestGlobals.dig.array = function array(description, wanted){
+    if(arguments.length==1){
+        wanted=description;
+        description=null;
+    }
     return function(array){
-        var result=array.map(function(element){ return bestGlobals.dig(element, wanted);});
+        var result=array.map(function(element){ return bestGlobals.dig(wanted)(element);});
         return result;
     };
 }
 
+bestGlobals.spec = bestGlobals.dig;
 
 
 bestGlobals.createOptionsToFunction(bestGlobals.changing);
@@ -843,6 +869,20 @@ bestGlobals.sameValue = function sameValue(a,b){
       a instanceof Date && b instanceof Date && a.getTime() == b.getTime() ||
       typeof a === 'number' && (a>MAX_SAFE_INTEGER || a< -MAX_SAFE_INTEGER) && Math.abs(a/b)<1.00000000000001 && Math.abs(a/b)>0.99999999999999 ||
       a && !!a.sameValue && a.sameValue(b);
+}
+
+bestGlobals.sameValues = function sameValues(a,b, sideOfBigger){
+    if(a===b) return true;
+    if(sideOfBigger=="left"){
+        return bestGlobals.sameValues(b,a,"right");
+    }else if(sideOfBigger=="right"){
+        for(var name in a){
+            if(!(name in b) || !bestGlobals.sameValue(a[name],b[name])) return false;
+        }
+        return true;
+    }else{
+        return bestGlobals.sameValues(a,b,"right") && bestGlobals.sameValues(a,b,"left");
+    }
 }
 
 bestGlobals.isLowerIdent = function isLowerIdent(text){

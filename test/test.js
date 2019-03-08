@@ -9,6 +9,7 @@ var bestGlobals = require('..');
 var auditCopy = require('audit-copy');
 var discrepances = require('discrepances');
 var dig = bestGlobals.dig;
+var spec = bestGlobals.spec;
 
 console.log('DATES');
 var now=new Date(Date.now());
@@ -269,7 +270,7 @@ describe('mini-tools config functions', function(){
     });
 });
 
-describe('mini-tools dig', function(){
+describe('dig', function(){
     var _=dig;
     if('example', function(){
         var obtained = _({name:'Argentina', lang:'es', other:77, stats:{anualCpi:50, pob:400000}} , {name:_, stats:_({pob:_}), democray:_.defualt(true)});
@@ -325,7 +326,7 @@ describe('mini-tools dig', function(){
     fixtures.forEach(function(fixture){
         if(fixture.opts){
             it('opts '+fixture.name, function(){
-                var obtained = dig(fixture.input, fixture.opts);
+                var obtained = dig(fixture.opts)(fixture.input);
                 expect(obtained).to.eql(fixture.expected);
             })
         }
@@ -337,7 +338,88 @@ describe('mini-tools dig', function(){
     })
     it('rejects non object', function(){
         expect(function(){
-            _({x:3},{y:{z:_}});
+            _({y:{z:_}})({x:3});
+        }).to.throwException(/must be a dig object/);
+    })
+});
+
+
+describe('spec', function(){
+    var _=spec;
+    if('example', function(){
+        var obtained = _({name:'Argentina', lang:'es', other:77, stats:{anualCpi:50, pob:400000}} , {name:_, stats:_({pob:_}), democray:_.defualt(true)});
+    })
+    var fixtures=[{
+        name:'simple',
+        input   :{want:'a', want2:'b', dont:'c', dont2:{}},
+        expected:{want:'a', want2:'b'},
+        opts    :{want:_("is what it wants"), want2:_.default("this too",'x'),want3:_},
+    },{
+        name:'excluding',
+        input   :{want:'a', want2:'b', dont:'c', dont2:{}},
+        expected:{want:'a', want2:'b'},
+        fun     :_.exclude("all the record excluding audit fields", {dont:_, dont2:_}),
+    },{
+        name:'nested',
+        input   :{want:'a', want2:{alfa:'a', beta:'b'}, dont:'c', dont2:{}},
+        expected:{want:'a', want2:{alfa:'a'}},
+        opts    :{want:_, want2:_("the alfa record", {alfa:_})},
+    },{
+        name:'indexed_object',
+        input   :{country:{
+            ar:{name:'Argentina', lang:'es', other:77},
+            de:{name:'Alemania' , lang:'de', other:99}
+        }},
+        expected:{country:{
+            ar:{name:'Argentina', lang:'es'},
+            de:{name:'Alemania' , lang:'de'}
+        }},
+        opts    :{country:_.idx("an index object", {name:_, lang:_})},
+        fun     :_({country:_.idx({name:_, lang:_})}),
+    },{
+        name:'array',
+        input   :{list:[{want:'a', want2:'b', dont:'c', dont2:{}},{want:1, dont:2},{want2:3,x:5}]},
+        expected:{list:[{want:'a', want2:'b'},{want:1},{want2:3}]},
+        opts    :{list:_.array({want:_, want2:_})},
+    },{
+        name:'inside array',
+        input   :[{want:'a', want2:'b', dont:'c', dont2:{}},{want:1, dont:2},{want2:3,x:5}],
+        expected:[{want:'a', want2:'b'},{want:1},{want2:3}],
+        opts    :_.array("pretty array", {want:_, want2:_}),
+        fun     :_.array({want:_, want2:_}),
+    },{
+        name:'nested array and indexed',
+        input   :[[{one:true, two:true, special:false}],[{alpha:false, beta:false},{a:false,b:false}]],
+        expected:[[{one:true, two:true}],[{alpha:false, beta:false},{a:false,b:false}]],
+        opts    :_.array("matrix", _.array("list of dictionaries", _.exclude({special:true}))),
+        fun     :_.array("matrix", _.array("list of dictionaries", _.exclude({special:true}))),
+    },{
+        name:'array with default',
+        input   :{list:[{want:'a', want2:'b', dont:'c', dont2:{}},{want:1, dont:2},{want2:3,x:5}]},
+        expected:{list:[{want:'a', want2:'b'},{want:1},{want:'def', want2:3}]},
+        opts    :{list:_.array({want:_.default('def'), want2:_})},
+    },{
+        name:'force integer',
+        input   :{name:'Jesús', age:'33'},
+        expected:{name:'Jesús', age:33},
+        opts    :{name:_, age:Number},
+    }];
+    fixtures.forEach(function(fixture){
+        if(fixture.opts){
+            it('opts '+fixture.name, function(){
+                var obtained = spec(fixture.opts)(fixture.input);
+                expect(obtained).to.eql(fixture.expected);
+            })
+        }
+        it('fun '+fixture.name, function(){
+            var fun = fixture.fun || dig(fixture.opts);
+            var obtained = fun(fixture.input);
+            expect(obtained).to.eql(fixture.expected);
+        })
+    })
+    it('rejects non object', function(){
+        expect(function(){
+            _({y:{z:_}})({x:3});
         }).to.throwException(/must be a dig object/);
     })
 });
@@ -1115,6 +1197,22 @@ describe("sameValue", function(){
     ].forEach(function(fixture){
         it("for "+JSON.stringify(fixture), function(){
             var obtained = bestGlobals.sameValue(fixture.a, fixture.b);
+            expect(obtained).to.eql(fixture.res);
+        });
+    });
+});
+
+describe("sameValues", function(){
+    [
+        {a:{a:1,x:1}, b:{a:1,x:0}  , res:false},
+        {a:{a:1,x:1}, b:{x:1,a:1}  , res:true},
+        {a:{a:1,b:2,x:new Date(2001,2,3)}, b:{b:2,a:1,x:new Date(2001,2,3)}, res:true},
+        {a:{x:bestGlobals.timeInterval({minutes:2})}, b:{x:bestGlobals.timeInterval({minutes:3})}, res:false},
+        {a:{a:1,x:bestGlobals.timeInterval({minutes:2})}, b:{a:1,x:bestGlobals.timeInterval({seconds:120})}, res:true},
+        {a:{a:1,x:bestGlobals.MAX_SAFE_INTEGER*1000}, b:{a:1,x:bestGlobals.MAX_SAFE_INTEGER*1000+0.0001}, res:true},
+    ].forEach(function(fixture){
+        it("for "+JSON.stringify(fixture), function(){
+            var obtained = bestGlobals.sameValues(fixture.a, fixture.b);
             expect(obtained).to.eql(fixture.res);
         });
     });
