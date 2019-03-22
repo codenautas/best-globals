@@ -318,15 +318,37 @@ function addDateMethods(dt, constructor) {
     return dt;
 }
 
+var DELTA4DATE = 1;
+
 ////////// date
 bestGlobals.date = function date(dt) {
+    return bestGlobals.dateForceIfNecesary(dt, true);
+};
+
+bestGlobals.dateForceIfNecesary = function dateForceIfNecesary(dt, strict) {
     if(!dt.ms && ! bestGlobals.date.isOK(dt)) { throw new Error('invalid date'); }
-    var d = addDateMethods(new Date(dt.ms || dt.getTime()), bestGlobals.date);
-    if(new Date(d-1).getDate()==d.getDate()){
-        throw new Error('invalid date "'+d.toDateString()+'"because it is not at the begining of the date');
-    }
-    d.isRealDate = true;
-    return d;
+    var d=new Date(dt.ms || dt.getTime());
+    var delta=4*60*60*1000;
+    do{
+        if(new Date(d-DELTA4DATE).getDate()!=d.getDate()){
+            d = addDateMethods(d, bestGlobals.dateForceIfNecesary);
+            d.isRealDate = true;
+            return d;
+        }
+        if(!strict){
+            if(new Date(d.getTime()-delta).getDate()!=d.getDate()){
+                d = new Date(d.getTime()-delta)
+                if(delta==1){
+                    delta=0;
+                }else{
+                    delta=Math.ceil(delta/2);
+                }
+            }else{
+                d = new Date(d.getTime()+delta)
+            }
+        }
+    }while(!strict && delta>0);
+    throw new Error('invalid date "'+d.toDateString()+'"because it is not at the begining of the date');
 };
 
 bestGlobals.date.isValidDate = function isValidDate(year, month, day) {

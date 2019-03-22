@@ -752,12 +752,60 @@ describe("date", function(){
             });
         });
     });
+    it("date sub day by day", function(){
+        var HS24=24*60*60*1000;
+        var d=bestGlobals.date.today();
+        var n=100000;
+        while(n--){
+            try{
+                var newd = d.sub({days:1});
+                if(newd.getTime()-d.getTime()!=-HS24){
+                    console.log('***** Date dif',newd.toISOString(),d.toISOString(),(newd.getTime()-d.getTime())/60/60/1000,'hours');
+                    if(Math.abs(newd.getTime()-d.getTime() + HS24) > 2*60*60*1000){
+                        throw new Error('Imposible date interval');
+                    }
+                }
+                d=newd;
+            }catch(err){
+                console.log("****************** ERROR in date ",d)
+                throw new Error(err.message+' for '+d);
+            }
+        }
+        expect(true).to.be.ok();
+    });
+    it("date add day by day", function(){
+        var HS24=24*60*60*1000;
+        var d=bestGlobals.date.ymd(1899,12,31);
+        var n=100000;
+        while(n--){
+            try{
+                var newd = d.add({days:1});
+                if(newd.getTime()-d.getTime()!=HS24){
+                    console.log('***** Date dif',newd.toISOString(),d.toISOString(),(newd.getTime()-d.getTime())/60/60/1000,'hours');
+                    if(Math.abs(newd.getTime()-d.getTime() - HS24) > 2*60*60*1000){
+                        throw new Error('Imposible date interval');
+                    }
+                }
+                d=newd;
+            }catch(err){
+                console.log("****************** ERROR in date ",d)
+                throw new Error(err.message+' for '+d);
+            }
+        }
+        expect(true).to.be.ok();
+    });
+    describe("dateForceIfNecesary", function(){
+        it("ajust one ms", function(){
+            var d=bestGlobals.dateForceIfNecesary({ms:bestGlobals.date.ymd(2019,3,22).getTime()-1});
+            expect(d.isRealDate).to.be.ok();
+        })
+    })
     describe("date add", function(){
         var fixtures=[
-            {d:'2017-12-20', days: 0 , res:'2017-12-20'},
-            {d:'2017-12-21', days: 1 , res:'2017-12-22'},
-            {d:'2017-12-22', days:30 , res:'2018-01-21'},
-            {d:'2017-12-23', days:-30, res:'2017-11-23'},
+            {d:'2017-12-20', days: 0   , res:'2017-12-20'},
+            {d:'2017-12-21', days: 1   , res:'2017-12-22'},
+            {d:'2017-12-22', days:30   , res:'2018-01-21'},
+            {d:'1899-12-31', days:42151, res:'2015-05-28'},
         ];
         fixtures.forEach(function(fixture){
             it("fixture "+JSON.stringify(fixture), function(){
