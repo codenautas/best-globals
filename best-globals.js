@@ -127,10 +127,10 @@ bestGlobals.changing = function changing(original, changes){
     ){
         if(!arguments[3]){
             throw new Error("changing with non Plain Object");
-        }else if(changes!==undefined){
-            return deepCopy(changes);
-        }else{
+        }else if(changes===undefined || opts.nullIsUndefined && changes===null){
             return deepCopy(original);
+        }else{
+            return deepCopy(changes);
         }
     }else{
         if(typeof changes!=="object"){

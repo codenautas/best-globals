@@ -186,6 +186,65 @@ describe('mini-tools config functions', function(){
             },
         })
     });
+    it("deep 'changing' function with null==undefined", function(){
+        var obtained = changing({
+            soloOriginal:2,
+            enAmbos:3,
+            hijo:{
+                nieto:{
+                    soloOriginal:12,
+                    enAmbos:13,
+                },
+                logicoPorFalse:true,
+                logicoPorNull:true,
+                logicoPorTrue:null,
+                logicoUndefinedNoPisa:true,
+            },
+            soloObjetoOriginal:{
+                original:7
+            }
+        },{
+            enAmbos:4,
+            hijo:{
+                nieto:{
+                    enAmbos:14,
+                    soloCambio:15,
+                },
+                nietoFaltante:{
+                    uno:16,
+                    dos:17
+                },
+                logicoPorFalse:false,
+                logicoPorNull:null,
+                logicoPorTrue:true,
+                logicoUndefinedNoPisa:undefined,
+            },
+            soloCambio:5,
+        },bestGlobals.changing.options({nullIsUndefined:true}));
+        expect(obtained).to.eql({
+            soloOriginal:2,
+            enAmbos:4,
+            soloCambio:5,
+            hijo:{
+                nieto:{
+                    soloOriginal:12,
+                    enAmbos:14,
+                    soloCambio:15,
+                },
+                nietoFaltante:{
+                    uno:16,
+                    dos:17
+                },
+                logicoPorFalse:false,
+                logicoPorNull:true,
+                logicoPorTrue:true,
+                logicoUndefinedNoPisa:true, 
+            },
+            soloObjetoOriginal:{
+                original:7
+            },
+        })
+    });
     it("deep 'bestGlobals.changing' function must delete", function(){
         var obtained = changing({
             normal:1,
