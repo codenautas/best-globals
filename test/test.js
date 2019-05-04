@@ -572,7 +572,11 @@ describe("date", function(){
         expect(timeInterval({ms:new Date(1926,7,7,11,0,0)-new Date(1926,7,9,11,0,0)  }).toHms()).eql('-48:00:00');
         expect(timeInterval({ms:new Date(1926,7,7,11,0,0)-new Date(1926,7,9,10,32,11)}).toHms()).eql('-47:32:11');
         expect(timeInterval({ms:new Date(1926,7,7,11,0,0)-new Date(1926,7,9,10,32,11)}).toHm()).eql('-47:32');
-        //expect(timeInterval(new Date(1916,7,7,11, 0,0)-new Date(1916,7,9,10,32,11)).toHms()).eql('48:27:49');
+        expect(timeInterval({ms:new Date(1926,7,7,11,0,0)-new Date(1926,7,8,10,32,0)}).toHmsOrMs()).eql('-23:32:00');
+        expect(timeInterval({ms:new Date(1926,7,7,11,0,0)-new Date(1926,7,7,11,2,13)}).toHmsOrMs()).eql('-2:13');
+        expect(timeInterval({ms:new Date(1926,7,7,11,0,0)-new Date(1926,7,7,11,0,3)}).toHmsOrMs()).eql('-0:03');
+        expect(timeInterval({ms:new Date(1926,7,7,10,1,3)-new Date(1926,7,7,0,0,0)}).toHmsOrMs()).eql('10:01:03');
+        expect(timeInterval({ms:new Date(1926,7,7,1,1,3)-new Date(1926,7,7,0,0,0)}).toHmsOrMs()).eql('1:01:03');
     });
     it("create timeInterval from string and format it", function(){
         expect(timeInterval.iso("48H").toHms()).eql('48:00:00');

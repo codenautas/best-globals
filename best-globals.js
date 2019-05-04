@@ -565,7 +565,7 @@ bestGlobals.TimeInterval = function TimeInterval(timePack){
         time+=timePack[attr]*timeValues[attr];
     }
     this.timeInterval={ms:time};
-    this.toHms = function toHms(omitSeconds, withDays, omitLeftCeros) {
+    this.toHms = function toHms(omitSeconds, withDays, omitLeftCeros, omitHourCero, omitFirstLeftCero) {
         var leftCero = omitLeftCeros?'':'0';
         var tm = this.timeInterval.ms;
         var prefix = (tm<0?'-':'');
@@ -577,20 +577,24 @@ bestGlobals.TimeInterval = function TimeInterval(timePack){
         var m = Math.floor(x % 60);
         x /= 60;
         var h = Math.floor(x);
-        if(withDays){
-            h = Math.floor(x % 24);
-            x /= 24;
-            var d = Math.floor(x);
-            if(d){
-                prefix+=(Math.abs(d)<10?leftCero:'')+d+'D';
-                if(!h && !m && !s){
-                    return prefix;
+        if(h || !omitHourCero){
+            if(withDays){
+                h = Math.floor(x % 24);
+                x /= 24;
+                var d = Math.floor(x);
+                if(d){
+                    prefix+=(Math.abs(d)<10 && !omitFirstLeftCero?(leftCero):'')+d+'D';
+                    if(!h && !m && !s){
+                        return prefix;
+                    }
+                    prefix+=' ';
+                    omitFirstLeftCero = false;
                 }
-                prefix+=' ';
             }
+            tdiff.push((h<10 && !omitFirstLeftCero?leftCero:'')+h);
+            omitFirstLeftCero = false;
         }
-        tdiff.push((h<10?leftCero:'')+h);
-        tdiff.push((m<10?'0':'')+m);
+        tdiff.push((m<10 && !omitFirstLeftCero?'0':'')+m);
         if(!omitSeconds){
             tdiff.push((s<10?'0':'')+s);
         }
@@ -627,6 +631,10 @@ bestGlobals.TimeInterval = function TimeInterval(timePack){
 
 bestGlobals.TimeInterval.prototype.toString = function toString(){
     return this.toHms(false,true,false);
+}
+
+bestGlobals.TimeInterval.prototype.toHmsOrMs = function toHmsOrMs(){
+    return this.toHms(false,false,false,true,true);
 }
 
 bestGlobals.TimeInterval.prototype.toPostgres = function toPostgres(){
