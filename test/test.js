@@ -1286,6 +1286,22 @@ describe("serie", function(){
         {a:1     , res:[0]},
         {a:0, b:2, res:[0,1]},
         {a:5     , res:[0,1,2,3,4]},
+        {a:{from:1,length:0}, res:[]},
+        {a:{from:1,length:1}, res:[1]},
+        {a:{from:1,length:4}, res:[1,2,3,4]},
+        {a:{length:0       }, res:[]},
+        {a:{length:1       }, res:[0]},
+        {a:{from:0,length:2}, res:[0,1]},
+        {a:{length:5       }, res:[0,1,2,3,4]},
+        {a:{from:1,to:0}, res:[]},
+        {a:{from:1,to:1}, res:[1]},
+        {a:{from:1,to:4}, res:[1,2,3,4]},
+        {a:{to:-1      }, res:[]},
+        {a:{to:0       }, res:[0]},
+        {a:{from:0,to:1}, res:[0,1]},
+        {a:{to:4       }, res:[0,1,2,3,4]},
+        {a:{from:1,to:4,step:2}, res:[1,3]},
+        {a:{to:4       ,step:2}, res:[0,2,4]},
     ].forEach(function(fixture){
         it("for "+JSON.stringify(fixture), function(){
             var obtained = bestGlobals.serie(fixture.a, fixture.b);

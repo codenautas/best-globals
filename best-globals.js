@@ -886,10 +886,34 @@ if(!Array.prototype.find){
 
 bestGlobals.arrayFind = arrayFind;
 
-bestGlobals.serie = function serie(NorFirst, NifNoFirst){
-    var n     = NifNoFirst==null ? NorFirst : NifNoFirst;
-    var first = NifNoFirst==null ? 0        : NorFirst  ;
-    return Array.apply(null, Array(n)).map(function (_, i) {return i+first;});
+bestGlobals.serie = function serie(NorFirstOrObject, NifNoFirst){
+    var last;
+    var first;
+    var step;
+    var n; 
+    if(NorFirstOrObject instanceof Object){
+        first = 'from' in NorFirstOrObject ? NorFirstOrObject.from : 0;
+        step = 'step' in NorFirstOrObject ? NorFirstOrObject.step : 1;
+        if('length' in NorFirstOrObject){
+            n = NorFirstOrObject.length;
+            last = (n-1)*step + first;
+        }else{
+            last = 'to' in NorFirstOrObject ? NorFirstOrObject.to : function (){ throw new Error('serie lack of "from" or "to"') }();
+            n = Math.floor((last - first)/step)+1
+        }
+    }else{
+        n     = NifNoFirst==null ? NorFirstOrObject : NifNoFirst;
+        first = NifNoFirst==null ? 0        : NorFirstOrObject  ;
+        step = 1;
+    }
+    if(typeof step === 'number'){
+        if(n<0){
+            n=0;
+        }
+        return Array.apply(null, Array(n)).map(function (_, i) {return i*step+first;});
+    }else{
+        throw new Error('ERRRO serie.step must be a number')
+    }
 };
 
 var MAX_SAFE_INTEGER = bestGlobals.MAX_SAFE_INTEGER = 9007199254740991;

@@ -276,23 +276,28 @@ sleep(2000).then(function(){
 ```
 <!--lang:*-->
 
-### serie([a,]n) 
+### serie({[from:number,] to:number [,step:number]}) 
+### serie({[from:number,] length:number [,step:number]}) 
 
 <!--lang:es-->
 
-Devuelve un arreglo con *n* números empezando por *a* (o por cero)
+Devuelve un arreglo con una serie de números sumando de a *step* (o 1) 
+empezando en *from* (o en 0) y terminando en *to* o tienendo una longitud de *length*. 
 
 <!--lang:en--]
 
-Returns an array with *n* numbers starting with *a* (or zero)
+Returns an array with a serie of numbers starting with *from* (or zero), step by *step* (or 1);
+with *length* or until *to*.
 
 [!--lang:*-->
 
 ```js
 var serie = require('best-globals').serie;
 
-console.log(serie(3)); // [0,1,2]
-console.log(serie(2,3)); // [2,3,4]
+console.log(serie({length:3})); // [0,1,2]
+console.log(serie({from:2,length:3})); // [2,3,4]
+console.log(serie({from:2,to:4})); // [2,3,4]
+console.log(serie({from:2,to:15,step:5})); // [2,7,12]
 ```
 <!--lang:*-->
 
