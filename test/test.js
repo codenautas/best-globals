@@ -504,6 +504,19 @@ describe("date", function(){
         var d1 = date.iso("1916-07-09");
         control(d1, indep);
     });
+    it("date.iso(null,{nullReturnsNull:true})", function(){
+        var d1 = date.iso(null, {nullReturnsNull:true});
+        expect(d1 === null).to.be.ok();
+    });
+    it("date.iso('',{falsyReturnsNull:true})", function(){
+        var d1 = date.iso('', {falsyReturnsNull:true});
+        expect(d1 === null).to.be.ok();
+    });
+    it("date.iso('',{nullReturnsNull:true})", function(){
+        expect(function(){
+            var d1 = date.iso('', {nullReturnsNull:true});
+        }).to.throwError(/invalid date/ );
+    });
     /*
     it("create date from ms", function(){
         var d1 = date.ms(2*24*60*60*1000);

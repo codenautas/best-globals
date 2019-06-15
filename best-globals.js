@@ -326,6 +326,9 @@ bestGlobals.date = function date(dt) {
 };
 
 bestGlobals.dateForceIfNecesary = function dateForceIfNecesary(dt, strict) {
+    if(!strict){
+        if(dt==null) return null;
+    }
     if(!dt.ms && ! bestGlobals.date.isOK(dt)) { throw new Error('invalid date'); }
     var d=new Date(dt.ms || dt.getTime());
     var delta=4*60*60*1000;
@@ -385,7 +388,10 @@ bestGlobals.date.parseFormat = function parseFormat(dateStr) {
     return { y:parseInt(match[2],10), m:parseInt(match[4],10), d:parseInt(match[7],10) };
 };
 
-bestGlobals.date.iso = function iso(dateStr) {
+bestGlobals.date.iso = function iso(dateStr, opts) {
+    if(opts && !dateStr && (opts.falsyReturnsNull || opts.nullReturnsNull && dateStr == null)){
+        return null;
+    }
     var parsed=bestGlobals.date.parseFormat(dateStr);
     return bestGlobals.date.ymd(parsed.y, parsed.m, parsed.d);
 };
@@ -517,8 +523,11 @@ bestGlobals.datetime.now = function now(){
     return bestGlobals.datetime.ms(new Date().getTime());
 }
 
-bestGlobals.datetime.iso = function iso(dateStr) {
-    var match = bestGlobals.Datetime.re.exec(dateStr)
+bestGlobals.datetime.iso = function iso(dateStr, opts) {
+    if(opts && !dateStr && (opts.falsyReturnsNull || opts.nullReturnsNull && dateStr == null)){
+        return null;
+    }
+    var match = bestGlobals.Datetime.re.exec(dateStr);
     if(match){
         var integerParts={};
         integerParts.year    = parseInt(match[2],10)
@@ -645,7 +654,10 @@ bestGlobals.timeInterval = function timeInterval(timePack) {
     return new bestGlobals.TimeInterval(timePack);
 };
 
-bestGlobals.timeInterval.iso = function iso(s){
+bestGlobals.timeInterval.iso = function iso(s, opts){
+    if(opts && !s && (opts.falsyReturnsNull || opts.nullReturnsNull && s == null)){
+        return null;
+    }
     var m = s.match(/^(-?)[T ]?(?:(\d+)M(?:inute(?:s)?)?)?(?:(\d+)S(?:econd(?:s)?)?)?$/i);
     if(m && m[0]){
         m = [s,m[1],0,0,0,0,m[2],m[3],m[4]];
