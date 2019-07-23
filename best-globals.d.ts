@@ -1,6 +1,11 @@
 declare module "best-globals"{
     namespace bestGlobals{
-        function coalesce<T, TT extends (T|bestGlobals.coalesce.throwErrorIfUndefined)>(...params:(TT)[]):T;
+        function coalesce<T>(...params:T[]):T;
+        function coalesce<T1>(p1:T1|null, opts:bestGlobals.coalesce.throwErrorIfUndefined):T1;
+        function coalesce<T1, T2>(p1:T1|null, p2:T2|null, opts:bestGlobals.coalesce.throwErrorIfUndefined):T1|T2;
+        function coalesce<T1, T2, T3>(p1:T1|null, p2:T2|null, p3:T3|null, opts:bestGlobals.coalesce.throwErrorIfUndefined):T1|T2|T3;
+        function coalesce<T1, T2, T3, T4>(p1:T1|null, p2:T2|null, p3:T3|null, p4:T4|null, opts:bestGlobals.coalesce.throwErrorIfUndefined):T1|T2|T3|T4;
+        function coalesce<T1, T2, T3, T4, T5>(p1:T1|null, p2:T2|null, p3:T3|null, p4:T4|null, p5:T5|null, opts:bestGlobals.coalesce.throwErrorIfUndefined):T1|T2|T3|T4|T5;
         namespace coalesce{
             class throwErrorIfUndefined{
                 constructor(message:string)
