@@ -13,7 +13,7 @@ declare module "best-globals"{
         }
         function isPlainObject(other:any):boolean
         function deepCopy<T>(object:T):T
-        function changing<T extends {}, T2 extends {}>(origin:T, changes:T2, opts:{
+        function changing<T extends {}, T2 extends {}>(origin:T, changes:T2, opts?:{
             mostlyPlain:boolean, nullIsUndefined:boolean, deletingValue:keyof {}, 
         }):T & T2
         class RealDate extends Date{
