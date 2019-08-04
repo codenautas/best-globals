@@ -30,18 +30,48 @@ declare module "best-globals"{
             function array(parts:number[]):RealDate
             function today():RealDate
         }
-        class DateTime{
+        interface DateMethods{
+            toYmd():string
+            toHms():string
+            toYmdHms():string
+            toYmdHmsM():string
+            toYmdHmsMm():string
+        }
+        class DateTime implements DateMethods{
             toPlainString():string
             toPostgres():string
             add(ti:TimeInterval):DateTime
             sub(ti:TimeInterval):DateTime
             sub(dt:DateTime):TimeInterval
+            sub({ms:number}):DateTime
+            add({ms:number}):DateTime
+            toHms():string
+            toYmd():string
+            toHms():string
+            toYmdHms():string
+            toYmdHmsM():string
+            toYmdHmsMm():string
             sameValue(ti:DateTime):boolean
+            isValidTime(hours:number,minutes:number,seconds:number,ms:number):boolean
+            getFullYear():number
+            getMonth():number
+            getDate():number
+            getHours():number
+            getMinutes():number
+            getSeconds():number
+            getMilliseconds():number
+            getMicroseconds():number
+            valueOf():number
+            getTime():number
         }
         namespace datetime{
             function now():DateTime
             function iso(IsoString:string):DateTime
             function iso(IsoString:string|null, opts:TimeOpts):DateTime|null
+            function ymdHms(year:number,month:number,day:number,hours:number,minutes:number,seconds:number):DateTime
+            function ymdHmsM(year:number,month:number,day:number,hours:number,minutes:number,seconds:number,ms:number):DateTime
+            function ymdHmsMm(year:number,month:number,day:number,hours:number,minutes:number,seconds:number,ms:number,micros:number):DateTime
+            function ms(ms:number):DateTime
             function array(parts:number[]):DateTime
         }
         class TimeInterval{
