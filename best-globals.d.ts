@@ -11,7 +11,18 @@ declare module "best-globals"{
                 constructor(message:string)
             }
         }
-        function isPlainObject(other:any):boolean
+        function isPlainObject(object:Date):false
+        function isPlainObject(object:RegExp):false
+        function isPlainObject<T,K>(object:Map<T,K>):false
+        function isPlainObject(object:Symbol):false
+        function isPlainObject(object:number):false
+        function isPlainObject(object:string):false
+        function isPlainObject(object:boolean):false
+        function isPlainObject<T extends Function>(object:T):false
+        function isPlainObject<T>(object:T[]):false
+        function isPlainObject<T extends {}>(object:T):true
+        function isPlainObject(object:Object):object is Object
+        function isPlainObject(object:any):boolean
         function deepCopy<T>(object:T):T
         function changing<T extends {}, T2 extends {}>(origin:T, changes:T2, opts?:{
             mostlyPlain:boolean, nullIsUndefined:boolean, deletingValue:keyof {}, 
@@ -43,8 +54,8 @@ declare module "best-globals"{
             add(ti:TimeInterval):DateTime
             sub(ti:TimeInterval):DateTime
             sub(dt:DateTime):TimeInterval
-            sub({ms:number}):DateTime
-            add({ms:number}):DateTime
+            sub(invervalPlainObject:{ms:number}):DateTime
+            add(invervalPlainObject:{ms:number}):DateTime
             toHms():string
             toYmd():string
             toHms():string
