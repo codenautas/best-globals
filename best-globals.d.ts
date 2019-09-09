@@ -106,6 +106,7 @@ declare module "best-globals"{
         function serie(spec:{from?:number, step?:number, length:number}):number[]
         function sameValues(x:any, y:any):boolean
         function isLowerIdent(text:string):boolean
+        function deepFreeze<T extends {}>(o:T):ReadOnly<T>
     }
     export = bestGlobals
 }

@@ -955,6 +955,20 @@ bestGlobals.isLowerIdent = function isLowerIdent(text){
     return text && typeof text === "string" && /^[_a-z][_a-z0-9]*$/.test(text);
 };
 
+bestGlobals.deepFreeze = function deepFreeze(o){
+    if(o && o instanceof Object){
+        if(o instanceof Array){
+            o.forEach(function(e){
+
+            })
+        }
+        for(var attr in o){
+            bestGlobals.deepFreeze(o[attr])
+        }
+        Object.freeze(o);
+    }
+    return o;
+}
 
 return bestGlobals;
 

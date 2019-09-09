@@ -1359,3 +1359,59 @@ describe("sameValues", function(){
     });
 });
 
+describe("deepFreeze", function(){
+    var deepFreeze = bestGlobals.deepFreeze;
+    it("returns the same object", function(){
+        var original = {a:1, b:['hi', 'world'], c:new Date()};
+        var same = deepFreeze(original);
+        expect(original == same).to.be.ok();
+        expect(original.b == same.b).to.be.ok();
+    })
+    it("freeze the root object", function(){
+        var original = {a:1, b:['hi', 'world', {sign:'!'}], c:new Date()};
+        var same = deepFreeze(original);
+        expect(function(){
+            original.a=2;
+        }).to.throwError(/read only/);
+    })
+    it("freeze the array deepth 1", function(){
+        var original = {a:1, b:['hi', 'world', {sign:'!'}], c:new Date()};
+        var same = deepFreeze(original);
+        expect(function(){
+            original.b[0]='Hello';
+        }).to.throwError(/read only/);
+    })
+    it("freeze the object deepth 2", function(){
+        var original = {a:1, b:['hi', 'world', {sign:'!'}], c:new Date()};
+        var same = deepFreeze(original);
+        expect(function(){
+            original.b[2].sign='?';
+        }).to.throwError(/read only/);
+    })
+    it("freeze the object for addings", function(){
+        var original = {a:1, b:['hi', 'world', {sign:'!'}], c:new Date()};
+        var same = deepFreeze(original);
+        expect(function(){
+            original.b[2].space=' ';
+        }).to.throwError(/not extensible/);
+    })
+    it("freeze the array for addings", function(){
+        var original = {a:1, b:['hi', 'world', {sign:'!'}], c:new Date()};
+        var same = deepFreeze(original);
+        expect(function(){
+            original.b.push('\n');
+        }).to.throwError(/not extensible/);
+    })
+    it("freeze the object for deleting", function(){
+        var original = {a:1, b:['hi', 'world', {sign:'!'}], c:new Date()};
+        var same = deepFreeze(original);
+        expect(function(){
+            delete original.a;
+        }).to.throwError(/Cannot delete/);
+    })
+    it("can freeze a freezed object", function(){
+        var original = {a:1, b:['hi', 'world', {sign:'!'}], c:new Date()};
+        var same = deepFreeze(original);
+        var other = deepFreeze(same);
+    })
+})
