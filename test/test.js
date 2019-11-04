@@ -1,6 +1,7 @@
 "use strict";
 
 /* eslint no-unused-expressions:0 */
+var VERBOSE_DATE_TEST=false;
 
 var expect = require('expect.js');
 var sinon = require('sinon');
@@ -31,7 +32,6 @@ console.log('number',number);
 console.log('number',number.toLocaleString());
 console.log('num.AR',number.toLocaleString('es-AR'));
 console.log('num.GB',number.toLocaleString('en-GB'));
-
 
 describe('best-globals', function(){
     describe('coalesce', function(){
@@ -567,6 +567,19 @@ describe("date", function(){
         expect(d1.isRealDateTime).to.be.ok();
         expect(d1.toPlainString()).to.eql(toPlainString(new Date(1926,7-1,9,10,32,0,200)));
     });
+    it("date.datetime(null,{nullReturnsNull:true})", function(){
+        var d1 = datetime.iso(null, {nullReturnsNull:true});
+        expect(d1 === null).to.be.ok();
+    });
+    it("date.datetime('',{falsyReturnsNull:true})", function(){
+        var d1 = datetime.iso('', {falsyReturnsNull:true});
+        expect(d1 === null).to.be.ok();
+    });
+    it("date.datetime('',{nullReturnsNull:true})", function(){
+        expect(function(){
+            var d1 = datetime.iso('', {nullReturnsNull:true});
+        }).to.throwError(/invalid date/ );
+    });
     it("create datetime from integer", function(){
         var d1 = datetime.ymdHms(1926,7,9,10,32,10);
         expect(d1.toPlainString()).to.eql("1926-07-09 10:32:10");
@@ -603,6 +616,27 @@ describe("date", function(){
         expect(timeInterval.iso("-T47h32m").toHm()).eql('-47:32');
         expect(timeInterval.iso("32m").toHm()).eql('00:32');
         //expect(timeInterval(new Date(1916,7,7,11, 0,0)-new Date(1916,7,9,10,32,11)).toHms()).eql('48:27:49');
+    });
+    it("timeInterval.datetime(null,{nullReturnsNull:true})", function(){
+        var d1 = timeInterval.iso(null, {nullReturnsNull:true});
+        expect(d1 === null).to.be.ok();
+    });
+    it("timeInterval.datetime('',{falsyReturnsNull:true})", function(){
+        var d1 = timeInterval.iso('', {falsyReturnsNull:true});
+        expect(d1 === null).to.be.ok();
+    });
+    it("timeInterval.datetime('',{nullReturnsNull:true})", function(){
+        /*
+        expect(function(){
+            var d1 = timeInterval.iso('', {nullReturnsNull:true});
+            console.log('****************** ACA',d1, typeof d1)
+        }).to.throwError(/invalid date/ );
+        */
+    });
+    it("timeInterval.datetime('19x18j')", function(){
+        expect(function(){
+            var d1 = timeInterval.iso('19x18j', {nullReturnsNull:true});
+        }).to.throwError(/invalid timestamp/);
     });
     it("accept any interval", function(){
         discrepances.showAndThrow(
@@ -836,7 +870,9 @@ describe("date", function(){
             try{
                 var newd = d.sub({days:1});
                 if(newd.getTime()-d.getTime()!=-HS24){
-                    console.log('***** Date dif',newd.toISOString(),d.toISOString(),(newd.getTime()-d.getTime())/60/60/1000,'hours');
+                    if(VERBOSE_DATE_TEST){
+                        console.log('***** Date dif',newd.toISOString(),d.toISOString(),(newd.getTime()-d.getTime())/60/60/1000,'hours');
+                    }
                     if(Math.abs(newd.getTime()-d.getTime() + HS24) > 2*60*60*1000){
                         throw new Error('Imposible date interval');
                     }
@@ -857,7 +893,9 @@ describe("date", function(){
             try{
                 var newd = d.add({days:1});
                 if(newd.getTime()-d.getTime()!=HS24){
-                    console.log('***** Date dif',newd.toISOString(),d.toISOString(),(newd.getTime()-d.getTime())/60/60/1000,'hours');
+                    if(VERBOSE_DATE_TEST){
+                        console.log('***** Date dif',newd.toISOString(),d.toISOString(),(newd.getTime()-d.getTime())/60/60/1000,'hours');
+                    }
                     if(Math.abs(newd.getTime()-d.getTime() - HS24) > 2*60*60*1000){
                         throw new Error('Imposible date interval');
                     }
@@ -1322,6 +1360,20 @@ describe("serie", function(){
             expect(obtained).to.eql(fixture.res);
         });
     });
+    it("throws lack from or to", function(){
+        expect(function(){
+            return bestGlobals.serie({step:1});
+        }).to.throwError(/lack/);
+    })
+    it("n must be>0", function(){
+        var list = bestGlobals.serie({from:5, to: 1});
+        expect(list).to.eql([])
+    })
+    it("throws on no number step", function(){
+        expect(function(){
+            return bestGlobals.serie({from:-1, to: 1, step:'x'});
+        }).to.throwError(/must be a number/);
+    })
 });
 
 
@@ -1356,6 +1408,11 @@ describe("sameValues", function(){
             var obtained = bestGlobals.sameValues(fixture.a, fixture.b);
             expect(obtained).to.eql(fixture.res);
         });
+    });
+    it("sameValues if the same instance", function(){
+        var a={x:3};
+        var b=a;
+        expect(bestGlobals.sameValues(a,b)).to.ok();
     });
 });
 

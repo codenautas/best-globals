@@ -924,7 +924,7 @@ bestGlobals.serie = function serie(NorFirstOrObject, NifNoFirst){
         }
         return Array.apply(null, Array(n)).map(function (_, i) {return i*step+first;});
     }else{
-        throw new Error('ERRRO serie.step must be a number')
+        throw new Error('ERROR serie.step must be a number')
     }
 };
 
