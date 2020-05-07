@@ -98,7 +98,7 @@ declare module "best-globals"{
         function constructorName<T extends {}>(o:T):string
         function escapeRegExp(regExpString:string):RegExp
         function forOrder(text:string):string
-        function compareForOrder<T extends {}>(sortColumns:{column: keyof T, order?:1|-1, fun:<U>(x:U)=>U|string}[]):(row1:T, row2:T)=>0|1|-1
+        function compareForOrder<T extends {}>(sortColumns:{column: keyof T, order?:1|-1, fun?:<U>(x:U)=>U|string}[]):(row1:T, row2:T)=>0|1|-1
         function sleep(ms:number):Promise<void>
         function serie(length:number):number[]
         function serie(first:number, length:number):number[]
