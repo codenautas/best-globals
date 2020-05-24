@@ -249,12 +249,14 @@ describe('mini-tools config functions', function(){
         var obtained = changing({
             normal:1,
             forDelete:2,
+            stay:'data-to-delete'
         },{
             normal:3,
             forDelete:'data-to-delete'
         },bestGlobals.changing.options({deletingValue:'data-to-delete'}));
         expect(obtained).to.eql({
-            normal:3
+            normal:3,
+            stay:'data-to-delete'
         })
     });
     it("deep 'bestGlobals.changing' function must delete undefineds", function(){
