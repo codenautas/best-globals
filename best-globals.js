@@ -267,6 +267,13 @@ var dateMethods=[
         r.push(npad(this.getDate(),2));
         return r.join('-');        
     }},
+    {name: "toDmy", fun: function toYmd() {
+        var r = [];
+        r.push(this.getDate());
+        r.push(this.getMonth()+1);
+        r.push(this.getFullYear());
+        return r.join('/');        
+    }},
     {name: "toHms", fun: function toHms() {
         var r = [];
         r.push(npad(this.getHours(),2));

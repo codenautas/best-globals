@@ -821,9 +821,9 @@ describe("date", function(){
         [
             {i:new Date(2015,  1, 10),            toYmd:'2015-02-10', toHms:'00:00:00', toYmdHms:'2015-02-10 00:00:00', toYmdHmsM:'2015-02-10 00:00:00.000'},
             {i:new Date(1935, 11,  1),            toYmd:'1935-12-01', toHms:'00:00:00', toYmdHms:'1935-12-01 00:00:00'},
-            {i:new Date(1935, 11, 31),            toYmd:'1935-12-31', toHms:'00:00:00'},
-            {i:new Date(2035,  0,  1),            toYmd:'2035-01-01', toHms:'00:00:00'},
-            {i:new Date(2035,  0,  1,  3,  3),    toYmd:'2035-01-01', toHms:'03:03:00', hasHour:true},
+            {i:new Date(1935, 11, 31),            toYmd:'1935-12-31', toHms:'00:00:00', toDmy:'31/12/1935'},
+            {i:new Date(2035,  0,  1),            toYmd:'2035-01-01', toHms:'00:00:00', toDmy:'1/1/2035'},
+            {i:new Date(2035,  0,  1,  3,  3),    toYmd:'2035-01-01', toHms:'03:03:00', toDmy:'1/1/2035', hasHour:true},
             {i:new Date(1935, 11,  1, 10, 11, 12),                    toHms:'10:11:12', hasHour:true},
             {i:new Date(1935, 11,  1,  0,  1, 2 ),                    toHms:'00:01:02', hasHour:true},
             {i:new Date(1969,  1,  2, 14, 2, 30),                     toYmdHms:'1969-02-02 14:02:30', hasHour:true},
@@ -834,7 +834,7 @@ describe("date", function(){
             {i:new Date(10511,1,3),              toYmd:'10511-02-03'},
             {i:new Date(511,1,3),                toYmd:'511-02-03'},
         ].forEach(function(param){
-            "toYmd,toHms,toYmdHms,toYmdHmsM".split(',').forEach(function(functionName){
+            "toDmy,toYmd,toHms,toYmdHms,toYmdHmsM".split(',').forEach(function(functionName){
                 if(param[functionName]) {
                     it(functionName+"("+param.i.toLocaleString()+") => ["+param[functionName]+"]", function(){
                         var auditCopyParam = auditCopy.inObject(param);
