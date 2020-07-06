@@ -27,7 +27,7 @@ declare module "best-globals"{
         function changing<T extends {}, T2 extends {}>(origin:T, changes:T2, opts?:{
             mostlyPlain:boolean, nullIsUndefined:boolean, deletingValue:keyof {}, 
         }):T & T2
-        class RealDate extends Date{
+        class RealDate extends Date implements DateMethods{
             add(ti:TimeInterval):RealDate
             sub(ti:TimeInterval):RealDate
             sub(d:RealDate):TimeInterval
@@ -42,6 +42,7 @@ declare module "best-globals"{
             function today():RealDate
         }
         interface DateMethods{
+            toDmy():string
             toYmd():string
             toHms():string
             toYmdHms():string
