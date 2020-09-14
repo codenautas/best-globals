@@ -274,6 +274,12 @@ var dateMethods=[
         r.push(this.getFullYear());
         return r.join('/');        
     }},
+	{name: "toHm", fun: function toHm() {
+        var r = [];
+        r.push(npad(this.getHours(),2));
+        r.push(npad(this.getMinutes(),2));
+        return r.join(':');
+    }},
     {name: "toHms", fun: function toHms() {
         var r = [];
         r.push(npad(this.getHours(),2));

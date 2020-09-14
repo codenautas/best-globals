@@ -59,7 +59,7 @@ declare module "best-globals"{
             add(invervalPlainObject:{ms:number}):DateTime
             toHms():string
             toYmd():string
-            toHms():string
+            toHm():string
             toYmdHms():string
             toYmdHmsM():string
             toYmdHmsMm():string
