@@ -32,6 +32,12 @@ declare module "best-globals"{
             sub(ti:TimeInterval):RealDate
             sub(d:RealDate):TimeInterval
             sameValue(ti:RealDate):boolean
+            toDmy():string
+            toYmd():string
+            toHms():string
+            toYmdHms():string
+            toYmdHmsM():string
+            toYmdHmsMm():string
         }
         type TimeOpts = {falsyReturnsNull?:true, nullReturnsNull?:true};
         namespace date{
