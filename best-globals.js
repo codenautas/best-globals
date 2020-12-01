@@ -477,6 +477,20 @@ bestGlobals.Datetime.prototype.toPlainString = function toPlainString(){
 bestGlobals.Datetime.prototype.toPostgres = function toPostgres(){
     return this.toPlainString();
 }
+
+bestGlobals.Datetime.prototype.toLocaleString = function toPostgres(){
+    var str=this.toDmy()+' '+this.toHms();
+    var prune = function(what){
+        if(str.substr(str.length-what.length)==what){
+            str=str.substr(0,str.length-what.length);
+            return true;
+        }
+        return false;
+    }
+    /* eslint no-unused-expressions: 0 */
+    prune(':00') && prune(' 00:00');
+    return str;
+}
 /*
 bestGlobals.Datetime.prototype.add = function add(dt){
     return bestGlobals.timeInterval({ms:this.getTime()+dt.getTime()});

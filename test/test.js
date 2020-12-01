@@ -553,6 +553,8 @@ describe("date", function(){
         var d1 = datetime.iso("1926-07-09 10:32:00.000");
         expect(d1.isRealDateTime).to.be.ok();
         expect(d1.toPlainString()).to.eql("1926-07-09 10:32");
+        expect(d1.toDmy()).to.eql("9/7/1926");
+        expect(d1.toLocaleString()).to.eql("9/7/1926 10:32");
     });
     /*--*/ it("create datetime from string with 6 digits", function(){
         var d1 = datetime.iso("1926-07-09 10:32:00.000001");

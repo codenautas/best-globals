@@ -51,6 +51,7 @@ declare module "best-globals"{
         }
         class DateTime implements DateMethods{
             toPlainString():string
+            toLocaleString():string
             toPostgres():string
             add(ti:TimeInterval):DateTime
             sub(ti:TimeInterval):DateTime
@@ -59,6 +60,7 @@ declare module "best-globals"{
             add(invervalPlainObject:{ms:number}):DateTime
             toHms():string
             toYmd():string
+            toDmy():string
             toHm():string
             toYmdHms():string
             toYmdHmsM():string
