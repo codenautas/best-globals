@@ -24,9 +24,13 @@ declare module "best-globals"{
         function isPlainObject(object:Object):object is Object
         function isPlainObject(object:any):boolean
         function deepCopy<T>(object:T):T
-        function changing<T extends {}, T2 extends {}>(origin:T, changes:T2, opts?:{
-            mostlyPlain:boolean, nullIsUndefined:boolean, deletingValue:keyof {}, 
-        }):T & T2
+        class ChangingOptions{}
+        function changing<T extends {}, T2 extends {}>(origin:T, changes:T2, opts?:ChangingOptions):T & T2
+        namespace changing{
+            function options(opts:{
+                mostlyPlain?:boolean, nullIsUndefined?:boolean, deletingValue:keyof {}|null|undefined, 
+            }):ChangingOptions
+        }
         class RealDate extends Date implements DateMethods{
             add(ti:TimeInterval):RealDate
             sub(ti:TimeInterval):RealDate
@@ -115,7 +119,7 @@ declare module "best-globals"{
         function serie(spec:{from?:number, step?:number, length:number}):number[]
         function sameValues(x:any, y:any):boolean
         function isLowerIdent(text:string):boolean
-        function deepFreeze<T extends {}>(o:T):ReadOnly<T>
+        function deepFreeze<T extends {}>(o:T):Readonly<T>
     }
     export = bestGlobals
 }
