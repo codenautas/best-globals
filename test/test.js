@@ -1080,6 +1080,7 @@ describe('escapeRegExp', function(){
         {exp:'a|b' , no:'a'   , escaped:'a\\|b'     },
         {exp:'(a)' , no:'a'   , escaped:'\\(a\\)'   },
         {exp:'a{2}', no:'aa'  , escaped:'a\\{2\\}'  },
+        {exp:'[a-c]',no:'b'   , escaped:'\\[a-c\\]' },
     ].forEach(function(fixture) {
         it(JSON.stringify(fixture),function(){
             var escaped = bestGlobals.escapeRegExp(fixture.exp);
@@ -1090,6 +1091,7 @@ describe('escapeRegExp', function(){
             if('escaped' in fixture){
                 expect(escaped).to.be(fixture.escaped);
             }
+            expect(new RegExp(bestGlobals.escapeStringRegexp(fixture.exp).replace(/\\x2d/,'-'))).to.eql(r);
         }); 
     });
 });
@@ -1474,5 +1476,21 @@ describe("deepFreeze", function(){
         var original = {a:1, b:['hi', 'world', {sign:'!'}], c:new Date()};
         var same = deepFreeze(original);
         var other = deepFreeze(same);
+    })
+})
+
+describe("escapeStringRegexp", function(){
+    var fixtures =[
+        ['\\ ^ $ * + ? . ( ) | { } [ ]', '\\\\ \\^ \\$ \\* \\+ \\? \\. \\( \\) \\| \\{ \\} \\[ \\]', /\\ \^ \$ \* \+ \? \. \( \) \| \{ \} \[ \]/],
+        ['foo - bar', 'foo \\x2d bar', /foo \x2d bar/],
+        ['-', '\\x2d', /\x2d/]
+    ];
+    fixtures.forEach(f=>{
+        it('fixture: '+f[0], function(){
+            var escaped = bestGlobals.escapeStringRegexp(f[0]);
+            expect(escaped).to.eql(f[1]);
+            expect(new RegExp(escaped)).to.eql(f[2]);
+            expect(new RegExp(bestGlobals.escapeRegExp(f[0]).replace(/-/,'\\x2d'))).to.eql(f[2]);
+        })
     })
 })
