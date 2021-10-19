@@ -343,8 +343,8 @@ bestGlobals.dateForceIfNecesary = function dateForceIfNecesary(dt, strict) {
     if(!strict){
         if(dt==null) return null;
     }
-    if(!dt.ms && ! bestGlobals.date.isOK(dt)) { throw new Error('invalid date'); }
-    var d=new Date(dt.ms || dt.getTime());
+    if(dt.ms == null && ! bestGlobals.date.isOK(dt)) { throw new Error('invalid date'); }
+    var d=new Date(dt.ms != null ? dt.ms : dt.getTime());
     var delta=4*60*60*1000;
     do{
         if(new Date(d-DELTA4DATE).getDate()!=d.getDate()){

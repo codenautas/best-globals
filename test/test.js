@@ -886,7 +886,7 @@ describe("date", function(){
         var d=bestGlobals.date.today();
         var n=100000;
         while(n--){
-            try{
+            // try{
                 var newd = d.sub({days:1});
                 if(newd.getTime()-d.getTime()!=-HS24){
                     if(VERBOSE_DATE_TEST){
@@ -897,12 +897,12 @@ describe("date", function(){
                     }
                 }
                 d=newd;
-            }catch(err){
-                console.log("****************** ERROR in date ",d)
-                throw err;
-                console.log(err);
-                throw new Error(err.message+' for '+d);
-            }
+            // }catch(err){
+            //     console.log("****************** ERROR in date ",d)
+            //     throw err;
+            //     console.log(err);
+            //     throw new Error(err.message+' for '+d);
+            // }
         }
         expect(true).to.be.ok();
     });
