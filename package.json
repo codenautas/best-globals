@@ -44,7 +44,7 @@
   "scripts": {
     "test": "mocha --reporter spec --bail --check-leaks test/",
     "test-ci": "nyc node_modules/mocha/bin/_mocha --report lcovonly -- --reporter spec --check-leaks test/",
-    "test-cov": "nyc node_modules/mocha/bin/_mocha && nyc report --reporter=html --check-leaks test/",
+    "test-cov": "nyc node_modules/mocha/bin/_mocha && nyc report --reporter=html --check-leaks test/ && nyc report --reporter=lcov",
     "test-nav": "node server-for-test/karma-server.js --karma karma.conf.js --single-run",
     "test-nav-inf": "node server-for-test/karma-server.js --karma karma.conf.js"
   },

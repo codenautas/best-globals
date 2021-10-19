@@ -354,7 +354,8 @@ bestGlobals.dateForceIfNecesary = function dateForceIfNecesary(dt, strict) {
         if(!strict){
             if(new Date(d.getTime()-delta).getDate()!=d.getDate()){
                 d = new Date(d.getTime()-delta)
-                if(delta==1){
+                /* istanbul ignore if */
+                if(delta<=1){
                     delta=0;
                 }else{
                     delta=Math.ceil(delta/2);

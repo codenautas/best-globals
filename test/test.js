@@ -828,7 +828,7 @@ describe("date", function(){
             {i:new Date(1935, 11, 31),            toYmd:'1935-12-31', toHms:'00:00:00', toDmy:'31/12/1935'},
             {i:new Date(2035,  0,  1),            toYmd:'2035-01-01', toHms:'00:00:00', toDmy:'1/1/2035'},
             {i:new Date(2035,  0,  1,  3,  3),    toYmd:'2035-01-01', toHms:'03:03:00', toDmy:'1/1/2035', hasHour:true},
-            {i:new Date(1935, 11,  1, 10, 11, 12),                    toHms:'10:11:12', hasHour:true},
+            {i:new Date(1935, 11,  1, 10, 11, 12),                    toHms:'10:11:12', toHm:'10:11', hasHour:true},
             {i:new Date(1935, 11,  1,  0,  1, 2 ),                    toHms:'00:01:02', hasHour:true},
             {i:new Date(1969,  1,  2, 14, 2, 30),                     toYmdHms:'1969-02-02 14:02:30', hasHour:true},
             {i:new Date(1969,  1,  2, 14, 2),                         toYmdHms:'1969-02-02 14:02:00', hasHour:true},
@@ -838,7 +838,7 @@ describe("date", function(){
             {i:new Date(10511,1,3),              toYmd:'10511-02-03'},
             {i:new Date(511,1,3),                toYmd:'511-02-03'},
         ].forEach(function(param){
-            "toDmy,toYmd,toHms,toYmdHms,toYmdHmsM".split(',').forEach(function(functionName){
+            "toDmy,toYmd,toHms,toYmdHms,toYmdHmsM,toHm".split(',').forEach(function(functionName){
                 if(param[functionName]) {
                     it(functionName+"("+param.i.toLocaleString()+") => ["+param[functionName]+"]", function(){
                         var auditCopyParam = auditCopy.inObject(param);
@@ -921,6 +921,10 @@ describe("date", function(){
         it("ajust one ms", function(){
             var d=bestGlobals.dateForceIfNecesary({ms:bestGlobals.date.ymd(2019,3,22).getTime()-1});
             expect(d.isRealDate).to.be.ok();
+        })
+        it("accpet nulls", function(){
+            var d=bestGlobals.dateForceIfNecesary(null);
+            expect(d===null).to.be.ok();
         })
     })
     describe("date add", function(){
@@ -1212,7 +1216,7 @@ describe('comparing', function(){
 });
 
 describe("Promises", function(){
-    var d=40 + (typeof navigator !== "undefined" && navigator.userAgent.match(/Firefox\/[0-9.]+/)?1000:0);
+    var d=200 + (typeof navigator !== "undefined" && navigator.userAgent.match(/Firefox\/[0-9.]+/)?1000:0);
     it("sleeps and pass the returned value", function(){
         var now=new Date();
         return Promise.resolve(42).then(bestGlobals.sleep(200)).then(function(value){
@@ -1495,5 +1499,10 @@ describe("escapeStringRegexp", function(){
             expect(new RegExp(escaped)).to.eql(f[2]);
             expect(new RegExp(bestGlobals.escapeRegExp(f[0]).replace(/-/,'\\x2d'))).to.eql(f[2]);
         })
+    })
+    it('rejects non strings', function(){
+        expect(function(){
+            bestGlobals.escapeStringRegexp(7);
+        }).to.throwError(/Expect.+a string/)
     })
 })
