@@ -896,6 +896,8 @@ describe("date", function(){
                 d=newd;
             }catch(err){
                 console.log("****************** ERROR in date ",d)
+                throw err;
+                console.log(err);
                 throw new Error(err.message+' for '+d);
             }
         }
@@ -919,6 +921,7 @@ describe("date", function(){
                 d=newd;
             }catch(err){
                 console.log("****************** ERROR in date ",d)
+                throw err;
                 throw new Error(err.message+' for '+d);
             }
         }

@@ -39,7 +39,7 @@
   "main": "best-globals.js",
   "types": "best-globals.d.ts",
   "engines": {
-    "node": ">= 0.12.0"
+    "node": ">= 12"
   },
   "scripts": {
     "test": "mocha --reporter spec --bail --check-leaks test/",
