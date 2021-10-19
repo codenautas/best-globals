@@ -1212,7 +1212,7 @@ describe('comparing', function(){
 });
 
 describe("Promises", function(){
-    var d=40;
+    var d=40 + (typeof navigator !== "undefined" && navigator.userAgent.match(/Firefox\/[0-9.]+/)?1000:0);
     it("sleeps and pass the returned value", function(){
         var now=new Date();
         return Promise.resolve(42).then(bestGlobals.sleep(200)).then(function(value){
@@ -1222,6 +1222,7 @@ describe("Promises", function(){
         })
     });
     it("sleeps directly", function(){
+        this.timeout(5000)
         var FUTURE_DELTA=1; // https://travis-ci.org/codenautas/best-globals/jobs/401541694 tardó un milisegundo menos
         var now=new Date();
         return bestGlobals.sleep(400).then(function(){
@@ -1437,21 +1438,21 @@ describe("deepFreeze", function(){
         var same = deepFreeze(original);
         expect(function(){
             original.a=2;
-        }).to.throwError(/read only/);
+        }).to.throwError(/read.only/);
     })
     it("freeze the array deepth 1", function(){
         var original = {a:1, b:['hi', 'world', {sign:'!'}], c:new Date()};
         var same = deepFreeze(original);
         expect(function(){
             original.b[0]='Hello';
-        }).to.throwError(/read only/);
+        }).to.throwError(/read.only/);
     })
     it("freeze the object deepth 2", function(){
         var original = {a:1, b:['hi', 'world', {sign:'!'}], c:new Date()};
         var same = deepFreeze(original);
         expect(function(){
             original.b[2].sign='?';
-        }).to.throwError(/read only/);
+        }).to.throwError(/read.only/);
     })
     it("freeze the object for addings", function(){
         var original = {a:1, b:['hi', 'world', {sign:'!'}], c:new Date()};
@@ -1465,14 +1466,14 @@ describe("deepFreeze", function(){
         var same = deepFreeze(original);
         expect(function(){
             original.b.push('\n');
-        }).to.throwError(/not extensible/);
+        }).to.throwError(/not extensible|non-writable/);
     })
     it("freeze the object for deleting", function(){
         var original = {a:1, b:['hi', 'world', {sign:'!'}], c:new Date()};
         var same = deepFreeze(original);
         expect(function(){
             delete original.a;
-        }).to.throwError(/Cannot delete/);
+        }).to.throwError(/Cannot delete|non-configurable/);
     })
     it("can freeze a freezed object", function(){
         var original = {a:1, b:['hi', 'world', {sign:'!'}], c:new Date()};

@@ -386,7 +386,7 @@ bestGlobals.date.isOK = function isOK(dt) {
 
 bestGlobals.date.ymd = function ymd(y, m, d) {
     if(! bestGlobals.date.isValidDate(y, m, d)) { throw new Error('invalid date'); }
-    return bestGlobals.date(new Date(y, m-1, d, 0, 0, 0, 0));
+    return bestGlobals.dateForceIfNecesary(new Date(y, m-1, d, 0, 0, 0, 0), false);
 };
 
 // var reDate = '([12][0-9]{3})([-/])(([1][0-2])|(0?[1-9]))\\3(([0123][0-9]))';

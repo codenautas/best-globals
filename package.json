@@ -1,7 +1,7 @@
 {
   "name": "best-globals",
   "description": "common global function and constants - i.e. coalesce",
-  "version": "0.10.32",
+  "version": "0.10.33",
   "author": "Codenautas <codenautas@googlegroups.com>",
   "license": "MIT",
   "repository": "codenautas/best-globals",
@@ -45,7 +45,8 @@
     "test": "mocha --reporter spec --bail --check-leaks test/",
     "test-ci": "nyc node_modules/mocha/bin/_mocha --report lcovonly -- --reporter spec --check-leaks test/",
     "test-cov": "nyc node_modules/mocha/bin/_mocha && nyc report --reporter=html --check-leaks test/",
-    "test-nav": "node server-for-test/karma-server.js --karma karma.conf.js --single-run"
+    "test-nav": "node server-for-test/karma-server.js --karma karma.conf.js --single-run",
+    "test-nav-inf": "node server-for-test/karma-server.js --karma karma.conf.js"
   },
   "files": [
     "best-globals.js",
