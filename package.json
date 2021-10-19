@@ -18,11 +18,22 @@
   "dependencies": {},
   "devDependencies": {
     "colors": "~1.4.0",
+    "cookie-parser": "^1.4.5",
     "expect.js": "~0.3.1",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "karma": "^6.3.4",
+    "karma-chrome-launcher": "^3.1.0",
+    "karma-coverage": "^2.0.3",
+    "karma-coverage-html-index-reporter": "^1.0.2",
+    "karma-expect": "^1.1.3",
+    "karma-firefox-launcher": "^2.1.1",
+    "karma-mocha": "^2.0.1",
     "nyc": "~15.1.0",
-    "mocha": "~8.3.2",
-    "sinon": "~10.0.0",
-    "audit-copy": "~0.0.5",
+    "mocha": "~9.1.3",
+    "require-bro": "^0.2.2",
+    "sinon": "~11.1.2",
+    "audit-copy": "~0.1.0",
     "discrepances": "~0.2.6"
   },
   "main": "best-globals.js",
@@ -34,7 +45,7 @@
     "test": "mocha --reporter spec --bail --check-leaks test/",
     "test-ci": "nyc node_modules/mocha/bin/_mocha --report lcovonly -- --reporter spec --check-leaks test/",
     "test-cov": "nyc node_modules/mocha/bin/_mocha && nyc report --reporter=html --check-leaks test/",
-    "start": "node examples/server/server.js"
+    "test-nav": "node server-for-test/karma-server.js --karma karma.conf.js --single-run"
   },
   "files": [
     "best-globals.js",

@@ -5,8 +5,10 @@ var VERBOSE_DATE_TEST=false;
 
 var expect = require('expect.js');
 var sinon = require('sinon');
-var assert = require('assert');
-var bestGlobals = require('..');
+if(typeof process !== "undefined"){
+    var assert = require('assert');
+}
+var bestGlobals = require('../best-globals.js');
 var auditCopy = require('audit-copy');
 var discrepances = require('discrepances');
 var dig = bestGlobals.dig;
@@ -844,8 +846,11 @@ describe("date", function(){
                             expect(date(param.i)[functionName]()).to.eql(param[functionName]);
                         }
                         expect(datetime.ms(param.i.getTime())[functionName]()).to.eql(param[functionName]);
-                        var equalComparation = assert.deepStrictEqual || assert.deepEqual;
-                        equalComparation(auditCopy.inObject(param),auditCopyParam);
+                        if(typeof process !== "undefined"){
+                            // var equalComparation = assert.deepStrictEqual || assert.deepEqual;
+                            // equalComparation(auditCopy.inObject(param),auditCopyParam);
+                        }
+                        discrepances.showAndThrow(auditCopy.inObject(param),auditCopyParam)
                     });
                 }
             });
@@ -1027,10 +1032,7 @@ describe('functionName', function(){
     var vf = function varFun(){};
     var anonymous = function(){};
     var forceAno = function(){};
-    if(process.versions.node.split('.')[0]>=4){
-        // for coverage: emulate previous version anonymous functions:
-        Object.defineProperty(forceAno, 'name', {get: function(){ return null; }});
-    }
+    Object.defineProperty(forceAno, 'name', {get: function(){ return null; }});
     [
         {val:globalFun, name:'globalFun'},
         {val:localFun , name:'localFun' },
@@ -1051,7 +1053,7 @@ describe('functionName', function(){
 
 describe('constructorName', function(){
     function MiObj() {}
-    function Tainted() {  if(! process.version.match(/^(v0.12)/)) { delete this.constructor.name; } } // coverage
+    function Tainted() {  delete this.constructor.name; } // coverage
     [
         {val:{}, name:'Object'},
         {val:new Date, name:'Date'},
