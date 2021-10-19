@@ -338,6 +338,13 @@ describe('dig', function(){
     if('example', function(){
         var obtained = _({name:'Argentina', lang:'es', other:77, stats:{anualCpi:50, pob:400000}} , {name:_, stats:_({pob:_}), democray:_.defualt(true)});
     })
+    it('explained', function(){
+        var input   ={want:'a', want2:'b', dont:'c', dont2:{}};
+        var expected={want:'a', want2:'b'};
+        var opts    ={want:_, want2:_.default('x'),want3:_};
+        var obtained = dig('message', opts)(input);
+        expect(obtained).to.eql(expected);
+    })
     var fixtures=[{
         name:'simple',
         input   :{want:'a', want2:'b', dont:'c', dont2:{}},

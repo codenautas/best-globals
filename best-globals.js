@@ -171,6 +171,7 @@ bestGlobals.dig = function dig(description, wanted){
 };
 
 bestGlobals.dig.record = function digrecord(description, wanted){
+    /* istanbul ignore else */
     if(arguments.length==1){
         if(typeof description==="string"){
             return bestGlobals.dig;
