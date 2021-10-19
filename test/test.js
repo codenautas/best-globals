@@ -753,6 +753,9 @@ describe("date", function(){
        expect(datetime.iso("2016-12-02 01:02:03").sameValue(datetime.iso("2016-12-02 01:02:03"))).to.be.ok();
        expect(datetime.iso).withArgs("2016-12/02").to.throwError(invalidErr);
     });
+    it("should validate 1970-1-2", function() { expect(bestGlobals.date.isValidDate(1970,1,2)).to.be.ok(); });
+    it("should validate 1969-12-31", function() { expect(bestGlobals.date.isValidDate(1969,12,31)).to.be.ok(); });
+    it("should validate 1970-1-1", function() { expect(bestGlobals.date.isValidDate(1970,1,1)).to.be.ok(); });
     it("should validate y/d/m", function() {
         var isValidDate = bestGlobals.date.isValidDate;
         expect(isValidDate(1900,1,1)).to.be.ok();
@@ -787,7 +790,7 @@ describe("date", function(){
        expect(isOK(2016)).to.not.be.ok();
        //expect(isOK(new Date('foo-bar 2014'))).to.not.be.ok();
     });
-    [ [7], [3,4], [3,4,2010,4], [1992,4,4,1], ["1992-12-12"], [null] ].forEach(function(invalidParams){
+     [ [7], [3,4], [3,4,2010,4], [1992,4,4,1], ["1992-12-12"], [null] ].forEach(function(invalidParams){
         it("date.array rejects invalid input: "+JSON.stringify(invalidParams), function(){
             expect(function(){
                 date.array(invalidParams);
