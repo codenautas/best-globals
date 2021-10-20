@@ -8,8 +8,9 @@ common global function and constants - i.e. coalesce
 [![downloads](https://img.shields.io/npm/dm/best-globals.svg)](https://npmjs.org/package/best-globals)
 [![build](https://github.com/codenautas/best-globals/actions/workflows/node.js.yml/badge.svg)](https://github.com/codenautas/best-globals/actions/workflows/node.js.yml)
 [![coverage](https://img.shields.io/coveralls/codenautas/best-globals/master.svg)](https://coveralls.io/r/codenautas/best-globals)
-[![dependencies](https://img.shields.io/david/codenautas/best-globals.svg)](https://david-dm.org/codenautas/best-globals)
-[![outdated-deps](https://img.shields.io/github/issues-search/codenautas/best-globals?label=outdated-deps&query=is%3Apr%20author%3Aapp%2Fdependabot%20is%3Aopen)](https://github.com/codenautas/best-globals/pulls/app%2Fdependabot)
+[![outdated-deps](https://img.shields.io/github/issues-search/codenautas/best-globals?color=9cf&label=outdated-deps&query=is%3Apr%20author%3Aapp%2Fdependabot%20is%3Aopen)](https://github.com/codenautas/best-globals/pulls/app%2Fdependabot)
+
+https://img.shields.io/github/issues-search?color=9cf&query=is%3Aopen%20is%3Apr%20author%3Aapp%2Fdependabot
 
 
 language: ![English](https://raw.githubusercontent.com/codenautas/multilang/master/img/lang-en.png)
