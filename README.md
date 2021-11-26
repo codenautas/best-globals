@@ -10,8 +10,6 @@ common global function and constants - i.e. coalesce
 [![coverage](https://img.shields.io/coveralls/codenautas/best-globals/master.svg)](https://coveralls.io/r/codenautas/best-globals)
 [![outdated-deps](https://img.shields.io/github/issues-search/codenautas/best-globals?color=9cf&label=outdated-deps&query=is%3Apr%20author%3Aapp%2Fdependabot%20is%3Aopen)](https://github.com/codenautas/best-globals/pulls/app%2Fdependabot)
 
-https://img.shields.io/github/issues-search?color=9cf&query=is%3Aopen%20is%3Apr%20author%3Aapp%2Fdependabot
-
 
 language: ![English](https://raw.githubusercontent.com/codenautas/multilang/master/img/lang-en.png)
 also available in:
@@ -42,6 +40,9 @@ Use `coalesce.throwError(message)` for throw an Exception if all parameters are 
 
 Use `coalesce.throwErrorIfUndefined(message)` for throw an Exception if all parameters are undefined.
 
+`coalesce` is similar to `??`, but `coalesce` with `null` and `undefined` returns `null`,
+and `??` returns the last. Also `coalesce` can be used with his auxiliar functions `throwError` and `throwErrorIfUndefined`.
+
 
 ```js
 var coalesce = require('best-globals').coalesce;
@@ -49,7 +50,13 @@ var coalesce = require('best-globals').coalesce;
 console.log(coalesce(1,2)); // = 1
 console.log(coalesce(null,3)); // = 3
 console.log(coalesce(null,undefined,false,4)); // = false
+console.log(coalesce(null,undefined)); // = null [1]
+console.log(coalesce(undefined,null)); // = null
+console.log(coalesce(undefined,undefined)); // = undefined
+console.log(coalesce(undefined,coalesce.throwErrorIfUndefined('name'))); // = throw an Error [1]
 ```
+
+**Note** `[1]` the behavior differs from `??`
 
 
 ### changing(originalConfig, changes, options)
