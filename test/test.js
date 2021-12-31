@@ -9,6 +9,7 @@ if(typeof process !== "undefined"){
     var assert = require('assert');
 }
 var bestGlobals = require('../best-globals.js');
+var {compareForOrder} = bestGlobals;
 var auditCopy = require('audit-copy');
 var discrepances = require('discrepances');
 var dig = bestGlobals.dig;
@@ -1201,7 +1202,7 @@ describe('comparing', function(){
             {column:2, },
             {column:0, order:-1},
         ]
-        data.sort(bestGlobals.compareForOrder(criteria));
+        data.sort(compareForOrder(criteria));
         expect(data).to.eql(expected);
     })
     var columnsOrder=[

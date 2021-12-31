@@ -796,7 +796,7 @@ bestGlobals.forOrder.Native = function forOrderNative(a){
 bestGlobals.nullsOrder = 1; // 1=last -1=first;
 
 bestGlobals.compareForOrder = function compareForOrder(sortColumns){
-    var thisModule = this;
+    var thisModule = this || bestGlobals;
     return function forOrderComparator(row1,row2){
         var column;
         var i=0;
