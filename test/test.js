@@ -1520,3 +1520,18 @@ describe("escapeStringRegexp", function(){
         }).to.throwError(/Expect.+a string/)
     })
 })
+
+describe("simplifyText", function(){
+    var fixtures =[
+        ['¡Ésta!', '¡Esta!','esta'],
+        ['Citroën', 'Citroen', 'citroen'],
+        [' año - 2019 ', ' ano - 2019 ','ano 2019','ano2019'],
+    ]
+    fixtures.forEach(f=>{
+        it('fixture: '+f[0], function(){
+            expect(bestGlobals.simplifyText(f[0])).to.eql(f[1]);
+            if(f[2]) expect(bestGlobals.hyperSimplifyText(f[0])).to.eql(f[2]);
+            if(f[3]) expect(bestGlobals.hyperSimplifyText(f[0],'')).to.eql(f[3]);
+        })
+    })
+})

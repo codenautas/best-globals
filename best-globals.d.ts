@@ -121,6 +121,8 @@ declare module "best-globals"{
         function sameValues(x:any, y:any):boolean
         function isLowerIdent(text:string):boolean
         function deepFreeze<T extends {}>(o:T):Readonly<T>
+        function simplifyText(text:string):string
+        function hyperSimplifyText(text:string, spaceReplacer?:string):string
     }
     export = bestGlobals
 }
