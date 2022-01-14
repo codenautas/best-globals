@@ -1259,8 +1259,9 @@ describe("Promises", function(){
     });
     it("sleep catchs errors version 1", function(){
         var now=new Date();
+        var FUTURE_DELTA=1; // https://github.com/codenautas/best-globals/runs/4819265653?check_suite_focus=true tardó un milisegundo menos
         return bestGlobals.sleep(100).then(function(){
-            expect(new Date().getTime()-now.getTime()).not.to.be.lessThan(100);
+            expect(new Date().getTime()-now.getTime()).not.to.be.lessThan(100-FUTURE_DELTA);
             expect(new Date().getTime()-now.getTime()).to.be.lessThan(100+d);
             throw new Error("force");
         }).then(function(){
@@ -1269,7 +1270,7 @@ describe("Promises", function(){
             throw new Error("Must not be here 2");
         }).catch(function(err){
             expect(err.message).to.eql("force");
-            expect(new Date().getTime()-now.getTime()).not.to.be.lessThan(100);
+            expect(new Date().getTime()-now.getTime()).not.to.be.lessThan(100-FUTURE_DELTA);
             expect(new Date().getTime()-now.getTime()).to.be.lessThan(100+d);
         })
     });
