@@ -123,6 +123,7 @@ declare module "best-globals"{
         function deepFreeze<T extends {}>(o:T):Readonly<T>
         function simplifyText(text:string):string
         function hyperSimplifyText(text:string, spaceReplacer?:string):string
+        var simplifiedLetters={[letter in string]:string}
     }
     export = bestGlobals
 }

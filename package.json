@@ -1,7 +1,7 @@
 {
   "name": "best-globals",
   "description": "common global function and constants - i.e. coalesce",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "author": "Codenautas <codenautas@googlegroups.com>",
   "license": "MIT",
   "repository": "codenautas/best-globals",
@@ -22,7 +22,7 @@
     "expect.js": "~0.3.1",
     "express": "^4.17.2",
     "express-session": "^1.17.2",
-    "karma": "^6.3.9",
+    "karma": "^6.3.11",
     "karma-chrome-launcher": "^3.1.0",
     "karma-coverage": "^2.1.0",
     "karma-coverage-html-index-reporter": "^1.0.2",
