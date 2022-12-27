@@ -963,11 +963,13 @@ bestGlobals.sameValue = function sameValue(a,b){
     return a==b ||
       a instanceof Date && b instanceof Date && a.getTime() == b.getTime() ||
       typeof a === 'number' && (a>MAX_SAFE_INTEGER || a< -MAX_SAFE_INTEGER) && Math.abs(a/b)<1.00000000000001 && Math.abs(a/b)>0.99999999999999 ||
-      a && !!a.sameValue && a.sameValue(b);
+      a !=null && !!a.sameValue && a.sameValue(b);
 }
 
 bestGlobals.sameValues = function sameValues(a,b, sideOfBigger){
     if(a===b) return true;
+    if(bestGlobals.sameValue(a,b)) return true;
+    if(!(a instanceof Object) || !(b instanceof Object)) return false;
     if(sideOfBigger=="left"){
         return bestGlobals.sameValues(b,a,"right");
     }else if(sideOfBigger=="right"){

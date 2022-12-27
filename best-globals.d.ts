@@ -118,12 +118,13 @@ declare module "best-globals"{
         function serie(first:number, length:number):number[]
         function serie(spec:{from?:number, step?:number, to:number}):number[]
         function serie(spec:{from?:number, step?:number, length:number}):number[]
-        function sameValues(x:any, y:any):boolean
+        function sameValue<T>(x:T, y:T):boolean
+        function sameValues<T>(x:T, y:T):boolean
         function isLowerIdent(text:string):boolean
         function deepFreeze<T extends {}>(o:T):Readonly<T>
         function simplifyText(text:string):string
         function hyperSimplifyText(text:string, spaceReplacer?:string):string
-        var simplifiedLetters={[letter in string]:string}
+        var simplifiedLetters:Record<string,string>
     }
     export = bestGlobals
 }

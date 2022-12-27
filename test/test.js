@@ -1410,14 +1410,19 @@ describe("sameValue", function(){
         {a:1, b:0  , res:false},
         {a:1, b:1  , res:true},
         {a:new Date(2001,2,3), b:new Date(2001,2,3), res:true},
+        {a:bestGlobals.date.ymd(2001,2,3), b:bestGlobals.date.iso("2001-02-03"), res:true},
         {a:bestGlobals.timeInterval({minutes:2}), b:bestGlobals.timeInterval({minutes:3}), res:false},
         {a:bestGlobals.timeInterval({minutes:2}), b:bestGlobals.timeInterval({seconds:120}), res:true},
         {a:bestGlobals.MAX_SAFE_INTEGER*1000, b:bestGlobals.MAX_SAFE_INTEGER*1000+0.0001, res:true},
         {a:bestGlobals.MAX_SAFE_INTEGER*1000, b:bestGlobals.MAX_SAFE_INTEGER*100, res:false},
         {a:-bestGlobals.MAX_SAFE_INTEGER*1000, b:-bestGlobals.MAX_SAFE_INTEGER*1001, res:false},
+        {a:bestGlobals.timeInterval({hours:44, minutes:30}), b:{hours:44, minutes:30}, res:false},
+        {a:null, b:{}, res:false}
     ].forEach(function(fixture){
         it("for "+JSON.stringify(fixture), function(){
             var obtained = bestGlobals.sameValue(fixture.a, fixture.b);
+            expect(obtained).to.eql(fixture.res);
+            var obtained = bestGlobals.sameValues(fixture.a, fixture.b);
             expect(obtained).to.eql(fixture.res);
         });
     });
