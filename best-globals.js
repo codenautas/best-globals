@@ -461,7 +461,7 @@ bestGlobals.Datetime.prototype.getTime = function getTime() {
     ).getTime();
 };
 
-bestGlobals.Datetime.prototype.toPlainString = function toPlainString(){ 
+bestGlobals.Datetime.prototype.toPlainString = function toPlainString(preserveHm){ 
     var str=this.toYmdHmsMm();
     var prune = function(what){
         if(str.substr(str.length-what.length)==what){
@@ -471,7 +471,7 @@ bestGlobals.Datetime.prototype.toPlainString = function toPlainString(){
         return false;
     }
     /* eslint no-unused-expressions: 0 */
-    prune('000') && prune('.000') && prune(':00') && prune(' 00:00');
+    prune('000') && prune('.000') && prune(':00') && (preserveHm || prune(' 00:00'));
     return str; 
 }
 // bestGlobals.Datetime.prototype.toUTCString = function toUTCString(){ return this.iso; }
@@ -855,12 +855,26 @@ bestGlobals.registerJson4All = function registerJson4All(JSON4all){
             }else{
                 return date.getTime();
             }
-        }
+        },
+        serialize: function serialize(date){
+            return date.isRealDate ? date.toYmd() : date.toISOString();
+        },
+        deserialize: JSON4all.DateFunctions.deserialize,
+        valueLike:true
     });
     JSON4all.addType('date', {
         construct: function construct(value){
             return bestGlobals.date.iso(value);
         },
+        serialize: function serialize(o){
+            return o.toYmd();
+        },
+        deserialize: function deserialize(plainValue){
+            var ok = /^\d{4}-\d\d-\d\d$/.test(plainValue);
+            var value = ok && bestGlobals.date.iso(plainValue) || null;
+            return {ok, value};
+        },
+        valueLike:true
     });
     JSON4all.addType(bestGlobals.Datetime, {
         construct: function construct(value){
@@ -869,6 +883,15 @@ bestGlobals.registerJson4All = function registerJson4All(JSON4all){
         deconstruct: function construct(datetime){
             return datetime.toPlainString();
         },
+        serialize: function serialize(datetime){
+            return datetime.toPlainString(true);
+        },
+        deserialize: function deserialize(plainValue){
+            var ok = /^\d{4}-\d\d-\d\d \d\d:\d\d(:\d\d(.\d+)?)?$/.test(plainValue);
+            var value = ok && bestGlobals.datetime.iso(plainValue) || null;
+            return {ok, value};
+        },
+        valueLike:true
     });
 };
 
