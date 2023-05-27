@@ -117,8 +117,15 @@ function deepCopy(object){
 
 bestGlobals.deepCopy = deepCopy;
 
-bestGlobals.changing = function changing(original, changes){
-    var opts = bestGlobals.changing.retreiveOptions(arguments);
+function ChangingWithSpecial(change){
+    this.change = change;
+}
+
+function changing(original, changes){
+    var opts = changing.retreiveOptions(arguments);
+    if (changes instanceof ChangingWithSpecial) {
+        return changes.change(original);
+    }
     if(original===null ||
         !bestGlobals.isPlainObject(original) &&
             !(original instanceof Error) &&
@@ -144,7 +151,7 @@ bestGlobals.changing = function changing(original, changes){
                 }else if('deletingValue' in opts && changes[name]===opts.deletingValue){
                     // empty
                 }else{
-                    result[name] = changing(original[name], changes[name], bestGlobals.changing.options(opts), true);
+                    result[name] = changing(original[name], changes[name], changing.options(opts), true);
                 }
             }
             for(name in changes){
@@ -157,6 +164,16 @@ bestGlobals.changing = function changing(original, changes){
         }
     }
 };
+
+changing.trueByObject = function trueByObject(object){
+    return new ChangingWithSpecial(function(original, opts){
+        if (original == true) return deepCopy(object);
+        if (original) return changing(original, object, changing.options(opts))
+        return original;
+    });
+}
+
+console.log('***********!',changing.trueByObject,changing)
 
 bestGlobals.dig = function dig(description, wanted){
     if(arguments.length==1){
@@ -253,7 +270,9 @@ bestGlobals.dig.array = function array(description, wanted){
 bestGlobals.spec = bestGlobals.dig;
 
 
-bestGlobals.createOptionsToFunction(bestGlobals.changing);
+bestGlobals.createOptionsToFunction(changing);
+
+bestGlobals.changing = changing;
 
 function npad(num, width) {
     var n=num+''; // to string

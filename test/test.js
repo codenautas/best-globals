@@ -332,6 +332,24 @@ describe('mini-tools config functions', function(){
         expect(obtained.code).to.eql("A12");
         expect(obtained["z-number"]).to.eql(12);
     });
+    it("replaces true by object", function(){
+        var internalObject = {internal:7};
+        var obtained = changing({one: true}, {one: bestGlobals.changing.trueByObject(internalObject)});
+        expect(obtained).to.eql({one: internalObject});
+        expect(obtained.one !== internalObject).to.be.ok(); // need that receives a copy
+    })
+    it("replaces attributes when src is a copy in trueByObject", function(){
+        var internalObject = {internal:7};
+        var obtained = changing({one: {internal:6, x:5}}, {one: bestGlobals.changing.trueByObject(internalObject)});
+        expect(obtained).to.eql({one: {internal:7, x:5}});
+    });
+    [null, undefined, false, 0].forEach(function(falsy){
+        it("dont replace falsy: "+falsy, function(){
+            var internalObject = {internal:7};
+            var obtained = changing({one: falsy}, {one: bestGlobals.changing.trueByObject(internalObject)});
+            expect(obtained).to.eql({one: falsy});
+        })
+    })
 });
 
 describe('dig', function(){

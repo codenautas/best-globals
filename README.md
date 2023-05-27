@@ -64,6 +64,12 @@ console.log(coalesce(undefined,coalesce.throwErrorIfUndefined('name'))); // = th
 
 Returns a new object like originalConfig with the changes reflected
 
+Changes can be:
+   * any value,
+   * an object to apply the recursive changes (if the original is also an object)
+   * a call to `changes.trueByObject(changes)` that means that the change only applies to non falsy values
+
+
 
 ```js
 var changing = require('best-globals').changing;

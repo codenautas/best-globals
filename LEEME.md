@@ -112,9 +112,20 @@ Las sentencias marcadas con `[1]` reaccionan distinto a su par `??`
 
 Retorna un nuevo objeto con los datos que tiene orginalConfig cambiados por los que diga changes. 
 
+Changes puede ser:
+   * un valor cualquiera,
+   * un objeto al que se le aplicará el cambio recursivo (si el original también es un objeto)
+   * la llamada a `changes.trueByObject(changes)` que solo hace el cambio si el valor original no es falso
+
 <!--lang:en--]
 
 Returns a new object like originalConfig with the changes reflected
+
+Changes can be:
+   * any value,
+   * an object to apply the recursive changes (if the original is also an object)
+   * a call to `changes.trueByObject(changes)` that means that the change only applies to non falsy values
+
 
 [!--lang:*-->
 
