@@ -173,8 +173,6 @@ changing.trueByObject = function trueByObject(object){
     });
 }
 
-console.log('***********!',changing.trueByObject,changing)
-
 bestGlobals.dig = function dig(description, wanted){
     if(arguments.length==1){
         wanted=description;
