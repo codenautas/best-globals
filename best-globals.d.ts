@@ -59,6 +59,13 @@ declare module "best-globals"{
             toYmdHmsM():string
             toYmdHmsMm():string
         }
+        interface TimePack{
+            ms     :number
+            seconds:number
+            minutes:number
+            hours  :number
+            days   :number
+        }
         class DateTime implements DateMethods{
             toPlainString():string
             toLocaleString():string
@@ -107,6 +114,7 @@ declare module "best-globals"{
             function iso(IsoString:string):TimeInterval
             function iso(IsoString:string|null, opts:TimeOpts):TimeInterval|null
         }
+        function timeInterval(timePack:TimePack):TimeInterval
         function functionName(f:Function):string
         function constructorName<T extends {}>(o:T):string
         function escapeRegExp(regExpString:string):string // minimalistic
