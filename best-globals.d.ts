@@ -133,6 +133,7 @@ declare module "best-globals"{
         function simplifyText(text:string):string
         function hyperSimplifyText(text:string, spaceReplacer?:string):string
         var simplifiedLetters:Record<string,string>
+        function splitRawRowIntoRow(text:string):string[]
     }
     export = bestGlobals
 }

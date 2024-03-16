@@ -9,7 +9,7 @@ if(typeof process !== "undefined"){
     var assert = require('assert');
 }
 var bestGlobals = require('../best-globals.js');
-var {compareForOrder} = bestGlobals;
+var {compareForOrder,splitRawRowIntoRow} = bestGlobals;
 var auditCopy = require('audit-copy');
 var discrepances = require('discrepances');
 var dig = bestGlobals.dig;
@@ -1566,4 +1566,19 @@ describe("simplifyText", function(){
             if(f[3]) expect(bestGlobals.hyperSimplifyText(f[0],'')).to.eql(f[3]);
         })
     })
+})
+
+describe("splitRawRowIntoRow", function(){
+    var fixtures = [
+        ['splited\\n line\\r\\n|field with pipe \\|',['splited\n line\r\n','field with pipe |']],
+        ['multi escaped pipes \\|a\\\\|b\\\\\\|c\\\\\\\\|d',['multi escaped pipes |a\\','b\\|c\\\\','d']],
+        ['|line with hex \\x7c pipe',['','line with hex | pipe']],
+    ]
+    fixtures.forEach(([input, expected])=>
+        it("splits previous", function(){
+            console.log('ok',input, expected)
+            var obtained = splitRawRowIntoRow(input);
+            expect(obtained).to.eql(expected);
+        })
+    );
 })

@@ -1123,6 +1123,13 @@ bestGlobals.simplifyText = function simplifyText(text){
 bestGlobals.hyperSimplifyText = function hyperSimplifyText(text, spaceReplacer){
     return text.replace(/[^A-Za-z0-9\[\] ]/g,function(a){return bestGlobals.simplifiedChars[a]||' '}).trim().replace(/\s+/g,spaceReplacer==undefined?' ':spaceReplacer).toLowerCase();
 }
+bestGlobals.splitRawRowIntoRow = function splitRawRowIntoRow(line){
+    return line.split(/(?<!(?:^|[^\\])(?:\\\\)*\\)\|/).map(item => item.trimRight().replace(
+        /\\([^x]|x[\dA-Za-z]{1,2})/g,
+        (_,l)=>(l=='t'?'\t':l=='r'?'\r':l=='n'?'\n':l=='s'?' ':l[0]=='x'?String.fromCodePoint(parseInt(l.substr(1),16)):l)
+    ))
+}
+
 
 return bestGlobals;
 
