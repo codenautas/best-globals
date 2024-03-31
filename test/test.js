@@ -776,6 +776,7 @@ describe("date", function(){
        var invalidErr = /invalid datetime/;
        expect(datetime.iso("2016-12-02")).to.eql(datetime.ymdHmsM(2016,12,2,0,0,0,0));
        expect(datetime.iso("2016-12-02 01:02:03")).to.eql(datetime.ymdHmsM(2016,12,2,1,2,3,0));
+       expect(datetime.iso("2016-12-02 01:02:03").toSqlString()).to.eql("2016-12-02 01:02:03");
        expect(datetime.iso("2016-12-02 01:02:03").toPostgres()).to.eql("2016-12-02 01:02:03");
        expect(datetime.iso("2016-12-02 01:02:03").sameValue(datetime.iso("2016-12-02 01:02:03"))).to.be.ok();
        expect(datetime.iso).withArgs("2016-12/02").to.throwError(invalidErr);

@@ -493,11 +493,14 @@ bestGlobals.Datetime.prototype.toPlainString = function toPlainString(preserveHm
 }
 // bestGlobals.Datetime.prototype.toUTCString = function toUTCString(){ return this.iso; }
 
-bestGlobals.Datetime.prototype.toPostgres = function toPostgres(){
+bestGlobals.Datetime.prototype.toSqlString = function toSqlString(){
     return this.toPlainString();
 }
 
-bestGlobals.Datetime.prototype.toLocaleString = function toPostgres(){
+bestGlobals.Datetime.prototype.toPostgres = bestGlobals.Datetime.prototype.toSqlString;
+
+
+bestGlobals.Datetime.prototype.toLocaleString = function toSqlString(){
     var str=this.toDmy()+' '+this.toHms();
     var prune = function(what){
         if(str.substr(str.length-what.length)==what){
@@ -692,9 +695,11 @@ bestGlobals.TimeInterval.prototype.toHmsOrMs = function toHmsOrMs(){
     return this.toHms(false,false,false,true,true);
 }
 
-bestGlobals.TimeInterval.prototype.toPostgres = function toPostgres(){
+bestGlobals.TimeInterval.prototype.toSqlString = function toSqlString(){
     return this.timeInterval.ms+'ms';
 }
+
+bestGlobals.TimeInterval.prototype.toPostgres = bestGlobals.TimeInterval.prototype.toSqlString;
 
 bestGlobals.timeInterval = function timeInterval(timePack) {
     return new bestGlobals.TimeInterval(timePack);
