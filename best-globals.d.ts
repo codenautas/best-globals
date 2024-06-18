@@ -32,8 +32,8 @@ declare module "best-globals"{
             }):ChangingOptions
         }
         class RealDate extends Date implements DateMethods{
-            add(ti:TimeInterval):RealDate
-            sub(ti:TimeInterval):RealDate
+            add(ti:TimeInterval|{days:number}):RealDate
+            sub(ti:TimeInterval|{days:number}):RealDate
             sub(d:RealDate):TimeInterval
             sameValue(ti:RealDate):boolean
             toDmy():string
