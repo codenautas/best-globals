@@ -7,6 +7,8 @@ var expect = require('expect.js');
 var sinon = require('sinon');
 if(typeof process !== "undefined"){
     var assert = require('assert');
+    var MiniTools = require('mini-tools');
+    var pg = require('pg-promise-strict');
 }
 var bestGlobals = require('../best-globals.js');
 var {compareForOrder,splitRawRowIntoRow} = bestGlobals;
@@ -1144,6 +1146,45 @@ describe('escapeRegExp', function(){
 });
 
 describe('ordering', function(){
+    /** @type {pg.Client} */
+    var conn;
+    var collate = 'collate castellano_test_collate'
+    before(function(done){
+        if (typeof process !== "undefined") {
+            MiniTools.readConfig([
+                {db:{
+                    user: 'test_user',
+                    password: 'test_pass',
+                    database: 'test_db',
+                    host: 'localhost',
+                    port: 5432
+                }},
+                'local-config'
+            ],{whenNotExist:'ignore'}).then(function(connectParams){
+                console.log("***********************", connectParams)
+                return pg.connect(connectParams.db).then(function(newConn){
+                    conn = newConn;
+                })
+            }).then(function(){
+                console.log('////////////////////')
+                return conn.executeSentences([
+                    "DROP COLLATION if exists castellano_test_collate;",
+                    "CREATE COLLATION castellano_test_collate (LOCALE = 'en-US-u-kn-true-ka-noignore-ks-level4-kv-symbol', deterministic = false, PROVIDER = icu);"
+                //  "CREATE COLLATION castellano_test_collate (LOCALE = 'en-US-u-kn-true-ka-shifted-ks-level1-kv-symbol', deterministic = false, PROVIDER = icu);"
+                ]);
+            }).then(_=>done(), done);
+        }
+    })
+    after(function(done){
+        if (conn) {
+            console.log('-------------- pg done')
+            Promise.resolve().then(function(){
+                return conn.done();
+            }).then(function(){
+                return pg.shutdown();
+            }).then(_=>done(),done);
+        }
+    })
     it("calculates integer complement", function(){
         expect(bestGlobals.auxComplementInteger('12')).to.eql('87');
         expect(bestGlobals.auxComplementInteger('1002')).to.eql('8997');
@@ -1153,13 +1194,15 @@ describe('ordering', function(){
         {a:'ABC'        , b:'abd'       , label:'ignore case                 '},
         {a:'abc'        , b:'ABD'       , label:'ignore case                 '},
         {a:'x9b'        , b:'x11a'      , label:'natural number ordering     '},
-        {a:'x9.51b'     , b:'x9.9a'     , label:'decimal numbers             '},
-        {a:'x9.51b'     , b:'x009.9a'   , label:'trailing ceros              '},
+        {a:'x9.9a'      , b:'x9.51b'    , label:'dot is not implies decimal  '},
+        {a:'x9.5b'      , b:'x009.9a'   , label:'trailing ceros              '},
         {a:'x009.51b'   , b:'x19.9a'    , label:'trailing ceros              '},
         {a:'The Zeta'   , b:'There'     , label:'word by word                '},
         {a:'The~Zeta'   , b:'There'     , label:'word by word, any separator '},
-        {a:'The, 1'     , b:'The 2'     , label:'any secuence of separators  '},
+        {a:'The  1'     , b:'The 2'     , label:'any secuence of separators  '},
+        {a:'The 1'      , b:'The  2'    , label:'any secuence of separators  '},
         {a:'The 1'      , b:'The, 2'    , label:'any secuence of separators  '},
+        {a:'The, 1'     , b:'The 2'     , label:'any secuence of separators  '},
         {a:'ábcéno'     , b:'Abceña'    , label:'spanish                     '},
         {a:'abceño'     , b:'abcepa'    , label:'spanish                     '},
         {a:'{A}'        , b:'{AB}'      , label:'shortest                    '},
@@ -1190,18 +1233,34 @@ describe('ordering', function(){
         {a:'other'      , b:null        , label:'nulls last                  '},
         {a:new Date(2012,9,15,8), b:new Date() , label:'dates                '},
     ].forEach(function(fixture) {
-        it(JSON.stringify(fixture),function(){
-            var a1 = bestGlobals.forOrder(fixture.a);
-            var b1 = bestGlobals.forOrder(fixture.b);
-            if(!(a1<b1)){
-                console.log('a1', a1);
-                console.log('b1', b1);
+        it(JSON.stringify(fixture),function(done){
+            try {
+                var a1 = bestGlobals.forOrder(fixture.a);
+                var b1 = bestGlobals.forOrder(fixture.b);
+                if(!(a1<b1)){
+                    console.log('a1', a1);
+                    console.log('b1', b1);
+                }
+                expect(a1<b1).to.be.ok();
+                expect(a1>b1).to.not.be.ok();
+                expect(a1==b1).to.not.be.ok();
+                expect(a1!=null).to.be.ok();
+                expect(typeof a1=="string").to.be.ok();
+                if (conn && typeof fixture.a == "string" && typeof fixture.b == "string") {
+                    conn.query(
+                        'select $1 '+collate+' < $2 '+collate+' as less, $1 '+collate+' <> $2 '+collate+' as equal',
+                        [fixture.a, fixture.b]
+                    ).fetchUniqueRow().then(function(result){
+                        var row = result.row;
+                        expect(row.less).to.be.ok();
+                        expect(row.equal).to.be.ok();
+                    }).then(done,done);
+                } else { 
+                    done(); // not in node
+                }
+            } catch (err) {
+                done(err);
             }
-            expect(a1<b1).to.be.ok();
-            expect(a1>b1).to.not.be.ok();
-            expect(a1==b1).to.not.be.ok();
-            expect(a1!=null).to.be.ok();
-            expect(typeof a1=="string").to.be.ok();
         }); 
     });
 });

@@ -785,8 +785,8 @@ bestGlobals.forOrder = function forOrder(text){
     var normal=text.toString()
     .replace(letterTranslatorRegexp, function(letter){ return letterTranslator[letter]; })
     .replace(
-        /([a-z]+)|((-?)0*(0|[1-9][0-9]*)(\.[0-9]+)?)|([^a-z0-9])/ig, 
-        function(t, letters, nums, sign, integer, decimals, others){
+        /([a-z]+)|((-?)0*(0|[1-9][0-9]*))|([^a-z0-9])/ig, 
+        function(t, letters, nums, sign, integer, others){
             if(letters){
                 main.push(' '+letters.toLowerCase());
             }
@@ -799,7 +799,7 @@ bestGlobals.forOrder = function forOrder(text){
                 }else{
                     negative = false;
                 }
-                main.push(' '+(negative?'A':'')+String.fromCharCode(65+coalesce(integer,'').length)+coalesce(integer,'')+coalesce(decimals,''));
+                main.push(' '+(negative?'A':'')+String.fromCharCode(65+coalesce(integer,'').length)+coalesce(integer,''));
             }
             canBeNegative=false;
             if(others){
