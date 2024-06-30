@@ -794,7 +794,6 @@ bestGlobals.forOrder = function forOrder(text){
                 var negative;
                 if(sign && canBeNegative){
                     integer = bestGlobals.auxComplementInteger(integer);
-                    decimals = bestGlobals.auxComplementInteger(decimals||'');
                     negative = true;
                 }else{
                     negative = false;
