@@ -120,8 +120,7 @@ declare module "best-globals"{
         function escapeRegExp(regExpString:string):string // minimalistic
         function escapeStringRegexp(regexpString:string):string // can put inside other regexp with [ ]
         function forOrder(text:string):string
-        const orderingCriteria:Record<string, <U>(x:U)=>U|string>
-        function compareForOrder<T extends {}>(sortColumns:{column: keyof T, order?:1|-1, orderCriterion:string, orderFun?:<U>(x:U)=>U|string}[]):(row1:T, row2:T)=>0|1|-1
+        function compareForOrder<T extends {}>(sortColumns:{column: keyof T, order?:1|-1, fun?:<U>(x:U)=>U|string}[]):(row1:T, row2:T)=>0|1|-1
         function sleep(ms:number):Promise<void>
         function serie(length:number):number[]
         function serie(first:number, length:number):number[]
