@@ -811,9 +811,11 @@ bestGlobals.forOrder = function forOrder(text){
     return main.join('')+signs.join('')+'   '+text;
 };
 
-bestGlobals.forOrder.Native = function forOrderNative(a){
-    return a;
-};
+
+bestGlobals.orderingCriteria = {
+    native: x => x,
+    default: bestGlobals.forOrder
+}
 
 bestGlobals.nullsOrder = 1; // 1=last -1=first;
 
@@ -832,8 +834,9 @@ bestGlobals.compareForOrder = function compareForOrder(sortColumns){
             }else if(row2[column]==null){
                 return -thisModule.nullsOrder;
             }else{
-                var a=(sortColumns[i].func||thisModule.forOrder)(row1[column]);
-                var b=(sortColumns[i].func||thisModule.forOrder)(row2[column]);
+                var columnOrderFun = sortColumns[i].orderFunc||thisModule.orderingCriteria[sortColumns[i].orderCriterion||'default'];
+                var a = columnOrderFun(row1[column]);
+                var b = columnOrderFun(row2[column]);
                 if(a>b){
                     return 1*order;
                 }else if(a<b){

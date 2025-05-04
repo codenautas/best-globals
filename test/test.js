@@ -1225,7 +1225,7 @@ describe('comparing', function(){
             [11,null, 11],
         ]
         var criteria=[
-            {column:1, func:bestGlobals.forOrder.Native},
+            {column:1, orderFunc: bestGlobals.orderingCriteria.native},
             {column:2, },
             {column:0, order:-1},
         ]
@@ -1234,7 +1234,7 @@ describe('comparing', function(){
     })
     var columnsOrder=[
         {column:'b', order: 1},
-        {column:'c', order: 1, func:bestGlobals.forOrder.Native},
+        {column:'c', order: 1, orderCriterion:'native'},
         {column:'d', order:-1},
     ];
     var compareFunction=bestGlobals.compareForOrder(columnsOrder);
