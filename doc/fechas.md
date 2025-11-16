@@ -69,6 +69,7 @@ var d1 = date.iso("2009-03-14")
 var d2 = d2.add({days: 1})
 console.log(d1.toString()) // Sat Mar 14 2009 00:00:00 GMT-0200 (hora de verano de Argentina)
 console.log(d2.toString()) // Sun Mar 15 2009 00:00:00 GMT-0300 (hora estándar de Argentina)
+console.log(d1.toDmy()) // 15/3/2009
 console.log((d2-d1) / (60*60*1000)); // 25
 ```
 
@@ -81,7 +82,7 @@ Devuelve una fecha de tipo `Date` con algunas funciones adicionales, por ejemplo
 Los constructores nativos de Javascript `new Date(s)` y 
 `new Date(y, m, d)` devuelven diferentes tipos de `Date`. 
 En el primer caso lo devuelven en GMT0, en el segundo en el timezone local. 
-Además en el segundo caso `m` va de `0` a `11`. Lo cual puede genera confusiones o errores de programación. 
+Además, las funciones nativas de JS, en el segundo caso `m` va de `0` a `11`. Lo cual puede genera confusiones o errores de programación. 
 
 <!--lang:en--]
 
@@ -92,24 +93,52 @@ In the first casi returns `GMT0` tz and in the seccond the local timezone.
 Also in the second case the month counts from `0` to `11`. 
 That can produces programming mistakes. 
 
-[!--lang:*-->
-
-
-<!--lang:es-->
-
-<!--lang:en--]
 
 [!--lang:*-->
 
+# `date.today()`
+
 <!--lang:es-->
 
+Fecha del día (con la fecha aumentada que produce `date`)
+
 <!--lang:en--]
+
+An augmented date of today
 
 [!--lang:*-->
 
+# `dateTime.iso(s:string)` / `dateTime.now()`
+
+```ts
+var begin = dateTime.iso('2023-11-20 10:33')
+var end = dateTime.now()
+var interval = end.sub(begin)
+console.log(interval.toPlainString()); // 45D 10:30:12 
+var dt = begin.add({minutes:10}) // 2023-11-20 10:43
+```
+
 <!--lang:es-->
 
+Crea un Date a partir de un iso string pero con las funciones aumentadas de date. 
+
 <!--lang:en--]
+
+An augmented Date with date and time
+
+[!--lang:*-->
+
+# `timeInterval.iso(s:string)` / `timeInterval.iso({hours, minutes, seconds})
+
+<!--lang:es-->
+
+Crea un objeto que contiene un lapso de tiempo. Puede usarse junto a `toHm()` y `toHms()` para contener horas sin fecha.
+Puede sumarse a _DateTime_ u obtenerse por diferencia entre dos _DateTime_(s)
+
+<!--lang:en--]
+
+Creates an object containing a lapse of time. It can be used with `toHm()` y `toHms()` to express the time of the date (without storing the date).
+Can be added to a _DateTime_ or obtained by substracting to _DateTime_.
 
 [!--lang:*-->
 

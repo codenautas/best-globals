@@ -60,11 +60,11 @@ declare module "best-globals"{
             toYmdHmsMm():string
         }
         interface TimePack{
-            ms     :number
-            seconds:number
-            minutes:number
-            hours  :number
-            days   :number
+            ms     ?:number
+            seconds?:number
+            minutes?:number
+            hours  ?:number
+            days   ?:number
         }
         class DateTime implements DateMethods{
             toPlainString():string
