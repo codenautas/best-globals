@@ -601,6 +601,11 @@ bestGlobals.datetime.array = function array(arr) {
     return bestGlobals.datetime.ymdHmsMm(arr[0], arr[1], arr[2], arr[3]||0, arr[4]||0, arr[5]||0, arr[6]||0, arr[7]||0);
 };
 
+bestGlobals.datetime.date = function date(d) {
+    if(!d || !d.isRealDate) { throw new Error('invalid date'); }
+    return bestGlobals.datetime.ymdHms(d.getFullYear(), d.getMonth()+1, d.getDate(), 0, 0, 0);
+};
+
 addDateMethods(bestGlobals.Datetime.prototype, function(msPack){ return bestGlobals.datetime.ms(msPack.ms);});
 
 bestGlobals.TimeInterval = function TimeInterval(timePack){

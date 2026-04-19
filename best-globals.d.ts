@@ -104,6 +104,7 @@ declare module "best-globals"{
             function ymdHmsMm(year:number,month:number,day:number,hours:number,minutes:number,seconds:number,ms:number,micros:number):DateTime
             function ms(ms:number):DateTime
             function array(parts:number[]):DateTime
+            function date(d:RealDate):DateTime
         }
         class TimeInterval{
             add(ti:TimeInterval):TimeInterval

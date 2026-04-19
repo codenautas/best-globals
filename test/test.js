@@ -628,6 +628,25 @@ describe("date", function(){
         var d1 = datetime.array([1916,7,9,0,0,0,0]);
         control(d1, indep, true);
     });
+    it("create datetime from RealDate", function(){
+        var d = date.iso('2026-04-18');
+        var dt = datetime.date(d);
+        expect(dt.isRealDateTime).to.be.ok();
+        expect(dt.toPlainString()).to.eql('2026-04-18');
+        expect(dt.getHours()).to.eql(0);
+        expect(dt.getMinutes()).to.eql(0);
+        expect(dt.getSeconds()).to.eql(0);
+    });
+    it("datetime.date throws on non-RealDate", function(){
+        expect(function(){ datetime.date(new Date()); }).to.throwError(/invalid date/);
+        expect(function(){ datetime.date(null);      }).to.throwError(/invalid date/);
+    });
+    it("use a datetime from RealDate", function(){
+        var d = date.iso('2026-04-18');
+        var dt = datetime.date(d);
+        var dt2 = dt.add({hours:2, minutes:15})
+        expect(dt2.toYmdHms()).to.eql('2026-04-18 02:15:00');
+    });
     it("create timeInterval from integer and format it", function(){
         expect(timeInterval({ms:new Date(1926,7,9,10,32,0)-new Date(1926,7,9,10,32,11)}).toHms()).eql('-00:00:11');
         expect(timeInterval({ms:new Date(1926,7,9,11,0,0)-new Date(1926,7,7,11,0,0)  }).toHms()).eql('48:00:00');

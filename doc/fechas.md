@@ -1,5 +1,13 @@
 <!--multilang v0 es:fechas.md en:dates.md -->
 # *best-globals* `date`
+
+<!--multilang buttons-->
+
+idioma: ![castellano](https://raw.githubusercontent.com/codenautas/multilang/master/img/lang-es.png)
+también disponible en:
+[![inglés](https://raw.githubusercontent.com/codenautas/multilang/master/img/lang-en.png)](dates.md)
+
+
 <!--lang:es-->
 
 Manejar fechas en Javascript puede tener un montón de problemas:
@@ -128,6 +136,39 @@ An augmented Date with date and time
 
 [!--lang:*-->
 
+# `dateTime.date(d:RealDate)`
+
+<!--lang:es-->
+
+Convierte un `RealDate` (fecha sin hora) en un `DateTime` con hora `00:00:00`.
+Útil cuando se necesita operar con intervalos de tiempo o mezclar fechas con datetimes.
+
+<!--lang:en--]
+
+Converts a `RealDate` (date without time) into a `DateTime` with time `00:00:00`.
+Useful when you need to work with time intervals or mix dates with datetimes.
+
+[!--lang:*-->
+
+```ts
+import { date, datetime } from 'best-globals';
+
+var d  = date.iso('2026-04-18');
+var dt = datetime.date(d);
+console.log(dt.toPlainString()); // 2026-04-18
+console.log(dt.isRealDateTime);  // true
+```
+
+<!--lang:es-->
+
+Solo acepta un `RealDate` (creado con los constructores `date.*`). Lanza un error si se pasa un `Date` nativo.
+
+<!--lang:en--]
+
+Only accepts a `RealDate` (created with `date.*` constructors). Throws an error if a native `Date` is passed.
+
+[!--lang:*-->
+
 # `timeInterval.iso(s:string)` / `timeInterval.iso({hours, minutes, seconds})
 
 <!--lang:es-->
@@ -189,3 +230,9 @@ Can be added to a _DateTime_ or obtained by substracting to _DateTime_.
 ## más info
 
 Para más información sobre los cambios de hora en la República Argentina se puede mirar el [Servicio de Hidrografía Naval](https://www.hidro.gov.ar/observatorio/LaHora.asp?op=3)
+
+<!--lang:en--]
+
+## more info
+
+[!--lang:*-->
