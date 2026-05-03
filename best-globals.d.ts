@@ -107,9 +107,19 @@ declare module "best-globals"{
             function date(d:RealDate):DateTime
         }
         class TimeInterval{
-            add(ti:TimeInterval):TimeInterval
-            sub(ti:TimeInterval):TimeInterval
+            constructor(timePack:TimePack)
+            add(ti:TimeInterval|TimePack):TimeInterval
+            sub(ti:TimeInterval|TimePack):TimeInterval
             sameValue(ti:TimeInterval):boolean
+            toHms(omitSeconds?:boolean, withDays?:boolean, omitLeftCeros?:boolean, omitHourCero?:boolean, omitFirstLeftCero?:boolean):string
+            toHm():string
+            toPlainString():string
+            toHmsOrMs():string
+            toString():string
+            toSqlString():string
+            toPostgres():string
+            getAllHours():number
+            getTime():number
         }
         namespace timeInterval{
             function iso(IsoString:string):TimeInterval
