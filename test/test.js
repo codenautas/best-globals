@@ -737,6 +737,20 @@ describe("date", function(){
         expect(ti.toHms(false,false,false)).to.eql('266:02:03');
         expect(ti.toHms(false,true ,false)).to.eql('11D 02:02:03');
     });
+    it("negative timeInterval from TimePack", function(){
+        expect(timeInterval({hours:-2, minutes:-30}).toHms()).eql('-02:30:00');
+        expect(timeInterval({hours:-2, minutes:-30}).toHms(false,false,true)).eql('-2:30:00');
+        expect(timeInterval({days:-2, hours:-1}).toHms()).eql('-49:00:00');
+        expect(timeInterval({days:-2, hours:-1}).toPlainString()).eql('-2D 1:00:00');
+        expect(timeInterval({days:-2}).toPlainString()).eql('-2D');
+        expect(timeInterval({days:-1, hours:-2, minutes:-30}).toPlainString()).eql('-1D 2:30:00');
+    });
+    it("negative timeInterval iso round-trip", function(){
+        expect(timeInterval.iso("-2D 1:00:00").toPlainString()).eql('-2D 1:00:00');
+        expect(timeInterval.iso("-2D 01:30:00").toPlainString()).eql('-2D 1:30:00');
+        expect(timeInterval.iso("2D 1:30:00").toPlainString()).eql('2D 1:30:00');
+        expect(timeInterval.iso(timeInterval({days:-2, hours:-1}).toPlainString()).toHms()).eql('-49:00:00');
+    });
     it("indexing with dates", function(){
         var obj={};
         var d1=date.iso('2017-07-16');

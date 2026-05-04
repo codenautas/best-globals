@@ -720,7 +720,13 @@ bestGlobals.timeInterval.iso = function iso(s, opts){
     }else{
         m = s.match(/^(-?)P?(?:(\d+)Y(?:ear(?:s)?)?)?(?:(\d+)M(?:onth(?:s)?)?)?(?:(\d+)D(?:ay(?:s)?)?)?[T ]?(?:(\d+)H(?:our(?:s)?)?)?(?:(\d+)M(?:inute(?:s)?)?)?(?:(\d+)S(?:econd(?:s)?)?)?$/i);
         if(!m || !m[0]){
-            m = s.match(/^(-?)P?(?:(\d+)[/-](\d+)[/-](\d+))?[T ]?(?:(\d+):(\d+)(?::(\d+)))?$/i);
+            // handles "2D 1:30:00" format (produced by toPlainString for multi-day intervals)
+            var m2 = s.match(/^(-?)(\d+)D(?:ay(?:s)?)? (\d+):(\d+)(?::(\d+))?$/i);
+            if(m2 && m2[0]){
+                m = [s, m2[1], 0, 0, m2[2], m2[3], m2[4], m2[5]||0, 0];
+            }else{
+                m = s.match(/^(-?)P?(?:(\d+)[/-](\d+)[/-](\d+))?[T ]?(?:(\d+):(\d+)(?::(\d+)))?$/i);
+            }
         }
     }
     if(m){
