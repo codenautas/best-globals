@@ -17,6 +17,7 @@ common global function and constants - i.e. coalesce
 [![build](https://github.com/codenautas/best-globals/actions/workflows/node.js.yml/badge.svg)](https://github.com/codenautas/best-globals/actions/workflows/node.js.yml)
 [![coverage](https://img.shields.io/coveralls/codenautas/best-globals/master.svg)](https://coveralls.io/r/codenautas/best-globals)
 [![outdated-deps](https://img.shields.io/github/issues-search/codenautas/best-globals?color=9cf&label=outdated-deps&query=is%3Apr%20author%3Aapp%2Fdependabot%20is%3Aopen)](https://github.com/codenautas/best-globals/pulls/app%2Fdependabot)
+[![dependencies](https://snyk.io/test/github/codenautas/best-globals/badge.svg)](https://snyk.io/test/github/codenautas/best-globals)
 
 <!--multilang buttons-->
 
