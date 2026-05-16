@@ -16,7 +16,7 @@ common global function and constants - i.e. coalesce
 [![downloads](https://img.shields.io/npm/dm/best-globals.svg)](https://npmjs.org/package/best-globals)
 [![build](https://github.com/codenautas/best-globals/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/codenautas/best-globals/actions/workflows/build-and-test.yml)
 [![coverage](https://img.shields.io/coveralls/codenautas/best-globals/master.svg)](https://coveralls.io/r/codenautas/best-globals)
-[![dependencies](https://snyk.io/test/github/codenautas/best-globals/badge.svg)](https://snyk.io/test/github/codenautas/best-globals)
+[![dependencies](https://socket.dev/api/badge/npm/package/qa-control)](https://socket.dev/npm/package/qa-control)
 
 <!--multilang buttons-->
 
