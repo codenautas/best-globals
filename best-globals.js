@@ -1,23 +1,5 @@
 "use strict";
 
-(function codenautasModuleDefinition(root, name, factory) {
-    /* global define */
-    /* istanbul ignore next */
-    if(typeof root.globalModuleName !== 'string'){
-        root.globalModuleName = name;
-    }
-    /* istanbul ignore next */
-    if(typeof exports === 'object' && typeof module === 'object'){
-        module.exports = factory();
-    }else if(typeof define === 'function' && define.amd){
-        define(factory);
-    }else if(typeof exports === 'object'){
-        exports[root.globalModuleName] = factory();
-    }else{
-        root[root.globalModuleName] = factory();
-    }
-    root.globalModuleName = null;
-})(/*jshint -W040 */this, 'bestGlobals', function() {
 /*jshint +W040 */
 
 /*jshint -W004 */
@@ -98,7 +80,7 @@ bestGlobals.isPlainObject = function isPlainObject(x){
     return typeof x==="object" && x && x.constructor === Object;
 };
 
-function deepCopy(object){
+var deepCopy = function deepCopy(object){
     var rta=object;
     if(bestGlobals.isPlainObject(object)){
         rta={};
@@ -121,7 +103,7 @@ function ChangingWithSpecial(change){
     this.change = change;
 }
 
-function changing(original, changes){
+var changing = function changing(original, changes){
     var opts = changing.retreiveOptions(arguments);
     if (changes instanceof ChangingWithSpecial) {
         return changes.change(original);
@@ -933,7 +915,7 @@ bestGlobals.registerJson4All = function registerJson4All(JSON4all){
 // 2017-03-26
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
 // adapted by Emilio Platzer
-function arrayFind(predicate){
+var arrayFind = function arrayFind(predicate){
  // 1. Let O be ? ToObject(this value).
   if (this == null) {
     throw new TypeError('"this" is null or not defined');
@@ -1147,6 +1129,38 @@ bestGlobals.splitRawRowIntoRow = function splitRawRowIntoRow(line){
 }
 
 
-return bestGlobals;
-
-});
+export var coalesce = bestGlobals.coalesce;
+export var createOptionsToFunction = bestGlobals.createOptionsToFunction;
+export var isPlainObject = bestGlobals.isPlainObject;
+export var deepCopy = bestGlobals.deepCopy;
+export var dig = bestGlobals.dig;
+export var spec = bestGlobals.spec;
+export var changing = bestGlobals.changing;
+export var date = bestGlobals.date;
+export var dateForceIfNecesary = bestGlobals.dateForceIfNecesary;
+export var Datetime = bestGlobals.Datetime;
+export var datetime = bestGlobals.datetime;
+export var TimeInterval = bestGlobals.TimeInterval;
+export var timeInterval = bestGlobals.timeInterval;
+export var functionName = bestGlobals.functionName;
+export var constructorName = bestGlobals.constructorName;
+export var escapeRegExp = bestGlobals.escapeRegExp;
+export var auxComplementInteger = bestGlobals.auxComplementInteger;
+export var forOrder = bestGlobals.forOrder;
+export var nullsOrder = bestGlobals.nullsOrder;
+export var compareForOrder = bestGlobals.compareForOrder;
+export var sleep = bestGlobals.sleep;
+export var registerJson4All = bestGlobals.registerJson4All;
+export var arrayFind = bestGlobals.arrayFind;
+export var serie = bestGlobals.serie;
+export var MAX_SAFE_INTEGER = bestGlobals.MAX_SAFE_INTEGER;
+export var sameValue = bestGlobals.sameValue;
+export var sameValues = bestGlobals.sameValues;
+export var isLowerIdent = bestGlobals.isLowerIdent;
+export var deepFreeze = bestGlobals.deepFreeze;
+export var escapeStringRegexp = bestGlobals.escapeStringRegexp;
+export var simplifiedLetters = bestGlobals.simplifiedLetters;
+export var simplifiedChars = bestGlobals.simplifiedChars;
+export var simplifyText = bestGlobals.simplifyText;
+export var hyperSimplifyText = bestGlobals.hyperSimplifyText;
+export var splitRawRowIntoRow = bestGlobals.splitRawRowIntoRow;

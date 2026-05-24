@@ -1,7 +1,8 @@
 {
   "name": "best-globals",
   "description": "common global function and constants - i.e. changes",
-  "version": "2.1.5",
+  "version": "3.0.0-beta.1",
+  "type": "module",
   "author": "Codenautas <codenautas@googlegroups.com>",
   "license": "MIT",
   "repository": "codenautas/best-globals",
