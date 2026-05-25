@@ -1268,7 +1268,7 @@ describe('comparing', function(){
     var columnsOrder=[
         {column:'b', order: 1},
         {column:'c', order: 1, func:bestGlobals.forOrder.Native},
-        {column:'d', order:-1},
+        {column:'d', order:-1, nullsOrder:-1},
     ];
     var compareFunction=bestGlobals.compareForOrder(columnsOrder);
     [
@@ -1282,10 +1282,9 @@ describe('comparing', function(){
         {a:{a:1, b:4,c:null,d:null}, b:{a:4, b:4,c:null,   d:4}, expected:-1, label:'= = null first             '},
     ].forEach(function(fixture) {
         it(JSON.stringify(fixture),function(){
-            bestGlobals.nullsOrder = -1;
             var result = compareFunction(fixture.a, fixture.b);
             expect(result).to.eql(fixture.expected);
-        }); 
+        });
     });
 });
 

@@ -808,8 +808,6 @@ bestGlobals.forOrder.Native = function forOrderNative(a){
     return a;
 };
 
-bestGlobals.nullsOrder = 1; // 1=last -1=first;
-
 bestGlobals.compareForOrder = function compareForOrder(sortColumns){
     var thisModule = this || bestGlobals;
     return function forOrderComparator(row1,row2){
@@ -817,13 +815,14 @@ bestGlobals.compareForOrder = function compareForOrder(sortColumns){
         var i=0;
         do{
             var order = bestGlobals.coalesce(sortColumns[i].order, 1);
+            var nullsOrder = bestGlobals.coalesce(sortColumns[i].nullsOrder, 1); // 1=last -1=first
             column=sortColumns[i].column;
             if(row1[column]==null){
                 if(row2[column]!=null){
-                    return thisModule.nullsOrder;
+                    return nullsOrder;
                 }
             }else if(row2[column]==null){
-                return -thisModule.nullsOrder;
+                return -nullsOrder;
             }else{
                 var a=(sortColumns[i].func||thisModule.forOrder)(row1[column]);
                 var b=(sortColumns[i].func||thisModule.forOrder)(row2[column]);
@@ -1147,7 +1146,6 @@ export var constructorName = bestGlobals.constructorName;
 export var escapeRegExp = bestGlobals.escapeRegExp;
 export var auxComplementInteger = bestGlobals.auxComplementInteger;
 export var forOrder = bestGlobals.forOrder;
-export var nullsOrder = bestGlobals.nullsOrder;
 export var compareForOrder = bestGlobals.compareForOrder;
 export var sleep = bestGlobals.sleep;
 export var registerJson4All = bestGlobals.registerJson4All;
