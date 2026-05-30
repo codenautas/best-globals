@@ -616,16 +616,18 @@ bestGlobals.TimeInterval = function TimeInterval(timePack){
         console.log('| DEPRECATED timeInterval(ms) |');
         console.log('|-----------------------------|');
     }
+    var sign = timePack.negative ? -1 : 1;
     var timeValues={
         ms     :1,
         seconds:1000,
         minutes:1000*60,
         hours  :1000*60*60,
         days   :1000*60*60*24,
+        negative: 0
     }
     var time=0;
     for(var attr in timePack){
-        time+=timePack[attr]*timeValues[attr];
+        time+=timePack[attr]*timeValues[attr]*sign;
     }
     this.timeInterval={ms:time};
     this.toHms = function toHms(omitSeconds, withDays, omitLeftCeros, omitHourCero, omitFirstLeftCero) {
