@@ -745,6 +745,7 @@ describe("date", function(){
         expect(timeInterval({days:-2}).toPlainString()).eql('-2D');
         expect(timeInterval({days:-1, hours:-2, minutes:-30}).toPlainString()).eql('-1D 2:30:00');
         expect(timeInterval({negative:true, days:1, hours:2, minutes:30}).toPlainString()).eql('-1D 2:30:00');
+        expect(timeInterval({negative:true, hours:3, minutes:30}).toPlainString()).eql('-3:30:00');
     });
     it("negative timeInterval iso round-trip", function(){
         expect(timeInterval.iso("-2D 1:00:00").toPlainString()).eql('-2D 1:00:00');
