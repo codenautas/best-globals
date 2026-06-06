@@ -61,28 +61,28 @@ Have handy some common global functions
 
 Retorna el primer argumento que no es nulo o indefinido
 
-En caso de recibir como parámetro `coalesce.throwError(message)` 
+En caso de recibir como parámetro `coalesce.throwError(message)`
 y que los parámetros anteriores no están definidos o son distintos de null
-lanza una excepción con ese mensaje. 
+lanza una excepción con ese mensaje.
 
-En caso de recibir como parámetro `coalesce.throwErrorIfUndefined(message)` 
-y que los parámetros anteriores no están definidos 
-lanza una excepción con ese mensaje. 
+En caso de recibir como parámetro `coalesce.throwErrorIfUndefined(message)`
+y que los parámetros anteriores no están definidos
+lanza una excepción con ese mensaje.
 
-Es similar a `??` salvo que `coalesce` entre `null` y `undefined` `coalesce` 
+Es similar a `??` salvo que `coalesce` entre `null` y `undefined` `coalesce`
 siempre devuelve `null` y `??` devuelve el último. Además `coalesce` interpeta
-sus funciones auxiliares `throwError` y `throwErrorIfUndefined`. 
+sus funciones auxiliares `throwError` y `throwErrorIfUndefined`.
 
 <!--lang:en--]
 
-Returns the first not null nor undefined parameter. 
+Returns the first not null nor undefined parameter.
 
 Use `coalesce.throwError(message)` for throw an Exception if all parameters are null or undefined.
 
 Use `coalesce.throwErrorIfUndefined(message)` for throw an Exception if all parameters are undefined.
 
-`coalesce` is similar to `??`, but `coalesce` with `null` and `undefined` returns `null`, 
-and `??` returns the last. Also `coalesce` can be used with his auxiliar functions `throwError` and `throwErrorIfUndefined`. 
+`coalesce` is similar to `??`, but `coalesce` with `null` and `undefined` returns `null`,
+and `??` returns the last. Also `coalesce` can be used with his auxiliar functions `throwError` and `throwErrorIfUndefined`.
 
 [!--lang:*-->
 
@@ -111,7 +111,7 @@ Las sentencias marcadas con `[1]` reaccionan distinto a su par `??`
 
 <!--lang:es-->
 
-Retorna un nuevo objeto con los datos que tiene orginalConfig cambiados por los que diga changes. 
+Retorna un nuevo objeto con los datos que tiene orginalConfig cambiados por los que diga changes.
 
 Changes puede ser:
    * un valor cualquiera,
@@ -208,7 +208,7 @@ try{
 <!--lang:es-->
 
 Produce el texto que debe ser enviado a `RegExp` para que detecte exacto ese texto
-(aún cuando en el texto haya caracteres especiales de una regexp). 
+(aún cuando en el texto haya caracteres especiales de una regexp).
 
 <!--lang:en--]
 
@@ -304,13 +304,13 @@ sleep(2000).then(function(){
 ```
 <!--lang:*-->
 
-### serie({[from:number,] to:number [,step:number]}) 
-### serie({[from:number,] length:number [,step:number]}) 
+### serie({[from:number,] to:number [,step:number]})
+### serie({[from:number,] length:number [,step:number]})
 
 <!--lang:es-->
 
-Devuelve un arreglo con una serie de números sumando de a *step* (o 1) 
-empezando en *from* (o en 0) y terminando en *to* o tienendo una longitud de *length*. 
+Devuelve un arreglo con una serie de números sumando de a *step* (o 1)
+empezando en *from* (o en 0) y terminando en *to* o tienendo una longitud de *length*.
 
 <!--lang:en--]
 
@@ -329,7 +329,7 @@ console.log(serie({from:2,to:15,step:5})); // [2,7,12]
 ```
 <!--lang:*-->
 
-### today() 
+### today()
 
 <!--lang:es-->
 

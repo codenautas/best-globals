@@ -283,14 +283,14 @@ var dateMethods=[
         r.push(this.getFullYear());
         r.push(npad(this.getMonth()+1,2));
         r.push(npad(this.getDate(),2));
-        return r.join('-');        
+        return r.join('-');
     }},
     {name: "toDmy", fun: function toYmd() {
         var r = [];
         r.push(this.getDate());
         r.push(this.getMonth()+1);
         r.push(this.getFullYear());
-        return r.join('/');        
+        return r.join('/');
     }},
 	{name: "toHm", fun: function toHm() {
         var r = [];
@@ -318,7 +318,7 @@ var dateMethods=[
         var ms=0;
         if(!objectOrTimeInterval.getTime){
             objectOrTimeInterval=bestGlobals.timeInterval(objectOrTimeInterval);
-        }            
+        }
         ms=objectOrTimeInterval.getTime();
         return {ms:this.getTime()+ms*(sign||1)};
     }, mustConstruct:true},
@@ -330,8 +330,8 @@ var dateMethods=[
         }
     }},
     {name: "sameValue", fun: function sameValue(other){
-        return other && 
-            other instanceof other.constructor && 
+        return other &&
+            other instanceof other.constructor &&
             this.getTime() == other.getTime();
     }}
 ]
@@ -387,7 +387,7 @@ bestGlobals.dateForceIfNecesary = function dateForceIfNecesary(dt, strict) {
 };
 
 bestGlobals.date.isValidDate = function isValidDate(year, month, day) {
-    if(year<0 || month<1 || day<0) { return false; } 
+    if(year<0 || month<1 || day<0) { return false; }
     month -= 1;
     var d = new Date(year, month, day);
     return d.getFullYear()===year && d.getMonth()===month && d.getDate()===day;
@@ -463,10 +463,10 @@ bestGlobals.Datetime.prototype.getSeconds      = function getSeconds()      { re
 bestGlobals.Datetime.prototype.getMilliseconds = function getMilliseconds() { return this.parts.ms;       };
 bestGlobals.Datetime.prototype.getMicroseconds = function getMicroseconds() { return this.parts.micros;   };
 
-bestGlobals.Datetime.prototype.valueOf = function getTime() { 
+bestGlobals.Datetime.prototype.valueOf = function getTime() {
     return this.getTime();
 }
-bestGlobals.Datetime.prototype.getTime = function getTime() { 
+bestGlobals.Datetime.prototype.getTime = function getTime() {
     return new Date(
         this.parts.year   ,
         this.parts.month-1,
@@ -474,11 +474,11 @@ bestGlobals.Datetime.prototype.getTime = function getTime() {
         this.parts.hour   ,
         this.parts.minutes,
         this.parts.seconds,
-        this.parts.ms     
+        this.parts.ms
     ).getTime();
 };
 
-bestGlobals.Datetime.prototype.toPlainString = function toPlainString(preserveHm){ 
+bestGlobals.Datetime.prototype.toPlainString = function toPlainString(preserveHm){
     var str=this.toYmdHmsMm();
     var prune = function(what){
         if(str.substr(str.length-what.length)==what){
@@ -489,7 +489,7 @@ bestGlobals.Datetime.prototype.toPlainString = function toPlainString(preserveHm
     }
     /* eslint no-unused-expressions: 0 */
     prune('000') && prune('.000') && prune(':00') && (preserveHm || prune(' 00:00'));
-    return str; 
+    return str;
 }
 // bestGlobals.Datetime.prototype.toUTCString = function toUTCString(){ return this.iso; }
 
@@ -685,8 +685,8 @@ bestGlobals.TimeInterval = function TimeInterval(timePack){
         return this.timeInterval.ms/(1000*60*60);
     }
     this.sameValue = function sameValue(otherInterval){
-        return otherInterval && 
-            otherInterval instanceof bestGlobals.TimeInterval && 
+        return otherInterval &&
+            otherInterval instanceof bestGlobals.TimeInterval &&
             this.timeInterval.ms == otherInterval.timeInterval.ms;
     }
     this.getTime = function getTime(){
@@ -798,7 +798,7 @@ bestGlobals.forOrder = function forOrder(text){
     var normal=text.toString()
     .replace(letterTranslatorRegexp, function(letter){ return letterTranslator[letter]; })
     .replace(
-        /([a-z]+)|((-?)0*(0|[1-9][0-9]*)(\.[0-9]+)?)|([^a-z0-9])/ig, 
+        /([a-z]+)|((-?)0*(0|[1-9][0-9]*)(\.[0-9]+)?)|([^a-z0-9])/ig,
         function(t, letters, nums, sign, integer, decimals, others){
             if(letters){
                 main.push(' '+letters.toLowerCase());
@@ -989,7 +989,7 @@ bestGlobals.serie = function serie(NorFirstOrObject, NifNoFirst){
     var last;
     var first;
     var step;
-    var n; 
+    var n;
     if(NorFirstOrObject instanceof Object){
         first = 'from' in NorFirstOrObject ? NorFirstOrObject.from : 0;
         step = 'step' in NorFirstOrObject ? NorFirstOrObject.step : 1;

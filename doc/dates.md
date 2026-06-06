@@ -19,8 +19,8 @@ also available in:
 
 
 
-Handling dates in Javascript is not easy as it seems. 
-   * adding a day is not that simple as adding `24 * 60 * 60 * 1000` miliseconds. 
+Handling dates in Javascript is not easy as it seems.
+   * adding a day is not that simple as adding `24 * 60 * 60 * 1000` miliseconds.
    * creating a date and then send it to the frontend o to the database can also have problems.
 
 Try this in node.js:
@@ -37,14 +37,14 @@ console.log(d2.toString()) // Sun Mar 15 2009 21:00:00 GMT-0300 (hora estándar 
 
 
 Can you see it?
-   * The date constructor, called with a string, interprets its paramter as a ISO date in the 0 time zone. Then in Buenos Aires is the date before, 2 hours before midnight. 
-   * Adding 24 hours you obtain a date 24hs after the other, but March 15th changes the hour in Buenos Aires. That's why we obtain a date 3 hours before midnight. 
+   * The date constructor, called with a string, interprets its paramter as a ISO date in the 0 time zone. Then in Buenos Aires is the date before, 2 hours before midnight.
+   * Adding 24 hours you obtain a date 24hs after the other, but March 15th changes the hour in Buenos Aires. That's why we obtain a date 3 hours before midnight.
 
 
 
 ## *best-globals* `date` usage
 
-`date` has a set of helper functions that improves the use of Javascript dates. 
+`date` has a set of helper functions that improves the use of Javascript dates.
 The result is a better `Date` that has the hour `12am` in the local timezone.
 
 
@@ -66,10 +66,10 @@ console.log((d2-d1) / (60*60*1000)); // 25
 
 Returns a `Date` object agumented with addicional functions, for example `add` that allows adding any number of days (with the appropriate hours).
 
-Both Javascript native constructors `new Date(s)` and `new Date(y, m, d)`,  retun different kind of `Date`. 
-In the first casi returns `GMT0` tz and in the seccond the local timezone. 
-Also in the second case the month counts from `0` to `11`. 
-That can produces programming mistakes. 
+Both Javascript native constructors `new Date(s)` and `new Date(y, m, d)`,  retun different kind of `Date`.
+In the first casi returns `GMT0` tz and in the seccond the local timezone.
+Also in the second case the month counts from `0` to `11`.
+That can produces programming mistakes.
 
 
 
@@ -85,7 +85,7 @@ An augmented date of today
 var begin = dateTime.iso('2023-11-20 10:33')
 var end = dateTime.now()
 var interval = end.sub(begin)
-console.log(interval.toPlainString()); // 45D 10:30:12 
+console.log(interval.toPlainString()); // 45D 10:30:12
 var dt = begin.add({minutes:10}) // 2023-11-20 10:43
 ```
 
@@ -116,4 +116,3 @@ Can be added to a _DateTime_ or obtained by substracting to _DateTime_.
 
 
 ## more info
-

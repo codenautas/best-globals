@@ -182,7 +182,7 @@ describe('mini-tools config functions', function(){
                 logicoPorFalse:false,
                 logicoPorNull:null,
                 logicoPorTrue:true,
-                logicoUndefinedNoPisa:true, 
+                logicoUndefinedNoPisa:true,
             },
             soloObjetoOriginal:{
                 original:7
@@ -241,7 +241,7 @@ describe('mini-tools config functions', function(){
                 logicoPorFalse:false,
                 logicoPorNull:true,
                 logicoPorTrue:true,
-                logicoUndefinedNoPisa:true, 
+                logicoUndefinedNoPisa:true,
             },
             soloObjetoOriginal:{
                 original:7
@@ -552,7 +552,7 @@ describe("date", function(){
         var d1 = date.ms(2*24*60*60*1000);
         control(d1, date.iso("1970-01-03"));
     });
-    */  
+    */
     it("create date from string without trainling zeros", function(){
         var d1 = date.iso("272-2-27");
         control(d1, nateConstantino);
@@ -890,7 +890,7 @@ describe("date", function(){
         [ {} , 'un string', 232.3, [], 1000  ].forEach(function(invalidParams){
             it("date() rejects "+JSON.stringify(invalidParams), function(){
                 expect(function(){ date(invalidParams); }).to.throwError(/invalid date/);
-                /* expect(function(){ datetime(invalidParams); }).to.throwError(/invalid date/);*/ 
+                /* expect(function(){ datetime(invalidParams); }).to.throwError(/invalid date/);*/
             });
         });
         it("rejects time in date", function(){
@@ -1123,7 +1123,7 @@ describe('functionName', function(){
     ].forEach(function(input) {
         it(JSON.stringify(input.val)+" should be "+JSON.stringify(input.name) ,function(){
             expect(bestGlobals.functionName(input.val)).to.eql(input.name);
-        }); 
+        });
     });
     it("rejects non functions", function(){
         expect(function(){
@@ -1149,7 +1149,7 @@ describe('constructorName', function(){
     ].forEach(function(input) {
         it(JSON.stringify(input.val)+" should be "+JSON.stringify(input.name) ,function(){
             expect(bestGlobals.constructorName(input.val)).to.eql(input.name);
-        }); 
+        });
     });
 });
 
@@ -1175,7 +1175,7 @@ describe('escapeRegExp', function(){
                 expect(escaped).to.be(fixture.escaped);
             }
             expect(new RegExp(bestGlobals.escapeStringRegexp(fixture.exp).replace(/\\x2d/,'-'))).to.eql(r);
-        }); 
+        });
     });
 });
 
@@ -1238,7 +1238,7 @@ describe('ordering', function(){
             expect(a1==b1).to.not.be.ok();
             expect(a1!=null).to.be.ok();
             expect(typeof a1=="string").to.be.ok();
-        }); 
+        });
     });
 });
 
@@ -1288,7 +1288,7 @@ describe('comparing', function(){
             bestGlobals.nullsOrder = -1;
             var result = compareFunction(fixture.a, fixture.b);
             expect(result).to.eql(fixture.expected);
-        }); 
+        });
     });
 });
 

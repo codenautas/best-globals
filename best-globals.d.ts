@@ -28,7 +28,7 @@ declare module "best-globals"{
         function changing<T extends {}, T2 extends {}>(origin:T, changes:T2, opts?:ChangingOptions):T & T2
         namespace changing{
             function options(opts:{
-                mostlyPlain?:boolean, nullIsUndefined?:boolean, deletingValue:keyof {}|null|undefined, 
+                mostlyPlain?:boolean, nullIsUndefined?:boolean, deletingValue:keyof {}|null|undefined,
             }):ChangingOptions
         }
         class RealDate extends Date implements DateMethods{

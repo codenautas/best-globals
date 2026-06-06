@@ -17,7 +17,7 @@ console.log(d);
 // 2024-11-03T04:00:00.000Z   4 hours after GMT-0 🌍
 
 console.log(d.toLocaleString())
-// 3/11/2024, 12:00:00        
+// 3/11/2024, 12:00:00
 
 d2 = new Date(d.getTime()+14*60*60*1000);
 
