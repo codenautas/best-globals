@@ -39,9 +39,10 @@
     "mocha": "~11.7.6",
     "pg-promise-strict": "^1.4.5",
     "require-bro": "^0.3.4",
-    "sinon": "~22.0.0",
-    "audit-copy": "~0.1.1",
-    "discrepances": "~0.2.14"
+    "sinon": "^22.0.0",
+    "audit-copy": "^0.1.1",
+    "discrepances": "^0.2.14",
+    "qa-control": "^0.6.11"
   },
   "main": "best-globals.js",
   "types": "best-globals.d.ts",
@@ -61,6 +62,7 @@
   ],
   "qa-control": {
     "profile": "minimum",
+    "gha": "all",
     "run-in": "both",
     "type": "lib",
     "stage": "stable",
