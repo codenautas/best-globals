@@ -35,14 +35,14 @@
     "karma-firefox-launcher": "^2.1.3",
     "karma-mocha": "^2.0.1",
     "nyc": "~18.0.0",
-    "mini-tools": "^1.13.5",
+    "mini-tools": "^1.13.6",
     "mocha": "~11.7.6",
     "pg-promise-strict": "^1.4.5",
-    "require-bro": "^0.3.4",
+    "require-bro": "^0.3.6",
     "sinon": "^22.0.0",
     "audit-copy": "^0.1.1",
     "discrepances": "^0.2.14",
-    "qa-control": "^0.6.12"
+    "qa-control": "^0.7.0"
   },
   "main": "best-globals.js",
   "types": "best-globals.d.ts",

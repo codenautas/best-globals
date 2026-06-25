@@ -11,7 +11,6 @@ common global function and constants - i.e. coalesce
 [!--lang:*-->
 
 <!-- cucardas -->
-![stable](https://img.shields.io/badge/stability-stable-blue.svg)
 [![npm-version](https://img.shields.io/npm/v/best-globals.svg)](https://npmjs.org/package/best-globals)
 [![downloads](https://img.shields.io/npm/dm/best-globals.svg)](https://npmjs.org/package/best-globals)
 [![build](https://github.com/codenautas/best-globals/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/codenautas/best-globals/actions/workflows/build-and-test.yml)
