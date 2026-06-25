@@ -662,11 +662,9 @@ bestGlobals.TimeInterval = function TimeInterval(timePack){
         }
         tdiff.push((m<10 && !omitFirstLeftCero?'0':'')+m);
         if(!omitSeconds){
-            console.log(tm, h,m,s,decimals, includeDecimals)
             tdiff.push( (s<10?'0':'')+s + (includeDecimals && decimals.length ? '.' + decimals : ''));
         }
         var hourPart=tdiff.join(':');
-        console.log(tdiff)
         return prefix+hourPart;
     };
     this.toHm = function toHm() {
