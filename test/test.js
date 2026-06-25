@@ -674,7 +674,8 @@ describe("date", function(){
         expect(timeInterval.iso("-47:32:11").toHms()).eql('-47:32:11');
         expect(timeInterval.iso("-T47h32m").toHm()).eql('-47:32');
         expect(timeInterval.iso("32m").toHm()).eql('00:32');
-        //expect(timeInterval(new Date(1916,7,7,11, 0,0)-new Date(1916,7,9,10,32,11)).toHms()).eql('48:27:49');
+        expect(timeInterval(new Date(1916,7,7,11, 0,0)-new Date(1916,7,9,10,32,11)).toHms()).eql('-47:32:11');
+        expect(timeInterval.iso("1D 03:25:42.857143").toPlainString()).eql('1D 3:25:42.857143');
     });
     it("timeInterval.datetime(null,{nullReturnsNull:true})", function(){
         var d1 = timeInterval.iso(null, {nullReturnsNull:true});
