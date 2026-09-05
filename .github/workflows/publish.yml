@@ -1,4 +1,4 @@
-name: Publish from Tag
+name: Publish from tag
 
 on:
   push:
@@ -7,10 +7,11 @@ on:
 
 permissions:
   id-token: write
-  contents: read
+  contents: write
 
 jobs:
   publish:
-    uses: codenautas/.github/.github/workflows/npm-publish-from-tag.yaml@v1
+    uses: codenautas/.github/.github/workflows/npm-publish-new-version.yaml@v2
     with:
       node_version: '24'
+      skip-tests-until-date: '2000-01-01'

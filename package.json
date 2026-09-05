@@ -42,7 +42,7 @@
     "sinon": "^22.0.0",
     "audit-copy": "^0.1.1",
     "discrepances": "^0.2.14",
-    "qa-control": "^0.7.0"
+    "qa-control": "^0.11.2"
   },
   "main": "best-globals.js",
   "types": "best-globals.d.ts",
@@ -65,6 +65,7 @@
     "run-in": "both",
     "type": "lib",
     "stage": "stable",
+    "sonar": "true",
     "coverage": 100
   }
 }

@@ -1,0 +1,15 @@
+name: Publish (manual)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  publish:
+    uses: codenautas/.github/.github/workflows/npm-publish-new-version.yaml@v2
+    with:
+      node_version: '24'
+      create-tag: true
