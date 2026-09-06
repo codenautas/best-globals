@@ -17,7 +17,7 @@
         root[root.globalModuleName] = factory();
     }
     root.globalModuleName = null;
-})(/*jshint -W040 */this, 'bestGlobals', function() {
+})(/*jshint -W040 */this, 'bestGlobals', function() { // eslint-disable-line max-statements
 /*jshint +W040 */
 
 /*jshint -W004 */
@@ -121,7 +121,7 @@ function ChangingWithSpecial(change){
     this.change = change;
 }
 
-function changing(original, changes){
+function changing(original, changes){ // eslint-disable-line complexity
     var opts = changing.retreiveOptions(arguments);
     if (changes instanceof ChangingWithSpecial) {
         return changes.change(original);
@@ -129,7 +129,7 @@ function changing(original, changes){
     if(original===null ||
         !bestGlobals.isPlainObject(original) &&
             !(original instanceof Error) &&
-            (!opts.mostlyPlain || typeof original != "object" || !bestGlobals.isPlainObject(changes))
+            (!opts.mostlyPlain || typeof original !== "object" || !bestGlobals.isPlainObject(changes))
          // && !bestGlobals.changing
     ){
         if(!arguments[3]){
@@ -163,18 +163,18 @@ function changing(original, changes){
             return result;
         }
     }
-};
+}
 
 changing.trueByObject = function trueByObject(object){
     return new ChangingWithSpecial(function(original, opts){
-        if (original == true) return deepCopy(object);
+        if (original === true) return deepCopy(object);
         if (original) return changing(original, object, changing.options(opts))
         return original;
     });
 }
 
 bestGlobals.dig = function dig(description, wanted){
-    if(arguments.length==1){
+    if (arguments.length === 1) {
         wanted=description;
         description=null;
     }
@@ -187,7 +187,7 @@ bestGlobals.dig = function dig(description, wanted){
 
 bestGlobals.dig.record = function digrecord(description, wanted){
     /* istanbul ignore else */
-    if(arguments.length==1){
+    if (arguments.length === 1) {
         if(typeof description==="string"){
             return bestGlobals.dig;
         }
@@ -214,7 +214,7 @@ bestGlobals.dig.record = function digrecord(description, wanted){
 };
 
 bestGlobals.dig.exclude = function digExclude(description, dontWanted){
-    if(arguments.length==1){
+    if (arguments.length === 1) {
         dontWanted=description;
         description=null;
     }
@@ -230,7 +230,7 @@ bestGlobals.dig.exclude = function digExclude(description, dontWanted){
 }
 
 bestGlobals.dig.default = function (description, defaultValue){
-    if(arguments.length==1){
+    if (arguments.length === 1) {
         defaultValue=description;
         description=null;
     }
@@ -240,7 +240,7 @@ bestGlobals.dig.default = function (description, defaultValue){
 };
 
 bestGlobals.dig.indexedObject = function digIndexedObject(description, wanted){
-    if(arguments.length==1){
+    if (arguments.length === 1) {
         wanted=description;
         description=null;
     }
@@ -255,7 +255,7 @@ bestGlobals.dig.indexedObject = function digIndexedObject(description, wanted){
 bestGlobals.dig.idx = bestGlobals.dig.indexedObject;
 
 bestGlobals.dig.array = function array(description, wanted){
-    if(arguments.length==1){
+    if (arguments.length === 1) {
         wanted=description;
         description=null;
     }
@@ -332,7 +332,7 @@ var dateMethods=[
     {name: "sameValue", fun: function sameValue(other){
         return other &&
             other instanceof other.constructor &&
-            this.getTime() == other.getTime();
+            this.getTime() === other.getTime();
     }}
 ]
 
@@ -364,13 +364,13 @@ bestGlobals.dateForceIfNecesary = function dateForceIfNecesary(dt, strict) {
     var d=new Date(dt.ms != null ? dt.ms : dt.getTime());
     var delta=4*60*60*1000;
     do{
-        if(new Date(d-DELTA4DATE).getDate()!=d.getDate()){
+        if (new Date(d-DELTA4DATE).getDate() !== d.getDate()) {
             d = addDateMethods(d, bestGlobals.dateForceIfNecesary);
             d.isRealDate = true;
             return d;
         }
         if(!strict){
-            if(new Date(d.getTime()-delta).getDate()!=d.getDate()){
+            if (new Date(d.getTime()-delta).getDate() !== d.getDate()) {
                 d = new Date(d.getTime()-delta)
                 /* istanbul ignore if */
                 if(delta<=1){
@@ -481,7 +481,7 @@ bestGlobals.Datetime.prototype.getTime = function getTime() {
 bestGlobals.Datetime.prototype.toPlainString = function toPlainString(preserveHm){
     var str=this.toYmdHmsMm();
     var prune = function(what){
-        if(str.substr(str.length-what.length)==what){
+        if(str.substr(str.length-what.length) === what){
             str=str.substr(0,str.length-what.length);
             return true;
         }
@@ -503,13 +503,12 @@ bestGlobals.Datetime.prototype.toPostgres = bestGlobals.Datetime.prototype.toSql
 bestGlobals.Datetime.prototype.toLocaleString = function toSqlString(){
     var str=this.toDmy()+' '+this.toHms();
     var prune = function(what){
-        if(str.substr(str.length-what.length)==what){
+        if (str.substr(str.length-what.length) === what) {
             str=str.substr(0,str.length-what.length);
             return true;
         }
         return false;
     }
-    /* eslint no-unused-expressions: 0 */
     prune(':00') && prune(' 00:00');
     return str;
 }
@@ -630,7 +629,7 @@ bestGlobals.TimeInterval = function TimeInterval(timePack){
         time+=timePack[attr]*timeValues[attr]*sign;
     }
     this.timeInterval={ms:time};
-    this.toHms = function toHms(omitSeconds, withDays, omitLeftCeros, omitHourCero, omitFirstLeftCero, includeDecimals) {
+    this.toHms = function toHms(omitSeconds, withDays, omitLeftCeros, omitHourCero, omitFirstLeftCero, includeDecimals) { // eslint-disable-line complexity
         var leftCero = omitLeftCeros?'':'0';
         var tm = this.timeInterval.ms;
         var prefix = (tm<0?'-':'');
@@ -690,7 +689,7 @@ bestGlobals.TimeInterval = function TimeInterval(timePack){
     this.sameValue = function sameValue(otherInterval){
         return otherInterval &&
             otherInterval instanceof bestGlobals.TimeInterval &&
-            this.timeInterval.ms == otherInterval.timeInterval.ms;
+            this.timeInterval.ms == otherInterval.timeInterval.ms; // eslint-disable-line eqeqeq
     }
     this.getTime = function getTime(){
         return this.timeInterval.ms;
@@ -715,7 +714,7 @@ bestGlobals.timeInterval = function timeInterval(timePack) {
     return new bestGlobals.TimeInterval(timePack);
 };
 
-bestGlobals.timeInterval.iso = function iso(s, opts){
+bestGlobals.timeInterval.iso = function iso(s, opts){ // eslint-disable-line complexity
     if(opts && !s && (opts.falsyReturnsNull || opts.nullReturnsNull && s == null)){
         return null;
     }
@@ -736,7 +735,7 @@ bestGlobals.timeInterval.iso = function iso(s, opts){
         }
     }
     if(m){
-        var sign=m[1]=='-'?-1:1;
+        var sign = m[1] === '-' ? -1 : 1;
         return bestGlobals.timeInterval({
             ms     : m[8]*sign||0,
             seconds: m[7]*sign||0,
@@ -752,7 +751,10 @@ bestGlobals.functionName = function functionName(fun) {
     if(typeof fun !== "function"){
         throw new Error("non function in functionName");
     }
-    return fun.name||fun.toString().replace(/^\s*function\s*\*?\s*([^(]*)\([\s\S]*$/i,'$1')||'anonymous';
+    if (fun.name) return fun.name;
+    var regexName = /^\s*function\s*(?:\*\s*)?(?:([A-Za-z_$][\w$]*)\s*)?\(/;
+    var found = regexName.exec(fun.toString());
+    return (found && found[1]) || 'anonymous';
 };
 
 bestGlobals.constructorName = function constructorName(obj) {
@@ -1003,7 +1005,7 @@ bestGlobals.serie = function serie(NorFirstOrObject, NifNoFirst){
             n = NorFirstOrObject.length;
             last = (n-1)*step + first;
         }else{
-            last = 'to' in NorFirstOrObject ? NorFirstOrObject.to : function (){ throw new Error('serie lack of "from" or "to"') }();
+            last = 'to' in NorFirstOrObject ? NorFirstOrObject.to : (function (){ throw new Error('serie lack of "from" or "to"') })();
             n = Math.floor((last - first)/step)+1
         }
     }else{
@@ -1024,8 +1026,8 @@ bestGlobals.serie = function serie(NorFirstOrObject, NifNoFirst){
 var MAX_SAFE_INTEGER = bestGlobals.MAX_SAFE_INTEGER = 9007199254740991;
 
 bestGlobals.sameValue = function sameValue(a,b){
-    return a==b ||
-      a instanceof Date && b instanceof Date && a.getTime() == b.getTime() ||
+    return a == b || // eslint-disable-line eqeqeq
+      a instanceof Date && b instanceof Date && a.getTime() === b.getTime() ||
       typeof a === 'number' && (a>MAX_SAFE_INTEGER || a< -MAX_SAFE_INTEGER) && Math.abs(a/b)<1.00000000000001 && Math.abs(a/b)>0.99999999999999 ||
       a !=null && !!a.sameValue && a.sameValue(b);
 }
@@ -1034,14 +1036,14 @@ bestGlobals.sameValues = function sameValues(a,b, sideOfBigger){
     if(a===b) return true;
     if(bestGlobals.sameValue(a,b)) return true;
     if(!(a instanceof Object) || !(b instanceof Object)) return false;
-    if(sideOfBigger=="left"){
+    if (sideOfBigger === "left") {
         return bestGlobals.sameValues(b,a,"right");
-    }else if(sideOfBigger=="right"){
-        for(var name in a){
+    } else if (sideOfBigger === "right") {
+        for (var name in a) {
             if(!(name in b) || !bestGlobals.sameValue(a[name],b[name])) return false;
         }
         return true;
-    }else{
+    } else {
         return bestGlobals.sameValues(a,b,"right") && bestGlobals.sameValues(a,b,"left");
     }
 }
@@ -1145,12 +1147,12 @@ bestGlobals.simplifyText = function simplifyText(text){
     return text.replace(/[^A-Za-z0-9\[\] ]/g,function(a){return bestGlobals.simplifiedChars[a]||a});
 }
 bestGlobals.hyperSimplifyText = function hyperSimplifyText(text, spaceReplacer){
-    return text.replace(/[^A-Za-z0-9\[\] ]/g,function(a){return bestGlobals.simplifiedChars[a]||' '}).trim().replace(/\s+/g,spaceReplacer==undefined?' ':spaceReplacer).toLowerCase();
+    return text.replace(/[^A-Za-z0-9\[\] ]/g,function(a){return bestGlobals.simplifiedChars[a]||' '}).trim().replace(/\s+/g,spaceReplacer==undefined?' ':spaceReplacer).toLowerCase(); // eslint-disable-line eqeqeq
 }
 bestGlobals.splitRawRowIntoRow = function splitRawRowIntoRow(line){
     return line.split(/(?<!(?:^|[^\\])(?:\\\\)*\\)\|/).map(item => item.trimRight().replace(
         /\\([^x]|x[\dA-Za-z]{1,2})/g,
-        (_,l)=>(l=='t'?'\t':l=='r'?'\r':l=='n'?'\n':l=='s'?' ':l[0]=='x'?String.fromCodePoint(Number.parseInt(l.substr(1),16)):l)
+        (_,l) => (l === 't' ? '\t' : l === 'r' ? '\r' : l === 'n' ? '\n' : l === 's' ? ' ': l[0] === 'x' ? String.fromCodePoint(Number.parseInt(l.substr(1),16)) : l)
     ))
 }
 

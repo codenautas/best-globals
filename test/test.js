@@ -5,9 +5,6 @@ var VERBOSE_DATE_TEST=false;
 
 var expect = require('expect.js');
 var sinon = require('sinon');
-if(typeof process !== "undefined"){
-    var assert = require('assert');
-}
 var bestGlobals = require('../best-globals.js');
 var {compareForOrder,splitRawRowIntoRow} = bestGlobals;
 var auditCopy = require('audit-copy');
@@ -354,9 +351,9 @@ describe('mini-tools config functions', function(){
 
 describe('dig', function(){
     var _=dig;
-    if('example', function(){
-        var obtained = _({name:'Argentina', lang:'es', other:77, stats:{anualCpi:50, pob:400000}} , {name:_, stats:_({pob:_}), democray:_.defualt(true)});
-    })
+    // if('example', function(){
+    //     var obtained = _({name:'Argentina', lang:'es', other:77, stats:{anualCpi:50, pob:400000}} , {name:_, stats:_({pob:_}), democray:_.defualt(true)});
+    // })
     it('explained', function(){
         var input   ={want:'a', want2:'b', dont:'c', dont2:{}};
         var expected={want:'a', want2:'b'};
@@ -435,9 +432,9 @@ describe('dig', function(){
 
 describe('spec', function(){
     var _=spec;
-    if('example', function(){
-        var obtained = _({name:'Argentina', lang:'es', other:77, stats:{anualCpi:50, pob:400000}} , {name:_, stats:_({pob:_}), democray:_.defualt(true)});
-    })
+    // if('example', function(){
+    //     var obtained = _({name:'Argentina', lang:'es', other:77, stats:{anualCpi:50, pob:400000}} , {name:_, stats:_({pob:_}), democray:_.defualt(true)});
+    // })
     var fixtures=[{
         name:'simple',
         input   :{want:'a', want2:'b', dont:'c', dont2:{}},
@@ -513,7 +510,7 @@ describe('spec', function(){
     })
 });
 
-describe("date", function(){
+describe("date", function(){ // eslint-disable-line max-statements
     var indep = new Date(1916,7-1,9);
     var first = new Date(1910,5-1,25);
     var nateConstantino = new Date(272,2-1,27);
@@ -925,10 +922,6 @@ describe("date", function(){
                             expect(date(param.i)[functionName]()).to.eql(param[functionName]);
                         }
                         expect(datetime.ms(param.i.getTime())[functionName]()).to.eql(param[functionName]);
-                        if(typeof process !== "undefined"){
-                            // var equalComparation = assert.deepStrictEqual || assert.deepEqual;
-                            // equalComparation(auditCopy.inObject(param),auditCopyParam);
-                        }
                         discrepances.showAndThrow(auditCopy.inObject(param),auditCopyParam)
                     });
                 }
@@ -957,7 +950,7 @@ describe("date", function(){
         while(n--){
             // try{
                 var newd = d.sub({days:1});
-                if(newd.getTime()-d.getTime()!=-HS24){
+                if(newd.getTime()-d.getTime() !== -HS24){
                     if(VERBOSE_DATE_TEST){
                         console.log('***** Date dif',newd.toISOString(),d.toISOString(),(newd.getTime()-d.getTime())/60/60/1000,'hours');
                     }
@@ -982,7 +975,7 @@ describe("date", function(){
         while(n--){
             try{
                 var newd = d.add({days:1});
-                if(newd.getTime()-d.getTime()!=HS24){
+                if(newd.getTime()-d.getTime() !== HS24){
                     if(VERBOSE_DATE_TEST){
                         console.log('***** Date dif',newd.toISOString(),d.toISOString(),(newd.getTime()-d.getTime())/60/60/1000,'hours');
                     }
@@ -994,7 +987,6 @@ describe("date", function(){
             }catch(err){
                 console.log("****************** ERROR in date ",d)
                 throw err;
-                throw new Error(err.message+' for '+d);
             }
         }
         expect(true).to.be.ok();
@@ -1046,7 +1038,7 @@ describe("date", function(){
         do{
             now = bestGlobals.datetime.now();
             rawNow = new Date();
-        }while(trys-- && now.getTime() != rawNow.getTime());
+        }while(trys-- && now.getTime() !== rawNow.getTime());
         expect([
             now.getFullYear(),
             now.getMonth(),
@@ -1240,9 +1232,9 @@ describe('ordering', function(){
             }
             expect(a1<b1).to.be.ok();
             expect(a1>b1).to.not.be.ok();
-            expect(a1==b1).to.not.be.ok();
+            expect(a1 === b1).to.not.be.ok();
             expect(a1!=null).to.be.ok();
-            expect(typeof a1=="string").to.be.ok();
+            expect(typeof a1 === "string").to.be.ok();
         });
     });
 });
@@ -1386,7 +1378,7 @@ describe("Array.find polyfill", function(){
     it("not found", function(){
         var toSearch=[{num:3},{num:1},{num:5}];
         var founded = bestGlobals.arrayFind.call(toSearch,function(element){
-            return element.num==2;
+            return element.num === 2;
         });
         expect(founded === undefined).to.be.ok();
     });
@@ -1490,8 +1482,8 @@ describe("sameValue", function(){
         it("for "+JSON.stringify(fixture), function(){
             var obtained = bestGlobals.sameValue(fixture.a, fixture.b);
             expect(obtained).to.eql(fixture.res);
-            var obtained = bestGlobals.sameValues(fixture.a, fixture.b);
-            expect(obtained).to.eql(fixture.res);
+            var obtained2 = bestGlobals.sameValues(fixture.a, fixture.b);
+            expect(obtained2).to.eql(fixture.res);
         });
     });
 });
@@ -1522,8 +1514,8 @@ describe("deepFreeze", function(){
     it("returns the same object", function(){
         var original = {a:1, b:['hi', 'world'], c:new Date()};
         var same = deepFreeze(original);
-        expect(original == same).to.be.ok();
-        expect(original.b == same.b).to.be.ok();
+        expect(original === same).to.be.ok();
+        expect(original.b === same.b).to.be.ok();
     })
     it("freeze the root object", function(){
         var original = {a:1, b:['hi', 'world', {sign:'!'}], c:new Date()};

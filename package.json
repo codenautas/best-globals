@@ -24,6 +24,8 @@
   "devDependencies": {
     "colors": "~1.4.0",
     "cookie-parser": "^1.4.7",
+    "eslint": "^9.39.2",
+    "eslint-plugin-regexp": "^3.3.0",
     "expect.js": "~0.3.1",
     "express": "^5.2.1",
     "express-session": "^1.19.0",
@@ -60,7 +62,6 @@
     "best-globals.d.ts"
   ],
   "qa-control": {
-    "profile": "minimum",
     "gha": "all",
     "run-in": "both",
     "type": "lib",

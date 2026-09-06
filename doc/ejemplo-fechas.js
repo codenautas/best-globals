@@ -1,3 +1,5 @@
+"use strict";
+
 process.env.TZ = "America/New_York";
 
 var d0 = new Date(2024, 11-1, 3);
