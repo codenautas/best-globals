@@ -17,8 +17,6 @@ console.log(d1.toString()) // Sat Mar 14 2009 00:00:00 GMT-0200 (hora de verano 
 console.log(d2.toString()) // Sun Mar 15 2009 00:00:00 GMT-0300 (hora estándar de Argentina)
 console.log((d2-d1) / (60*60*1000)); // 25
 
-return;
-
 var d0 = new Date(2008, 10-1, 17);
 var d1 = new Date(2008, 10-1, 18);
 var d2 = new Date(2008, 10-1, 19);

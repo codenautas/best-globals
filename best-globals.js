@@ -730,7 +730,7 @@ bestGlobals.timeInterval.iso = function iso(s, opts){
             if(m2 && m2[0]){
                 m = [s, m2[1], 0, 0, m2[2], m2[3], m2[4], m2[5]||0, m2[6] && m2[6].length ? ('0' + m2[6]) * 1000 : 0];
             }else{
-                m = s.match(/^(-?)P?(?:(\d+)[/-](\d+)[/-](\d+))?[T ]?(?:(\d+):(\d+)(?::(\d+)(\.\d+)?))?$/i);
+                m = s.match(/^(-?)P?(?:(\d{1,4})[/-](\d{1,4})[/-](\d{1,4}))?[T ]?(?:(\d{1,6}):(\d{1,2})(?::(\d{1,2})(\.\d{1,6})?))?$/i);
                 if (m) m[8] = m[8] && m[8].length ? ('0' + m[8]) * 1000 : 0
             }
         }
@@ -752,7 +752,7 @@ bestGlobals.functionName = function functionName(fun) {
     if(typeof fun !== "function"){
         throw new Error("non function in functionName");
     }
-    return fun.name||fun.toString().replace(/^\s*function\s*([^(]*)\((.|\s)*$/i,'$1')||'anonymous';
+    return fun.name||fun.toString().replace(/^\s*function\s*\*?\s*([^(]*)\([\s\S]*$/i,'$1')||'anonymous';
 };
 
 bestGlobals.constructorName = function constructorName(obj) {
