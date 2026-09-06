@@ -395,7 +395,7 @@ bestGlobals.date.isValidDate = function isValidDate(year, month, day) {
 
 bestGlobals.date.isOK = function isOK(dt) {
     if(! (dt instanceof Date) ||
-       isNaN(dt.getTime()) ||
+       Number.isNaN(dt.getTime()) ||
        ! bestGlobals.date.isValidDate(dt.getFullYear(), dt.getMonth()+1, dt.getDate())
     ){
         return false;
@@ -417,7 +417,7 @@ bestGlobals.date.parseFormat = function parseFormat(dateStr) {
     var re = new RegExp('^('+reDate+'('+reTz1+'|'+reTz2+')?)$');
     var match = re.exec(dateStr);
     if(! match) { throw new Error('invalid date'); }
-    return { y:parseInt(match[2],10), m:parseInt(match[4],10), d:parseInt(match[7],10) };
+    return { y:Number.parseInt(match[2],10), m:Number.parseInt(match[4],10), d:Number.parseInt(match[7],10) };
 };
 
 bestGlobals.date.iso = function iso(dateStr, opts) {
@@ -579,17 +579,17 @@ bestGlobals.datetime.iso = function iso(dateStr, opts) {
     var match = bestGlobals.Datetime.re.exec(dateStr);
     if(match){
         var integerParts={};
-        integerParts.year    = parseInt(match[2],10)
-        integerParts.month   = parseInt(match[4],10)
-        integerParts.day     = parseInt(match[7],10)
-        integerParts.hour    = parseInt(match[10]||0,10)
-        integerParts.minutes = parseInt(match[11]||0,10)
-        integerParts.seconds = parseInt(match[13]||0,10)
-        integerParts.ms      = parseInt(((match[15]||'0')+'000000').substr(0,3),10)
+        integerParts.year    = Number.parseInt(match[2],10)
+        integerParts.month   = Number.parseInt(match[4],10)
+        integerParts.day     = Number.parseInt(match[7],10)
+        integerParts.hour    = Number.parseInt(match[10]||0,10)
+        integerParts.minutes = Number.parseInt(match[11]||0,10)
+        integerParts.seconds = Number.parseInt(match[13]||0,10)
+        integerParts.ms      = Number.parseInt(((match[15]||'0')+'000000').substr(0,3),10)
         var microPartWithoutMilliSecs = ((match[15]||'0')+'000000').substr(3);
         microPartWithoutMilliSecs+='000';
         microPartWithoutMilliSecs = microPartWithoutMilliSecs.substr(0,3);
-        integerParts.micros  = parseInt(microPartWithoutMilliSecs,10);
+        integerParts.micros  = Number.parseInt(microPartWithoutMilliSecs,10);
     }else{
         throw new Error('invalid datetime');
     }
@@ -636,7 +636,9 @@ bestGlobals.TimeInterval = function TimeInterval(timePack){
         var prefix = (tm<0?'-':'');
         var tdiff = [];
         var x = Math.abs(tm);
-        var decimals = (Math.round((tm % 1000) * 1000)).toString().replace(/0+$/,'');
+        // se usa x (el valor absoluto) para que el signo quede solo en prefix y no entre los decimales.
+        // el replace opera sobre a lo sumo 7 dígitos (999999), por eso /0+$/ no es un riesgo de ReDoS.
+        var decimals = (Math.round((x % 1000) * 1000)).toString().replace(/0+$/,''); // NOSONAR javascript:S5852
         x /= 1000;
         var s = Math.floor(x % 60);
         x /= 60;
@@ -867,8 +869,10 @@ bestGlobals.sleep = function sleep(milliseconds){
             setTimeout(function(){ resolve(value); },milliseconds);
         });
     };
-    pseudoFunction.then = function then(f){
-        return pseudoFunction().then(f);
+    // pseudoFunction es intencionalmente un thenable: así admite tanto `await sleep(100)`
+    // como el pasamano `.then(sleep(100))`. Cumple el contrato (onFulfilled, onRejected).
+    pseudoFunction.then = function then(onFulfilled, onRejected){ // NOSONAR javascript:S7739
+        return pseudoFunction().then(onFulfilled, onRejected);
     };
     return pseudoFunction;
 };
@@ -1146,7 +1150,7 @@ bestGlobals.hyperSimplifyText = function hyperSimplifyText(text, spaceReplacer){
 bestGlobals.splitRawRowIntoRow = function splitRawRowIntoRow(line){
     return line.split(/(?<!(?:^|[^\\])(?:\\\\)*\\)\|/).map(item => item.trimRight().replace(
         /\\([^x]|x[\dA-Za-z]{1,2})/g,
-        (_,l)=>(l=='t'?'\t':l=='r'?'\r':l=='n'?'\n':l=='s'?' ':l[0]=='x'?String.fromCodePoint(parseInt(l.substr(1),16)):l)
+        (_,l)=>(l=='t'?'\t':l=='r'?'\r':l=='n'?'\n':l=='s'?' ':l[0]=='x'?String.fromCodePoint(Number.parseInt(l.substr(1),16)):l)
     ))
 }
 

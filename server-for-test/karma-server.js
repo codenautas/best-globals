@@ -3,6 +3,7 @@
 //var _ = require('lodash');
 var express = require('express');
 var app = express();
+app.disable("x-powered-by");
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');

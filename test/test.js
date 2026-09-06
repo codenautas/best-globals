@@ -677,6 +677,10 @@ describe("date", function(){
         expect(timeInterval(new Date(1916,7,7,11, 0,0)-new Date(1916,7,9,10,32,11)).toHms()).eql('-47:32:11');
         expect(timeInterval.iso("1D 03:25:42.857143").toPlainString()).eql('1D 3:25:42.857143');
     });
+    it("negative timeInterval with decimals", function(){
+        expect(timeInterval({ms:-1500}).toPlainString()).eql('-0:00:01.5');
+        expect(timeInterval({ms:-11250}).toPlainString()).eql('-0:00:11.25');
+    });
     it("timeInterval.datetime(null,{nullReturnsNull:true})", function(){
         var d1 = timeInterval.iso(null, {nullReturnsNull:true});
         expect(d1 === null).to.be.ok();
