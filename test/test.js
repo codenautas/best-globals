@@ -572,7 +572,7 @@ describe("date", function(){ // eslint-disable-line max-statements
     });
     function toPlainString(date){
         var shiftedDate = new Date(date.getTime()-date.getTimezoneOffset()*60*1000)
-        return shiftedDate.toISOString().replace(/[T]/g,' ').replace(/[Z]/g,'');
+        return shiftedDate.toISOString().replace(/T/g,' ').replace(/Z/g,'');
     }
     it("create datetime from string", function(){
         var d1 = datetime.iso("1926-07-09 10:32:00.000");
@@ -1137,7 +1137,7 @@ describe('constructorName', function(){
         {val:new Date, name:'Date'},
         {val:[], name:'Array'},
         {val:new Array(), name:'Array'},
-        {val:new RegExp('bla'), name:'RegExp'},
+        {val:/bla/, name:'RegExp'},
         {val:undefined, name:undefined},
         {val:null, name:undefined},
         {val:function MiObj() {}, name:'Function'},
@@ -1604,8 +1604,12 @@ describe("simplifyText", function(){
 
 describe("splitRawRowIntoRow", function(){
     var fixtures = [
+        ['',['']],
+        ['a',['a']],
+        ['a|b|c',['a','b','c']],
         ['splited\\n line\\r\\n|field with pipe \\|',['splited\n line\r\n','field with pipe |']],
         ['multi escaped pipes \\|a\\\\|b\\\\\\|c\\\\\\\\|d',['multi escaped pipes |a\\','b\\|c\\\\','d']],
+        ['|empty||cols|',['','empty','','cols','']],
         ['|line with hex \\x7c pipe',['','line with hex | pipe']],
     ]
     fixtures.forEach(([input, expected])=>

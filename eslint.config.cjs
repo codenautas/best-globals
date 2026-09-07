@@ -1,15 +1,19 @@
 "use strict";
 
+var regexp = require('eslint-plugin-regexp');
+
 module.exports = [
     {
         ignores: ["dist/**"]
     },
+    regexp.configs['flat/recommended'],
     {
         languageOptions: {
             ecmaVersion: "latest",
             sourceType: "commonjs"
         },
         rules: {
+            'regexp/no-super-linear-move': 1,
             // Possible Errors
             "comma-dangle": 0,
             "no-cond-assign": 2,

@@ -1150,7 +1150,7 @@ bestGlobals.hyperSimplifyText = function hyperSimplifyText(text, spaceReplacer){
     return text.replace(/[^A-Za-z0-9\[\] ]/g,function(a){return bestGlobals.simplifiedChars[a]||' '}).trim().replace(/\s+/g,spaceReplacer==undefined?' ':spaceReplacer).toLowerCase(); // eslint-disable-line eqeqeq
 }
 bestGlobals.splitRawRowIntoRow = function splitRawRowIntoRow(line){
-    return line.split(/(?<!(?:^|[^\\])(?:\\\\)*\\)\|/).map(item => item.trimRight().replace(
+    return line === '' ? [''] : line.split(/((?:[^|\\]|\\[\s\S]|\\$)*)(?:$|(\|))/).filter((x,p,a) => p%3==1||p==a.length-1 && a[a.length-2]!=undefined).map(item => item.trimRight().replace( // eslint-disable-line eqeqeq
         /\\([^x]|x[\dA-Za-z]{1,2})/g,
         (_,l) => (l === 't' ? '\t' : l === 'r' ? '\r' : l === 'n' ? '\n' : l === 's' ? ' ': l[0] === 'x' ? String.fromCodePoint(Number.parseInt(l.substr(1),16)) : l)
     ))
